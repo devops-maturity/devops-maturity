@@ -1,0 +1,13 @@
+# Python cache files
+__pycache__/
+**.pyc
+*.py[cod]
+
+# Python virtual environments
+venv/
+.venv/
+
+# Python distribution files
+dist/
+build/
+*.egg-info/

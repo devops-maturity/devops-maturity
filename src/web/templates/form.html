@@ -1,0 +1,15 @@
+<!-- basic HTML form template -->
+<html>
+  <body>
+    <h2>DevOps Maturity Assessment</h2>
+    <form action="/submit" method="post">
+      {% for q in criteria %}
+        <label>{{ q.question }}</label><br>
+        <input type="radio" name="{{ q.id }}" value="yes"> Yes
+        <input type="radio" name="{{ q.id }}" value="no" checked> No
+        <br><br>
+      {% endfor %}
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

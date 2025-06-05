@@ -1,0 +1,25 @@
+[project]
+name = "devops-maturity"
+version = "0.1.0"
+description = "A DevOps maturity assessment tool with CLI and Web interface."
+authors = [
+  { name = "Xianpeng Shen", email = "xianpeng.shen@gmail.com" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pybadges",
+  "typer[all]",
+  "jinja2",
+  "pydantic"
+]
+
+[project.scripts]
+devops-maturity = "src.cli.main:app"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
