@@ -1,9 +1,34 @@
-<html>
-  <body>
-    <h2>Your Score: {{ score|round(1) }}%</h2>
-    <h3>Level: {{ level }}</h3>
-    <img src="/static/badge.svg" alt="Badge">
-    <br><br>
-    <a href="/">Back</a>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .badge-img { max-width: 220px; margin-bottom: 20px; }
+        .copy-box { font-family: monospace; background: #f4f4f4; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Your DevOps Maturity Badge</h2>
+    <div class="text-center">
+        <img src="{{ badge_url }}" alt="DevOps Maturity Badge" class="badge-img">
+    </div>
+    <h4 class="mt-4">Copy Badge Code</h4>
+    <div>
+        <strong>Markdown:</strong>
+        <div class="copy-box">![]({{ badge_url }})</div>
+        <strong>reStructuredText:</strong>
+        <div class="copy-box">.. image:: {{ badge_url }}</div>
+        <strong>HTML:</strong>
+        <div class="copy-box">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
+        <strong>AsciiDoc:</strong>
+        <div class="copy-box">image::{{ badge_url }}[]</div>
+    </div>
+    <div class="mt-4 text-center">
+        <a href="/" class="btn btn-secondary">Back to Assessment</a>
+    </div>
+</div>
+</body>
 </html>

@@ -16,10 +16,13 @@ def calculate_score(criteria: List[Criteria], responses: List[UserResponse]) -> 
 
 
 def score_to_level(score: float) -> str:
-    if score >= 90:
-        return "Gold"
-    elif score >= 70:
-        return "Silver"
-    elif score >= 50:
-        return "Bronze"
-    return "Beginner"
+    if score == 0:
+        return "WIP"
+    elif score < 50:
+        return "PASSING"
+    elif score < 70:
+        return "BRONZE"
+    elif score < 90:
+        return "SILVER"
+    else:
+        return "GOLD"
