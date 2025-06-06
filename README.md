@@ -6,9 +6,22 @@ This repository contains a DevOps Maturity Assessment tool designed to help orga
 
 ## Usage
 
-To use the DevOps Maturity Assessment, follow these steps:
+### Launch Web Application
+
+To launch the web application, you can use the following command:
 
 ```bash
-uv run devops_maturity:app
-
+uvicorn src.web.main:app --reload
 ```
+
+Then open [http://localhost:8000](http://localhost:8000) in your browser to access the DevOps Maturity Assessment web interface.
+
+### Use the CLI
+
+To run the assessment in your terminal, use:
+
+```bash
+python -m cli.main check
+```
+
+This will prompt you to answer questions interactively and generate a badge based on your score.

@@ -2,13 +2,13 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from core.model import Criteria, UserResponse
-from core.scorer import calculate_score, score_to_level
-from badges.generator import generate_badge
+from ..core.model import Criteria, UserResponse
+from ..core.scorer import calculate_score, score_to_level
+from ..badges.generator import generate_badge
 
 app = FastAPI()
-templates = Jinja2Templates(directory="devops_maturity/web/templates")
-app.mount("/static", StaticFiles(directory="devops_maturity/web/static"), name="static")
+templates = Jinja2Templates(directory="src/web/templates")
+app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
 criteria = [
     Criteria(id="ci", question="Do you use continuous integration?", weight=1.0),
@@ -35,7 +35,7 @@ def submit_form(
     ]
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
-    generate_badge(score, level, "devops_maturity/web/static/badge.svg")
+    generate_badge(score, level, "src/web/static/badge.svg")
     return templates.TemplateResponse(
         "result.html", {"request": request, "score": score, "level": level}
     )
@@ -44,5 +44,5 @@ def submit_form(
 @app.get("/badge.svg")
 def get_badge():
     return FileResponse(
-        "devops_maturity/web/static/badge.svg", media_type="image/svg+xml"
+        "src/web/static/badge.svg", media_type="image/svg+xml"
     )

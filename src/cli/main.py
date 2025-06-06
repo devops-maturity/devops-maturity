@@ -1,7 +1,7 @@
 import typer
-from core.model import Criteria, UserResponse
-from core.scorer import calculate_score, score_to_level
-from badges.generator import generate_badge
+from ..core.model import Criteria, UserResponse
+from ..core.scorer import calculate_score, score_to_level
+from ..badges.generator import generate_badge
 
 app = typer.Typer()
 
