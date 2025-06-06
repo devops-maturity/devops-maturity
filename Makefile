@@ -1,0 +1,56 @@
+.DEFAULT_GOAL := all
+sources = pytest_pretty
+
+.PHONY: .uv
+.uv: ## Check that uv is installed
+	@uv --version || echo 'Please install uv: https://docs.astral.sh/uv/getting-started/installation/'
+
+.PHONY: .pre-commit
+.pre-commit: ## Check that pre-commit is installed
+	@pre-commit -V || echo 'Please install pre-commit: https://pre-commit.com/'
+
+.PHONY: install
+install: .uv .pre-commit ## Install the package, dependencies, and pre-commit for local development
+	uv sync --frozen
+	uv pip install --editable .[dev]
+	pre-commit install --install-hooks
+
+.PHONY: format
+format: ## Format Python code
+	uv run ruff format
+	uv run ruff check --fix --fix-only
+
+.PHONY: lint
+lint: ## Lint Python code
+	uv run ruff format --check
+	uv run ruff check
+
+.PHONY: test
+test: ## Run Python tests
+	uv run coverage run -p -m pytest
+
+.PHONY: test-all-python
+test-all-python: ## Run tests on Python 3.9 to 3.13
+	UV_PROJECT_ENVIRONMENT=.venv39 uv run --python 3.9 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv310 uv run --python 3.10 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv311 uv run --python 3.11 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv312 uv run --python 3.12 coverage run -p -m pytest
+	UV_PROJECT_ENVIRONMENT=.venv313 uv run --python 3.13 coverage run -p -m pytest
+	@uv run coverage combine
+	@uv run coverage report
+
+.PHONY: all
+all: format typecheck test ## run format, typecheck and test
+
+.PHONY: help
+help: ## Show this help (usage: make help)
+	@echo "Usage: make [recipe]"
+	@echo "Recipes:"
+	@awk '/^[a-zA-Z0-9_-]+:.*?##/ { \
+		helpMessage = match($$0, /## (.*)/); \
+		if (helpMessage) { \
+			recipe = $$1; \
+			sub(/:/, "", recipe); \
+			printf "  \033[36m%-20s\033[0m %s\n", recipe, substr($$0, RSTART + 3, RLENGTH); \
+		} \
+	}' $(MAKEFILE_LIST)
