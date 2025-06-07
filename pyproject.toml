@@ -45,8 +45,6 @@ Issues = "https://github.com/devops-maturity/devops-maturity/issues"
 dev = [
   "uvicorn[standard]",
   "pre-commit",
-  "pytest",
-  "ruff",
 ]
 
 [project.scripts]
