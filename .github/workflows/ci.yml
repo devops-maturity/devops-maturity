@@ -24,7 +24,7 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --extra dev # install dev dependencies
       - uses: pre-commit/action@v3.0.0
         with:
           extra_args: --all-files --verbose

@@ -11,7 +11,7 @@ sources = pytest_pretty
 
 .PHONY: install
 install: .uv .pre-commit ## Install the package, dependencies, and pre-commit for local development
-	uv sync --frozen
+	uv sync --extra dev --frozen
 	uv pip install --editable .[dev]
 	pre-commit install --install-hooks
 
@@ -39,8 +39,13 @@ test-all-python: ## Run tests on Python 3.9 to 3.13
 	@uv run coverage combine
 	@uv run coverage report
 
+.PHONY: preview
+preview: ## Preview website
+	uv sync --extra dev
+	uv run uvicorn src.web.main:app --reload
+
 .PHONY: all
-all: format typecheck test ## run format, typecheck and test
+all: format test ## run format and test
 
 .PHONY: help
 help: ## Show this help (usage: make help)
