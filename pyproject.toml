@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=77.0.1", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "devops-maturity"
 version = "0.1.0"
@@ -51,7 +55,3 @@ dev = [
 
 [project.scripts]
 devops-maturity = "src.cli.main:app"
-
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
