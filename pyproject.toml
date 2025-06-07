@@ -5,46 +5,16 @@ description = "A DevOps maturity assessment tool with CLI and Web interface."
 authors = [
   { name = "Xianpeng Shen", email = "xianpeng.shen@gmail.com" }
 ]
-license = "MIT"
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = [
-  "devops",
-  "maturity",
-  "assessment",
-  "cli",
-  "web",
-]
-
-classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
-  "Framework :: FastAPI",
-]
-
 dependencies = [
   "fastapi",
+  "uvicorn[standard]",
   "pybadges",
-  "typer",
+  "typer[all]",
   "jinja2",
   "pydantic"
-]
-
-[project.urls]
-Homepage = "https://github.com/devops-maturity"
-Repository = "https://github.com/devops-maturity/devops-maturity"
-Issues = "https://github.com/devops-maturity/devops-maturity/issues"
-
-[project.optional-dependencies]
-dev = [
-  "uvicorn[standard]",
-  "pre-commit",
 ]
 
 [project.scripts]

@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from core.model import Criteria, UserResponse
-from core.scorer import calculate_score, score_to_level
-from badges.generator import generate_badge
+from ..core.model import Criteria, UserResponse
+from ..core.scorer import calculate_score, score_to_level
+from ..badges.generator import generate_badge
+from typing import List
 
 app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")
@@ -128,3 +129,16 @@ async def submit(request: Request):
 @app.get("/badge.svg")
 def get_badge():
     return FileResponse("src/web/static/badge.svg", media_type="image/svg+xml")
+
+
+def calculate_score(criteria: List[Criteria], responses: List[UserResponse]) -> float:
+    total = 0.0
+    max_score = 0.0
+    response_map = {r.id: r.answer for r in responses}
+
+    for c in criteria:
+        max_score += c.weight
+        if response_map.get(c.id):
+            total += c.weight
+
+    return (total / max_score) * 100 if max_score else 0.0
