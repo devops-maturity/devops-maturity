@@ -21,7 +21,7 @@ Then open [http://localhost:8000](http://localhost:8000) in your browser to acce
 To run the assessment in your terminal, use:
 
 ```bash
-python -m cli.main check
+python -m src.cli.main check
 ```
 
 This will prompt you to answer questions interactively and generate a badge based on your score.
