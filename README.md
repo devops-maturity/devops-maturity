@@ -1,5 +1,7 @@
 # DevOps Maturity Assessment
 
+[![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
+
 ## Overview
 
 This repository contains a DevOps Maturity Assessment tool designed to help organizations evaluate their DevOps practices and identify areas for improvement. The assessment is based on a set of questions that cover various aspects of DevOps, including culture, automation, measurement, sharing, and security.
