@@ -13,14 +13,19 @@ dependencies = [
   "badgepy",
   "typer",
   "jinja2",
-  "pydantic"
+  "pydantic",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pytest",
   "ruff",
   "uvicorn",
+]
+test = [
+  "fastapi",
+  "httpx",
+  "pytest",
+  "pytest-cov",
 ]
 
 [project.scripts]

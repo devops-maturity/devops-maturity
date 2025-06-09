@@ -1,10 +1,14 @@
 import nox
+import os
+
+# check if running in CI environment
+GITHUB_ACTIONS = os.environ.get("GITHUB_ACTIONS") == "true"
 
 
 @nox.session
 def tests(session):
     """Run the tests."""
-    session.install("pytest", "pytest-cov")
+    session.install("-e", ".[test]")
     session.run("pytest", "--cov=src", "tests")
 
 
@@ -27,4 +31,6 @@ def preview(session):
     """Preview the project."""
     session.install("uvicorn")
     session.install(".")
+    if GITHUB_ACTIONS:
+        return
     session.run("uvicorn", "src.web.main:app", "--reload")
