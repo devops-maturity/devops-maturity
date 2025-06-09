@@ -1,3 +1,8 @@
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "devops-maturity"
 version = "0.1.0"
@@ -8,8 +13,24 @@ authors = [
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
 
-
+keywords = [
+  "devops",
+  "maturity",
+  "assessment",
+  "cli",
+  "web",
+]
 
 dependencies = [
   "fastapi",
@@ -17,6 +38,8 @@ dependencies = [
   "typer",
   "jinja2",
   "pydantic",
+  "python-multipart",
+  "sqlalchemy",
 ]
 
 [project.optional-dependencies]
@@ -34,6 +57,5 @@ test = [
 [project.scripts]
 devops-maturity = "src.cli.main:app"
 
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.mypy]
+ignore_missing_imports = true

@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from ..core.model import Criteria, UserResponse
+from ..core.model import Criteria, UserResponse, Assessment, SessionLocal
 from ..core.scorer import calculate_score, score_to_level
 from ..badges.generator import generate_badge
 
@@ -116,9 +116,19 @@ def read_form(request: Request):
 async def submit(request: Request):
     form = await request.form()
     responses = []
-    for c in criteria:
-        answer = form.get(c.id)
-        responses.append(UserResponse(id=c.id, answer=answer == "yes"))
+    responses_dict = {}
+    for k, v in form.items():
+        answer = v == "yes"
+        responses.append(UserResponse(id=k, answer=answer))
+        responses_dict[k] = answer  # store as dict for database
+
+    # Save to database
+    db = SessionLocal()
+    assessment = Assessment(responses=responses_dict)
+    db.add(assessment)
+    db.commit()
+    db.close()
+
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
     badge_filename = "devops-maturity.svg"
@@ -139,3 +149,20 @@ async def submit(request: Request):
 @app.get("/badge.svg")
 def get_badge():
     return FileResponse("src/web/static/badge.svg", media_type="image/svg+xml")
+
+
+@app.get("/assessments", response_class=HTMLResponse)
+def list_assessments(request: Request):
+    db = SessionLocal()
+    assessments = db.query(Assessment).all()
+    db.close()
+    assessment_data = []
+    for a in assessments:
+        # Convert responses from dict to UserResponse objects
+        responses = [UserResponse(id=k, answer=v) for k, v in a.responses.items()]
+        point = calculate_score(criteria, responses)
+        assessment_data.append({"id": a.id, "responses": a.responses, "point": point})
+    return templates.TemplateResponse(
+        "assessments.html",
+        {"request": request, "assessments": assessment_data},
+    )
