@@ -3,6 +3,8 @@ import os
 
 # check if running in CI environment
 GITHUB_ACTIONS = os.environ.get("GITHUB_ACTIONS") == "true"
+# https://render.com/docs/environment-variables
+RENDER = os.environ.get("RENDER") == "true"
 
 
 @nox.session
@@ -34,3 +36,13 @@ def preview(session):
     if GITHUB_ACTIONS:
         return
     session.run("uvicorn", "src.web.main:app", "--reload")
+
+
+@nox.session
+def render(session):
+    """Deoploy to render.com"""
+    if not RENDER:
+        return
+    session.install("uvicorn")
+    session.install(".")
+    session.run("uvicorn", "src.web.main:app", "--host", "0.0.0.0")
