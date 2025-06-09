@@ -23,6 +23,12 @@ class Assessment(Base):  # type: ignore
     responses = Column(JSON)
 
 
-engine = create_engine("sqlite:///./devops_maturity.db")
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base.metadata.create_all(bind=engine)
+engine = None
+SessionLocal = sessionmaker(autocommit=False, autoflush=False)
+
+
+def init_db():
+    global engine
+    engine = create_engine("sqlite:///./devops_maturity.db")
+    SessionLocal.configure(bind=engine)
+    Base.metadata.create_all(bind=engine)
