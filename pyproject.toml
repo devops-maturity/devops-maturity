@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=62.6", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "devops-maturity"
-version = "0.1.0"
 description = "A DevOps maturity assessment tool with CLI and Web interface."
 authors = [
   { name = "Xianpeng Shen", email = "xianpeng.shen@gmail.com" }
@@ -12,6 +11,8 @@ authors = [
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
+dynamic = ["version"]
+
 classifiers = [
   "Development Status :: alpha",
   "Intended Audience :: Developers",
@@ -23,13 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 
-keywords = [
-  "devops",
-  "maturity",
-  "assessment",
-  "cli",
-  "web",
-]
+keywords = ["devops","maturity", "assessment", "cli","web"]
 
 dependencies = [
   "fastapi",
@@ -40,6 +35,14 @@ dependencies = [
   "python-multipart",
   "sqlalchemy",
 ]
+
+[project.scripts]
+devops-maturity = "src.cli.main:app"
+
+[project.urls]
+homepage = "https://github.com/devops-maturity"
+source = "https://github.com/devops-maturity/devops-maturity"
+tracker = "https://github.com/devops-maturity/devops-maturity/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -53,8 +56,13 @@ test = [
   "pytest-cov",
 ]
 
-[project.scripts]
-devops-maturity = "src.cli.main:app"
+[tool.setuptools_scm]
+# It would be nice to include the commit hash in the version, but that
+# can't be done in a PEP 440-compatible way.
+version_scheme= "no-guess-dev"
+# Test PyPI does not support local versions.
+local_scheme = "no-local-version"
+fallback_version = "0.0.0"
 
 [tool.mypy]
 ignore_missing_imports = true
