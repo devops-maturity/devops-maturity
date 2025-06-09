@@ -10,8 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
   "fastapi",
-  "uvicorn[standard]",
-  "pybadges",
+  "badgepy",
   "typer",
   "jinja2",
   "pydantic"
@@ -21,6 +20,7 @@ dependencies = [
 dev = [
   "pytest",
   "ruff",
+  "uvicorn",
 ]
 
 [project.scripts]
