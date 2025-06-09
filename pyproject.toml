@@ -8,6 +8,9 @@ authors = [
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
+
+
+
 dependencies = [
   "fastapi",
   "badgepy",
