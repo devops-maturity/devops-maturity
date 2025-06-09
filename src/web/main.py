@@ -10,6 +10,16 @@ app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
+# categories of criteria
+categories = {
+    "CI/CD Basics": "CI/CD Basics",
+    "Quality": "Quality",
+    "Security": "Security",
+    "Secure Supply Chain": "Secure Supply Chain",
+    "Reporting": "Reporting",
+    "Analysis": "Analysis",
+}
+
 criteria = [
     # CI/CD Basics
     Criteria(
@@ -97,7 +107,8 @@ criteria = [
 @app.get("/", response_class=HTMLResponse)
 def read_form(request: Request):
     return templates.TemplateResponse(
-        "form.html", {"request": request, "criteria": criteria}
+        "form.html",
+        {"request": request, "criteria": criteria, "categories": categories},
     )
 
 

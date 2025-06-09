@@ -17,21 +17,19 @@
     <div class="container">
         <h1 class="mb-4 text-center">DevOps Maturity Assessment</h1>
         <form method="post" action="/submit">
-            {% set last_category = None %}
-            {% for c in criteria %}
-                {% if last_category != c.category %}
-                    <div class="category-title">{{ c.category }}</div>
-                    {% set last_category = c.category %}
-                {% endif %}
-                <div class="card">
-                    <div class="card-body">
-                        <label class="form-label fw-bold">{{ c.question }}</label>
-                        <div>
-                            <input type="radio" name="{{ c.id }}" value="yes"> Yes
-                            <input type="radio" name="{{ c.id }}" value="no" checked> No
+            {% for cat in categories %}
+                <div class="category-title">{{ cat }}</div>
+                {% for c in criteria if cat in c.question %}
+                    <div class="card">
+                        <div class="card-body">
+                            <label class="form-label fw-bold">{{ c.question }}</label>
+                            <div>
+                                <input type="radio" name="{{ c.id }}" value="yes"> Yes
+                                <input type="radio" name="{{ c.id }}" value="no" checked> No
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             {% endfor %}
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-lg">Submit Assessment</button>
