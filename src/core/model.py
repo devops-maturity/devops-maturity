@@ -5,6 +5,9 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
+engine = create_engine("sqlite:///./devops_maturity.db")
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 class Criteria(BaseModel):
     id: str
@@ -23,12 +26,5 @@ class Assessment(Base):  # type: ignore
     responses = Column(JSON)
 
 
-engine = None
-SessionLocal = sessionmaker(autocommit=False, autoflush=False)
-
-
 def init_db():
-    global engine
-    engine = create_engine("sqlite:///./devops_maturity.db")
-    SessionLocal.configure(bind=engine)
     Base.metadata.create_all(bind=engine)
