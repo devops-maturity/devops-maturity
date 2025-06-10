@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from ..core.model import Criteria, UserResponse, Assessment, SessionLocal
+from ..core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
 from ..core.scorer import calculate_score, score_to_level
 from ..badges.generator import generate_badge
 
@@ -102,6 +102,8 @@ criteria = [
         weight=0.5,
     ),
 ]
+
+init_db()
 
 
 @app.get("/", response_class=HTMLResponse)
