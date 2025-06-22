@@ -25,50 +25,16 @@ Then open [http://localhost:8000](http://localhost:8000) in your browser to acce
 To run the assessment in your terminal, use:
 
 ```bash
-python -m src.cli.main check
+pip install devops-maturity
+devops-maturity assess
 ```
 
 This will prompt you to answer questions interactively and generate a badge based on your score.
 
-## Assessment Categories & Criteria
+## DevOps Maturity Specification
 
-The assessment covers the following categories and criteria:
+The assessment is based on the [DevOps Maturity Specification](https://devops-maturity.github.io/).
 
-### CI/CD Basics
-- Build a specific branch (must have)
-- Build upon pull request (must have)
-- Docker (nice to have)
+## License
 
-### Quality
-- Automated Testing: Functional testing (must have)
-- Automated Testing: Performance testing (must have)
-- Code Coverage (nice to have)
-- Accessibility Testing (nice to have)
-
-### Security
-- Security scan (must have)
-- License scan (nice to have)
-
-### Secure Supply Chain
-- Documented Build Chain (must have)
-- CICD as coded (must have)
-- Artifacts are signed (nice to have)
-- Artifactory download for Package Managers (nice to have)
-
-### Reporting
-- Email/Slack reporting functionality
-
-### Analysis
-- Quality Gate (nice to have)
-- Code Lint (nice to have)
-- Static code analysis (nice to have)
-- Dynamic code analysis (nice to have)
-
-## Badge Levels
-
-Your score will generate one of the following badges:
-- **WIP**: 0%
-- **PASSING**: 1–49%
-- **BRONZE**: 50–69%
-- **SILVER**: 70–89%
-- **GOLD**: 90–100%
+This project is licensed under the [MIT License](LICENSE).
