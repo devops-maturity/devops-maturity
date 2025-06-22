@@ -43,7 +43,7 @@ def preview(session):
 @nox.session
 def deploy(session):
     """Deploy the project"""
-    if not (RENDER and NETLIFY):
+    if not RENDER or not NETLIFY:
         session.log("Skipping deploy: RENDER or NETLIFY not set.")
         return
     session.install("uvicorn")

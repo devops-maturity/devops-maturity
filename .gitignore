@@ -16,3 +16,7 @@ build/
 # Python test files
 .coverage
 .nox
+
+# Web server files
+devops_maturity.db
+src/web/static/devops-maturity.svg
