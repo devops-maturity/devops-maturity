@@ -5,8 +5,6 @@ import os
 GITHUB_ACTIONS = os.environ.get("GITHUB_ACTIONS") == "true"
 # https://render.com/docs/environment-variables
 RENDER = os.environ.get("RENDER") == "true"
-# https://docs.netlify.com/configure-builds/environment-variables/#build-metadata
-NETLIFY = os.environ.get("NETLIFY") == "true"
 
 
 @nox.session
@@ -43,8 +41,8 @@ def preview(session):
 @nox.session
 def deploy(session):
     """Deploy the project"""
-    if not RENDER or not NETLIFY:
-        session.log("Skipping deploy: RENDER or NETLIFY not set.")
+    if not RENDER:
+        session.log("Skipping deploy: RENDER not set.")
         return
     session.install("uvicorn")
     session.install(".")
