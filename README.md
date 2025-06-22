@@ -15,10 +15,13 @@ This repository contains a DevOps Maturity Assessment tool designed to help orga
 To launch the web application, you can use the following command:
 
 ```bash
-uvicorn src.web.main:app --reload
+git clone https://github.com/devops-maturity/devops-maturity.git
+cd devops-maturity
+pip install nox
+nox -s preview
 ```
 
-Then open [http://localhost:8000](http://localhost:8000) in your browser to access the DevOps Maturity Assessment web interface.
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser to access the DevOps Maturity Assessment web interface.
 
 ### Use the CLI
 
