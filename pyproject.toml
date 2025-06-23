@@ -27,7 +27,6 @@ keywords = ["devops","maturity", "assessment", "cli","web"]
 
 dependencies = [
   "fastapi",
-  "badgepy",
   "typer",
   "jinja2",
   "pydantic",
@@ -36,7 +35,7 @@ dependencies = [
 ]
 
 [project.scripts]
-devops-maturity = "src.cli.main:app"
+devops-maturity = "cli.main:app"
 
 [project.urls]
 homepage = "https://github.com/devops-maturity"
@@ -54,6 +53,9 @@ test = [
   "pytest",
   "pytest-cov",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools_scm]
 # It would be nice to include the commit hash in the version, but that

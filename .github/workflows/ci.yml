@@ -29,3 +29,8 @@ jobs:
 
       - name: Run Nox
         run: nox
+
+      - name: Smoke test
+        run: |
+          pip install dist/*.whl
+          devops-maturity --help
