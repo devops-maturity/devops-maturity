@@ -6,7 +6,7 @@
 
 ## Overview
 
-This repository contains a DevOps Maturity Assessment tool designed to help organizations evaluate their DevOps practices and identify areas for improvement. The assessment is based on a set of questions that cover various aspects of DevOps, including culture, automation, measurement, sharing, and security.
+The DevOps Maturity Assessment is a tool designed to help you evaluate your DevOps practices and maturity level. It provides a structured questionnaire that covers various aspects of DevOps, allowing you to identify strengths and areas for improvement.
 
 ## Usage
 
