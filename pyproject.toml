@@ -27,7 +27,6 @@ keywords = ["devops","maturity", "assessment", "cli","web"]
 
 dependencies = [
   "fastapi",
-  "badgepy",
   "typer",
   "jinja2",
   "pydantic",

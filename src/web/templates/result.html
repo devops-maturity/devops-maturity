@@ -13,18 +13,18 @@
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Your DevOps Maturity Badge</h2>
     <div class="text-center">
-        <img src="{{ badge_url }}" alt="DevOps Maturity Badge" class="badge-img">
+        <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
     </div>
     <h4 class="mt-4">Copy Badge Code</h4>
     <div>
         <strong>Markdown:</strong>
-        <div class="copy-box">![]({{ badge_url }})</div>
+        <div class="copy-box">[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)</div>
         <strong>reStructuredText:</strong>
-        <div class="copy-box">.. image:: {{ badge_url }}</div>
+        <div class="copy-box">.. image:: {{ badge_url }}<br>&nbsp;&nbsp;:target: https://devops-maturity.github.io/<br>&nbsp;&nbsp;:alt: DevOps Maturity Badge</div>
         <strong>HTML:</strong>
         <div class="copy-box">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
         <strong>AsciiDoc:</strong>
-        <div class="copy-box">image::{{ badge_url }}[]</div>
+        <div class="copy-box">link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]</div>
     </div>
     <div class="mt-4 text-center">
         <a href="/" class="btn btn-secondary">Back to Assessment</a>

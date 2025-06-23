@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from ..core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
 from ..core.scorer import calculate_score, score_to_level
-from ..badges.generator import generate_badge
+from ..core.badge import get_badge_url
 
 app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")
@@ -133,10 +133,7 @@ async def submit(request: Request):
 
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
-    badge_filename = "devops-maturity.svg"
-    badge_path = f"src/web/static/{badge_filename}"
-    badge_url = f"/static/{badge_filename}"
-    generate_badge(score, level, badge_path)
+    badge_url = get_badge_url(level)
     return templates.TemplateResponse(
         "result.html",
         {

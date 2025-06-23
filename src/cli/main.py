@@ -2,6 +2,7 @@ import typer
 from src.core.model import UserResponse, Assessment, SessionLocal
 from src.core.scorer import calculate_score, score_to_level
 from src.web.main import criteria
+from src.core.badge import get_badge_url
 
 app = typer.Typer(help="Run DevOps maturity assessment interactively.")
 
@@ -18,6 +19,7 @@ def assess():
     level = score_to_level(score)
     typer.echo(f"\nYour score: {score:.2f}")
     typer.echo(f"Your maturity level: {level}")
+    typer.echo(f"Copy Badge URL: {get_badge_url(level)}\n")
 
     # Save to database
     db = SessionLocal()
