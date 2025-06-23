@@ -18,7 +18,7 @@ def assess():
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
     typer.echo(f"\nYour score: {score:.2f}")
-    typer.echo(f"Your maturity level: {level}")
+    typer.echo(f"Your maturity level: {level}\n")
     typer.echo(f"Copy Badge URL: {get_badge_url(level)}\n")
 
     # Save to database
