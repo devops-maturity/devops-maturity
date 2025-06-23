@@ -8,7 +8,7 @@ description = "A tool to evaluate and measure the maturity level of your DevOps 
 authors = [
   { name = "Xianpeng Shen", email = "xianpeng.shen@gmail.com" }
 ]
-license = "MIT"
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.9"
 dynamic = ["version"]
