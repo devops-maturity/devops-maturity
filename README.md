@@ -1,6 +1,6 @@
 # DevOps Maturity Assessment
 
-![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)
+[![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)](https://pypi.org/project/devops-maturity/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/devops-maturity)
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
 

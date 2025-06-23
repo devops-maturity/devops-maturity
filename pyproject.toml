@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "devops-maturity"
-description = "A DevOps maturity assessment tool with CLI and Web interface."
+description = "A tool to evaluate and measure the maturity level of your DevOps practices."
 authors = [
   { name = "Xianpeng Shen", email = "xianpeng.shen@gmail.com" }
 ]
@@ -13,8 +13,9 @@ readme = "README.md"
 requires-python = ">=3.9"
 dynamic = ["version"]
 
+# https://pypi.org/classifiers/
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -23,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 
-keywords = ["devops","maturity", "assessment", "cli","web"]
+keywords = ["devops", "maturity", "assessment", "cli"]
 
 dependencies = [
   "fastapi",
@@ -56,6 +57,7 @@ test = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = false
 
 [tool.setuptools_scm]
 # It would be nice to include the commit hash in the version, but that
