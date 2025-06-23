@@ -2,9 +2,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from ..core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
-from ..core.scorer import calculate_score, score_to_level
-from ..core.badge import get_badge_url
+from core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
+from core.scorer import calculate_score, score_to_level
+from core.badge import get_badge_url
 
 app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")

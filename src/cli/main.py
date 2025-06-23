@@ -1,8 +1,8 @@
 import typer
-from src.core.model import UserResponse, Assessment, SessionLocal
-from src.core.scorer import calculate_score, score_to_level
-from src.web.main import criteria
-from src.core.badge import get_badge_url
+from core.model import UserResponse, Assessment, SessionLocal
+from core.scorer import calculate_score, score_to_level
+from web.main import criteria
+from core.badge import get_badge_url
 
 app = typer.Typer(help="Run DevOps maturity assessment interactively.")
 
