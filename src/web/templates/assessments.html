@@ -23,7 +23,14 @@
                     <td>
                         <ul class="mb-0">
                         {% for key, value in a.responses.items() %}
-                            <li><strong>{{ key }}</strong>: {{ value }}</li>
+                            {% set crit = (criteria_list | selectattr('id', 'equalto', key) | list | first) %}
+                            <li>
+                                <strong>{{ key }}</strong>
+                                {% if crit %} - {{ crit.criteria }}{% endif %}:
+                                <span class="{% if value %}text-success{% else %}text-danger{% endif %}">
+                                    {{ value }}
+                                </span>
+                            </li>
                         {% endfor %}
                         </ul>
                     </td>

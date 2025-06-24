@@ -11,7 +11,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Criteria(BaseModel):
     id: str
-    question: str
+    category: str
+    criteria: str
     weight: float
 
 
