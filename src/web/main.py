@@ -11,95 +11,91 @@ templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
 # categories of criteria
-categories = {
-    "CI/CD Basics": "CI/CD Basics",
-    "Quality": "Quality",
-    "Security": "Security",
-    "Secure Supply Chain": "Secure Supply Chain",
-    "Reporting": "Reporting",
-    "Analysis": "Analysis",
-}
+categories = [
+    "Basics",
+    "Quality",
+    "Security",
+    "Supply Chain Security",
+    "Analysis",
+    "Reporting",
+]
 
 criteria = [
-    # CI/CD Basics
+    # Basics
+    Criteria(id="D101", category="Basics", criteria="Branch Builds (🟢)", weight=1.0),
     Criteria(
-        id="build_branch",
-        question="Build a specific branch (CI/CD Basics, must have)",
-        weight=1.0,
+        id="D102", category="Basics", criteria="Pull Request Builds (🟢)", weight=1.0
     ),
     Criteria(
-        id="build_pr",
-        question="Build upon pull request (CI/CD Basics, must have)",
-        weight=1.0,
-    ),
-    Criteria(id="docker", question="Docker (CI/CD Basics, nice to have)", weight=0.5),
-    # Quality
-    Criteria(
-        id="func_test",
-        question="Automated Testing: Functional testing (Quality, must have)",
-        weight=1.0,
-    ),
-    Criteria(
-        id="perf_test",
-        question="Automated Testing: Performance testing (Quality, must have)",
-        weight=1.0,
-    ),
-    Criteria(
-        id="code_coverage", question="Code Coverage (Quality, nice to have)", weight=0.5
-    ),
-    Criteria(
-        id="accessibility",
-        question="Accessibility Testing (Quality, nice to have)",
+        id="D103",
+        category="Basics",
+        criteria="Clean Build Environments (🟡)",
         weight=0.5,
+    ),
+    # Quality
+    Criteria(id="D201", category="Quality", criteria="Unit Testing (🟢)", weight=1.0),
+    Criteria(
+        id="D202", category="Quality", criteria="Functional Testing (🟢)", weight=1.0
+    ),
+    Criteria(
+        id="D203", category="Quality", criteria="Performance Testing (🟡)", weight=0.5
+    ),
+    Criteria(id="D204", category="Quality", criteria="Code Coverage (🟡)", weight=0.5),
+    Criteria(
+        id="D205", category="Quality", criteria="Accessibility Testing (🟡)", weight=0.5
     ),
     # Security
     Criteria(
-        id="security_scan", question="Security scan (Security, must have)", weight=1.0
+        id="D301", category="Security", criteria="Security Scanning (🟢)", weight=1.0
     ),
     Criteria(
-        id="license_scan", question="License scan (Security, nice to have)", weight=0.5
+        id="D302", category="Security", criteria="License Scanning (🟡)", weight=0.5
     ),
-    # Secure Supply Chain
+    # Supply Chain Security
     Criteria(
-        id="doc_build_chain",
-        question="Documented Build Chain (Secure Supply Chain, must have)",
+        id="D401",
+        category="Supply Chain Security",
+        criteria="Documented Build Process (🟢)",
         weight=1.0,
     ),
     Criteria(
-        id="cicd_as_code",
-        question="CICD as coded (Secure Supply Chain, must have)",
+        id="D402",
+        category="Supply Chain Security",
+        criteria="CI/CD as Code (🟢)",
         weight=1.0,
     ),
     Criteria(
-        id="signed_artifacts",
-        question="Artifacts are signed (Secure Supply Chain, nice to have)",
+        id="D403",
+        category="Supply Chain Security",
+        criteria="Artifact Signing (🟡)",
         weight=0.5,
     ),
     Criteria(
-        id="artifactory_download",
-        question="Artifactory download for Package Managers (Secure Supply Chain, nice to have)",
+        id="D404",
+        category="Supply Chain Security",
+        criteria="Dependency Pinning (🟡)",
         weight=0.5,
-    ),
-    # Reporting
-    Criteria(
-        id="reporting",
-        question="Email/Slack reporting functionality (Reporting, must have)",
-        weight=1.0,
     ),
     # Analysis
     Criteria(
-        id="quality_gate", question="Quality Gate (Analysis, nice to have)", weight=0.5
-    ),
-    Criteria(id="code_lint", question="Code Lint (Analysis, nice to have)", weight=0.5),
-    Criteria(
-        id="static_analysis",
-        question="Static code analysis (Analysis, nice to have)",
-        weight=0.5,
+        id="D501", category="Analysis", criteria="Static Code Analysis (🟡)", weight=0.5
     ),
     Criteria(
-        id="dynamic_analysis",
-        question="Dynamic code analysis (Analysis, nice to have)",
+        id="D502",
+        category="Analysis",
+        criteria="Dynamic Code Analysis (🟡)",
         weight=0.5,
+    ),
+    Criteria(id="D503", category="Analysis", criteria="Code Linting (🟡)", weight=0.5),
+    # Reporting
+    Criteria(
+        id="D601",
+        category="Reporting",
+        criteria="Notifications & Alerts (🟢)",
+        weight=1.0,
+    ),
+    Criteria(
+        id="D602", category="Reporting", criteria="Attached Reports (🟢)", weight=1.0
     ),
 ]
 
@@ -163,5 +159,9 @@ def list_assessments(request: Request):
         assessment_data.append({"id": a.id, "responses": a.responses, "point": point})
     return templates.TemplateResponse(
         "assessments.html",
-        {"request": request, "assessments": assessment_data},
+        {
+            "request": request,
+            "assessments": assessment_data,
+            "criteria_list": criteria,
+        },
     )

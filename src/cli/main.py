@@ -13,7 +13,7 @@ def assess():
     responses = []
     typer.echo("DevOps Maturity Assessment\n")
     for c in criteria:
-        answer = typer.confirm(f"{c.question} (yes/no)", default=False)
+        answer = typer.confirm(f"{c.id} {c.criteria} (yes/no)", default=False)
         responses.append(UserResponse(id=c.id, answer=answer))
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
