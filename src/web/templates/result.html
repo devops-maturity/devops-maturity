@@ -83,7 +83,7 @@
 function copyToClipboard(elementId) {
     const el = document.getElementById(elementId);
     // Remove <br> tags for reStructuredText
-    let text = el.innerHTML.replace(/<br>/g, '\n').replace(/&nbsp;/g, ' ');
+    let text = el.textContent.replace(/<br>/g, '\n').replace(/&nbsp;/g, ' ');
     // Use Clipboard API to copy text
     navigator.clipboard.writeText(text).then(() => {
         alert("Text copied to clipboard!");
