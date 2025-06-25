@@ -29,9 +29,7 @@ jobs:
 
       - name: Run Nox
         run: nox
-
-      - name: Autofix
-        uses: autofix-ci/action@v1
+      - uses: autofix-ci/action@v1
         with:
           fail-fast: false
 
