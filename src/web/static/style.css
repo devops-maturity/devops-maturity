@@ -1,3 +1,4 @@
+/* General styles */
 .header-bg {
     width: 100%;
     min-height: 240px;
@@ -8,12 +9,14 @@
     padding-bottom: 80px;
 }
 
+/* Header styles */
 .header-bg .header-center {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+/* Header logo */
 body {
     background: #f8fafc;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -21,6 +24,7 @@ body {
     min-height: 100vh;
 }
 
+/* Container styles */
 .container {
     max-width: 900px;
     margin: -60px auto 0 auto; /* Center the container */
@@ -42,6 +46,7 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Card styles */
 .card {
     margin-bottom: 24px;
     border-radius: 8px;
@@ -49,20 +54,24 @@ body {
     border: none;
 }
 
+/* Card body */
 .card-body {
     padding: 1.25rem 1.5rem;
 }
 
+/* Badge styles */
 .badge-level {
     font-size: 1.2em;
     color: #5b7965;
 }
 
+/* Form styles */
 .form-label {
     font-size: 1.1em;
     color: #5b7965;
 }
 
+/* Button styles */
 .btn-primary {
     background: linear-gradient(90deg, #5b7965 0%, #f4c403 100%);
     border: none;
@@ -74,22 +83,26 @@ body {
     transition: background 0.2s;
 }
 
+/* Button hover and focus states */
 .btn-primary:hover, .btn-primary:focus {
     background: linear-gradient(90deg, #64746a 0%, #e6b802 100%);
     color: #000;
 }
 
+/* Outline button styles */
 .btn-outline-primary {
     border-color: #5b7965;
     color: #5b7965;
     border-radius: 50px;
 }
 
+/* Outline button hover and focus states */
 .btn-outline-primary:hover, .btn-outline-primary:focus {
     background: #5b7965;
     color: #fff;
 }
 
+/* Nav tabs styles */
 .nav-tabs .nav-link.active {
     background: #5b7965;
     color: #fff;
@@ -97,16 +110,19 @@ body {
     border: none;
 }
 
+/* Nav link styles */
 .nav-tabs .nav-link {
     color: #5b7965;
     font-weight: 500;
     border: none;
 }
 
+/* Nav link hover state */
 .nav-tabs {
     border-bottom: 2px solid #e5e7eb;
 }
 
+/* Logo styles */
 .logo-title {
     font-size: 2.6em;
     font-weight: 700;
@@ -116,6 +132,7 @@ body {
     text-align: center;
 }
 
+/* Logo image */
 .logo-img {
     width: 80px;
     height: 80px;
@@ -123,14 +140,14 @@ body {
     margin-bottom: 20px;
 }
 
-/* 页脚 */
+/* Footer styles */
 footer {
     font-size: 0.95em;
     margin-top: 48px;
     color: #64746a;
 }
 
-/* Copy 链接样式 */
+/* Copy link button */
 .copy-link {
     cursor: pointer;
     color: #5b7965;
@@ -146,6 +163,7 @@ footer {
     background-color: #fff;
 }
 
+/* Form check input hover state */
 .form-check-input:checked {
     background-color: black;
     border-color: black;
