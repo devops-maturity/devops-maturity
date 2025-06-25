@@ -32,6 +32,7 @@ dependencies = [
   "jinja2",
   "pydantic",
   "pyyaml",
+  "python-multipart",
   "sqlalchemy",
 ]
 

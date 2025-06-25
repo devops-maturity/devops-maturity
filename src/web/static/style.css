@@ -1,0 +1,183 @@
+/* General styles */
+.header-bg {
+    width: 100%;
+    min-height: 240px;
+    background: linear-gradient(45deg, #5b7965 0%, #f4c403 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 80px;
+}
+
+/* Header styles */
+.header-bg .header-center {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Header logo */
+body {
+    background: #f8fafc;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #222;
+    min-height: 100vh;
+}
+
+/* Container styles */
+.container {
+    max-width: 900px;
+    margin: -60px auto 0 auto; /* Center the container */
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.03), 0 2px 20px 10px rgba(0,0,0,0.02);
+    padding: 32px 24px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Category title */
+.category-title {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #64746a;
+    letter-spacing: 0.5px;
+}
+
+/* Card styles */
+.card {
+    margin-bottom: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.03), 0 2px 20px 10px rgba(0,0,0,0.02);
+    border: none;
+}
+
+/* Card body */
+.card-body {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Badge styles */
+.badge-level {
+    font-size: 1.2em;
+    color: #5b7965;
+}
+
+/* Form styles */
+.form-label {
+    font-size: 1.1em;
+    color: #5b7965;
+}
+
+/* Button styles */
+.btn-primary {
+    background: linear-gradient(90deg, #5b7965 0%, #f4c403 100%);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(91,121,101,0.08);
+    transition: background 0.2s;
+}
+
+/* Button hover and focus states */
+.btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(90deg, #64746a 0%, #e6b802 100%);
+    color: #000;
+}
+
+/* Outline button styles */
+.btn-outline-primary {
+    border-color: #5b7965;
+    color: #5b7965;
+    border-radius: 50px;
+}
+
+/* Outline button hover and focus states */
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background: #5b7965;
+    color: #fff;
+}
+
+/* Nav tabs styles */
+.nav-tabs .nav-link.active {
+    background: #5b7965;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    border: none;
+}
+
+/* Nav link styles */
+.nav-tabs .nav-link {
+    color: #5b7965;
+    font-weight: 500;
+    border: none;
+}
+
+/* Nav link hover state */
+.nav-tabs {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Logo styles */
+.logo-title {
+    font-size: 2.6em;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Logo image */
+.logo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 90%;
+    margin-bottom: 20px;
+}
+
+/* Footer styles */
+footer {
+    font-size: 0.95em;
+    margin-top: 48px;
+    color: #64746a;
+}
+
+/* Copy link button */
+.copy-link {
+    cursor: pointer;
+    color: #5b7965;
+    font-weight: 500;
+    text-decoration: underline;
+    margin-left: 8px;
+    transition: color 0.2s;
+}
+
+/* Form check input */
+.form-check-input {
+    border-color: #5b7965;
+    background-color: #fff;
+}
+
+/* Form check input hover state */
+.form-check-input:checked {
+    background-color: black;
+    border-color: black;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 12px 2px;
+    }
+    .logo-title {
+        font-size: 1.3em;
+    }
+    .category-title {
+        font-size: 1.1em;
+    }
+}

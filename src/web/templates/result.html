@@ -3,32 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Assessment Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .badge-img { max-width: 220px; margin-bottom: 20px; }
-        .copy-box { font-family: monospace; background: #FFFFFF; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
-    </style>
+    <link rel="icon" type="image/png" href="/static/logo.png">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container mt-5">
+<div class="header-bg">
+    <div class="header-center">
+        <div class="logo-title mt-2">DevOps Maturity Assessment</div>
+        <img src="/static/logo.png" alt="DevOps Maturity Logo" height="100" class="logo-img">
+    </div>
+</div>
+<div class="container bg-white p-4 rounded shadow-sm">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Assessment</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/assessments">All Assessments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/submit">Last Assessment</a>
+        </li>
+    </ul>
     <h2 class="mb-4 text-center">Your DevOps Maturity Badge</h2>
     <div class="text-center">
         <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
     </div>
-    <h4 class="mt-4">Copy Badge Code</h4>
     <div>
         <strong>Markdown:</strong>
-        <div class="copy-box">[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)</div>
+        <div class="input-group mb-2">
+            <div class="form-control copy-box" id="copy-markdown">[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)</div>
+            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-markdown')" aria-label="Copy Markdown code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
+                </svg>
+            </button>
+        </div>
         <strong>reStructuredText:</strong>
-        <div class="copy-box">.. image:: {{ badge_url }}<br>&nbsp;&nbsp;:target: https://devops-maturity.github.io/<br>&nbsp;&nbsp;:alt: DevOps Maturity Badge</div>
+        <div class="input-group mb-2">
+            <div class="form-control copy-box" id="copy-rst">.. image:: {{ badge_url }}<br>&nbsp;&nbsp;:target: https://devops-maturity.github.io/<br>&nbsp;&nbsp;:alt: DevOps Maturity Badge</div>
+            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-rst')" aria-label="Copy reStructuredText code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
+                </svg>
+            </button>
+        </div>
         <strong>HTML:</strong>
-        <div class="copy-box">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
+        <div class="input-group mb-2">
+            <div class="form-control copy-box" id="copy-html">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
+            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-html')" aria-label="Copy HTML code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
+                </svg>
+            </button>
+        </div>
         <strong>AsciiDoc:</strong>
-        <div class="copy-box">link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]</div>
+        <div class="input-group mb-2">
+            <div class="form-control copy-box" id="copy-asciidoc">link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]</div>
+            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-asciidoc')" aria-label="Copy AsciiDoc code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M10 1.5v1h2A1.5.5 0 0 1 13.5 4v9A1.5.5 0 0 1 12 14.5h-8A1.5.5 0 0 1 2.5 13V4A1.5.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
+                </svg>
+            </button>
+        </div>
     </div>
-    <div class="mt-4 text-center">
-        <a href="/" class="btn btn-secondary">Back to Assessment</a>
-    </div>
+     <footer class="mt-5 text-center text-muted">
+        &copy; 2025 DevOps Maturity Team
+        &nbsp;|&nbsp;
+        <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" class="github-link" style="color:inherit; text-decoration:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" style="vertical-align:middle;">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+        </a>
+    </footer>
 </div>
+<script>
+function copyToClipboard(elementId) {
+    const el = document.getElementById(elementId);
+    // Remove <br> tags for reStructuredText
+    let text = el.textContent.replace(/<br>/g, '\n').replace(/&nbsp;/g, ' ');
+    // Use Clipboard API to copy text
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Text copied to clipboard!");
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+        alert("Failed to copy text. Please try again.");
+    });
+}
+</script>
 </body>
 </html>
