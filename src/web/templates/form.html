@@ -35,10 +35,14 @@
                         <div class="card-body">
                             <label class="form-label fw-bold">{{ c.criteria }}</label>
                             <div>
-                                <input type="radio" class="form-check-input me-1" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes">
-                                <label for="{{ c.id }}-yes" class="me-3">Yes</label>
-                                <input type="radio" class="form-check-input me-1" name="{{ c.id }}" value="no" id="{{ c.id }}-no" checked>
-                                <label for="{{ c.id }}-no">No</label>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes">
+                                    <label for="{{ c.id }}-yes" class="form-check-label">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="{{ c.id }}" value="no" id="{{ c.id }}-no" checked>
+                                    <label for="{{ c.id }}-no" class="form-check-label">No</label>
+                                </div>
                             </div>
                         </div>
                     </div>
