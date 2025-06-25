@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
+
 <body>
+    <div class="logo-title mt-2 text-center">DevOps Maturity Assessment</div>
     <div class="container bg-white p-4 rounded shadow-sm">
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
@@ -20,13 +22,6 @@
                 <a class="nav-link" href="/assessments">All Assessments</a>
             </li>
         </ul>
-        <div class="text-center mb-3">
-            <img src="/static/logo.png" alt="DevOps Maturity Logo"
-                style="max-height:90px; background:#fff; padding:8px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-            <div class="logo-title mt-2">DevOps Maturity Assessment</div>
-            <a href="https://devops-maturity.github.io/" target="_blank"
-                class="btn btn-outline-primary btn-sm mt-2">Specification Homepage</a>
-        </div>
         <form method="post" action="/submit">
             {% for cat in categories %}
                 <div class="category-title">{{ cat }}</div>

@@ -30,6 +30,11 @@ jobs:
       - name: Run Nox
         run: nox
 
+      - name: Autofix
+        uses: autofix-ci/action@v1
+        with:
+          fail-fast: false
+
       - name: Smoke test
         run: |
           pip install dist/*.whl
