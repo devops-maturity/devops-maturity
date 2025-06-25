@@ -140,6 +140,17 @@ footer {
     transition: color 0.2s;
 }
 
+/* Form check input */
+.form-check-input {
+    border-color: #5b7965;
+    background-color: #fff;
+}
+
+.form-check-input:checked {
+    background-color: black;
+    border-color: black;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .container {
