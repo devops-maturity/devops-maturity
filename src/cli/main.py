@@ -47,7 +47,7 @@ def list_assessments():
         typer.echo(f"ID: {a.id} | Responses: {a.responses}")
 
 
-@app.command(name="load")
+@app.command(name="config")
 def assess_from_file(
     file_path: str = typer.Option(
         None,
@@ -57,7 +57,7 @@ def assess_from_file(
     ),
 ):
     """
-    Load answers from a YAML file and generate the DevOps maturity assessment result.
+    Read answers from a YAML file and generate the DevOps maturity assessment result.
     """
     if file_path is None:
         if os.path.exists("devops-maturity.yml"):
