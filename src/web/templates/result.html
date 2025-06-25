@@ -9,13 +9,28 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="logo-title mt-2 text-center">DevOps Maturity Assessment</div>
-<div class="container mt-5">
+<div class="header-bg">
+    <div class="header-center">
+        <div class="logo-title mt-2">DevOps Maturity Assessment</div>
+        <img src="/static/logo.png" alt="DevOps Maturity Logo" height="100" class="logo-img">
+    </div>
+</div>
+<div class="container bg-white p-4 rounded shadow-sm">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Assessment</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/assessments">All Assessments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/submit">Last Assessment</a>
+        </li>
+    </ul>
     <h2 class="mb-4 text-center">Your DevOps Maturity Badge</h2>
     <div class="text-center">
         <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
     </div>
-    <h4 class="mt-4">Copy Badge Code</h4>
     <div>
         <strong>Markdown:</strong>
         <div class="input-group mb-2">
@@ -53,9 +68,6 @@
                 </svg>
             </button>
         </div>
-    </div>
-    <div class="mt-4 text-center">
-        <a href="/" class="btn btn-secondary">Back to Assessment</a>
     </div>
 </div>
 <script>
