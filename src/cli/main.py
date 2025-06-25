@@ -1,12 +1,19 @@
 import os
 import typer
 import yaml
+from importlib.metadata import version
 from core.model import UserResponse, Assessment, SessionLocal
 from core.scorer import calculate_score, score_to_level
 from web.main import criteria
 from core.badge import get_badge_url
 
 app = typer.Typer(help="Run DevOps maturity assessment interactively.")
+
+
+def version_callback(value: bool):
+    if value:
+        typer.echo(f"DevOps Maturity CLI Version: {version('devops-maturity')}")
+        raise typer.Exit()
 
 
 def save_responses(responses):
@@ -80,6 +87,20 @@ def assess_from_file(
         answer = bool(data.get(c.id, False))
         responses.append(UserResponse(id=c.id, answer=answer))
     save_responses(responses)
+
+
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        None,
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Show the version and exit.",
+    ),
+):
+    # Do other global stuff, handle other global options here
+    return
 
 
 if __name__ == "__main__":
