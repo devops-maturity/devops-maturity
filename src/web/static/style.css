@@ -1,0 +1,117 @@
+/* General background and container */
+body {
+    background: #f8fafc;
+}
+
+.container {
+    max-width: 900px;
+    margin-top: 40px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+    padding: 32px 24px;
+}
+
+/* Category title */
+.category-title {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* Card styling */
+.card {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: none;
+}
+
+.card-body {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Badge level */
+.badge-level {
+    font-size: 1.2em;
+}
+
+/* Form label */
+.form-label {
+    font-size: 1.1em;
+}
+
+/* Primary button */
+.btn-primary {
+    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    transition: background 0.2s;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(90deg, #1d4ed8 0%, #0ea5e9 100%);
+    color: #fff;
+}
+
+/* Outline button */
+.btn-outline-primary {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* Navigation tabs */
+.nav-tabs .nav-link.active {
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    border: none;
+}
+
+.nav-tabs .nav-link {
+    color: #2563eb;
+    font-weight: 500;
+    border: none;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Logo title */
+.logo-title {
+    font-size: 2.1em;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 1px;
+}
+
+/* Footer */
+footer {
+    font-size: 0.95em;
+    margin-top: 48px;
+    color: #6b7280;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 12px 2px;
+    }
+    .logo-title {
+        font-size: 1.3em;
+    }
+    .category-title {
+        font-size: 1.1em;
+    }
+}
