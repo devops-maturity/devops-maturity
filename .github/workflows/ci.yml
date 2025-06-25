@@ -34,3 +34,6 @@ jobs:
         run: |
           pip install dist/*.whl
           devops-maturity --help
+          devops-maturity --version
+          devops-maturity config --file devops-maturity.yml
+          devops-maturity list

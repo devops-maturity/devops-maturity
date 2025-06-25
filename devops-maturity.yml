@@ -1,0 +1,34 @@
+# DevOps Maturity Assessment
+# https://devops-maturity.github.io/
+# https://github.com/devops-maturity/devops-maturity
+
+# Basics
+D101: true    # Branch Builds (must have)
+D102: true    # Pull Request Builds (must have)
+D103: true    # Clean Build Environments (nice to have)
+
+# Quality
+D201: true    # Unit Testing (must have)
+D202: false   # Functional Testing (must have)
+D203: false   # Performance Testing (nice to have)
+D204: false   # Code Coverage (nice to have)
+D205: false   # Accessibility Testing (nice to have)
+
+# Security
+D301: false   # Security Scanning (must have)
+D302: false   # License Scanning (nice to have)
+
+# Supply Chain Security
+D401: true    # Documented Build Process (must have)
+D402: true    # CI/CD as Code (must have)
+D403: false   # Artifact Signing (nice to have)
+D404: false   # Dependency Pinning (nice to have)
+
+# Analytics
+D501: false   # Static Code Analysis (nice to have)
+D502: false   # Dynamic Code Analysis (nice to have)
+D503: true    # Code Linting (nice to have)
+
+# Reporting
+D601: true    # Notifications & Alerts (must have)
+D602: false   # Attached Reports (must have)
