@@ -3,16 +3,30 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)](https://pypi.org/project/devops-maturity/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/devops-maturity)
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
+[![PASSING](https://img.shields.io/badge/DevOps%20Maturity-BRONZE-yellow.svg)](https://devops-maturity.github.io/)
+
 
 ## Overview
 
-The DevOps Maturity Assessment is a tool designed to help you evaluate your DevOps practices and maturity level. It provides a structured questionnaire that covers various aspects of DevOps, allowing you to identify strengths and areas for improvement.
+**DevOps Maturity Assessment** helps you evaluate and improve your DevOps practices.
+It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of questions that guide your DevOps evolution.
 
-## Usage
+## Quick Start
 
-### Launch Web Application
+### Run the CLI
 
-To launch the web application, you can use the following command:
+Install from PyPI and start the interactive assessment:
+
+```bash
+pip install devops-maturity
+devops-maturity assess
+```
+
+You'll be guided through a series of questions and receive a maturity score, level, and badge.
+
+### Launch the Web Interface
+
+To preview the web interface locally:
 
 ```bash
 git clone https://github.com/devops-maturity/devops-maturity.git
@@ -21,25 +35,21 @@ pip install nox
 nox -s preview
 ```
 
-Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser to access the DevOps Maturity Assessment web interface.
+Then visit http://127.0.0.1:8000 in your browser.
 
-### Use the CLI
+## Show Your Support
 
-To run the assessment in your terminal, use:
+If you find this tool helpful, please consider giving it a ⭐️ — your support helps others discover and adopt it.
 
-```bash
-pip install devops-maturity
-devops-maturity assess
+Want to show your project aligns with the [DevOps Maturity Specification][Specification]? Add this badge to your README:
+
+```markdown
+[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity%20Specification-1.0.0-yellow)](https://devops-maturity.github.io/)
 ```
-
-This will prompt you to answer questions interactively and generate a badge based on your score.
-
-## DevOps Maturity Specification
-
-The assessment is based on the [DevOps Maturity Specification](https://devops-maturity.github.io/).
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [Apache License 2.0][LICENSE].
 
 [LICENSE]: https://github.com/devops-maturity/devops-maturity/blob/main/LICENSE
+[Specification]: https://devops-maturity.github.io/
