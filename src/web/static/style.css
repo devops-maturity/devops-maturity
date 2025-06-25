@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
 }
 
-.container {
+.main-container {
     max-width: 900px;
     margin: -60px auto 0 auto; /* Center the container */
     background: #fff;
