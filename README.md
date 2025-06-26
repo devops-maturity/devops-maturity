@@ -37,6 +37,20 @@ nox -s preview
 
 Then visit http://127.0.0.1:8000 in your browser.
 
+#### Web Interface Preview
+
+Experience the full web interface workflow:
+
+**1. Start Your Assessment**
+![DevOps Maturity Assessment Home](docs/img/home.png)
+
+**2. View Your Results**
+![DevOps Maturity Assessment Results](docs/img/result.png)
+
+**3. Track Assessment History**
+![DevOps Maturity Assessment List](docs/img/list.png)
+
+
 ## Show Your Support
 
 If you find this tool helpful, please consider giving it a ⭐️ — your support helps others discover and adopt it.
