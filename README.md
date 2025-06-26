@@ -9,7 +9,8 @@
 ## Overview
 
 **DevOps Maturity Assessment** helps you evaluate and improve your DevOps practices.
-It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of questions that guide your DevOps evolution.
+
+It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
 
 ## Quick Start
 
