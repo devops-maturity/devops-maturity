@@ -22,7 +22,9 @@ pip install devops-maturity
 devops-maturity assess
 ```
 
-You'll be guided through a series of questions and receive a maturity score, level, and badge.
+You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
+
+[![asciicast](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz.svg)](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz)
 
 ### Launch the Web Interface
 
