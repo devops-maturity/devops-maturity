@@ -31,4 +31,4 @@ D503: true    # Code Linting (nice to have)
 
 # Reporting
 D601: true    # Notifications & Alerts (must have)
-D602: false   # Attached Reports (must have)
+D602: false   # Attached Reports (nice to have)
