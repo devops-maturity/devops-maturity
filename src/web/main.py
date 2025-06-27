@@ -95,7 +95,7 @@ criteria = [
         weight=1.0,
     ),
     Criteria(
-        id="D602", category="Reporting", criteria="Attached Reports (🟢)", weight=1.0
+        id="D602", category="Reporting", criteria="Attached Reports (🟡)", weight=0.5
     ),
 ]
 
