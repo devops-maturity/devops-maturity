@@ -45,13 +45,13 @@ Then visit http://127.0.0.1:8000 in your browser.
 Experience the full web interface workflow:
 
 **1. Start Your Assessment**
-![DevOps Maturity Assessment Home](docs/img/home.png)
+![DevOps Maturity Assessment Home][WebHome]
 
 **2. View Your Results**
-![DevOps Maturity Assessment Results](docs/img/result.png)
+![DevOps Maturity Assessment Results][WebResult]
 
 **3. Track Assessment History**
-![DevOps Maturity Assessment List](docs/img/list.png)
+![DevOps Maturity Assessment List][WebList]
 
 
 ## Show Your Support
@@ -70,3 +70,6 @@ This project is licensed under the [Apache License 2.0][LICENSE].
 
 [LICENSE]: https://github.com/devops-maturity/devops-maturity/blob/main/LICENSE
 [Specification]: https://devops-maturity.github.io/
+[WebHome]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/home.png?raw=true
+[WebResult]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/result.png?raw=true
+[WebList]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/list.png?raw=true
