@@ -38,6 +38,7 @@ dependencies = [
 
 [project.scripts]
 devops-maturity = "cli.main:app"
+dm = "cli.main:app"
 
 [project.urls]
 homepage = "https://github.com/devops-maturity"

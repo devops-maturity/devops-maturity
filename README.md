@@ -20,8 +20,16 @@ Install from PyPI and start the interactive assessment:
 
 ```bash
 pip install devops-maturity
+
+# Start the assessment
 devops-maturity assess
+
+# Or use the shortcut command
+dm assess
 ```
+
+> [!NOTE]
+> 💡 Tip: `dm` is a convenient alias for `devops-maturity`, making it quicker to type.
 
 You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
 
