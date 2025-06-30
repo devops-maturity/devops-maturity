@@ -19,7 +19,7 @@ def version_callback(value: bool):
 def save_responses(responses):
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
-    typer.secho(f"\nYour score: {score:.2f}", fg=typer.colors.BLUE, bold=True)
+    typer.secho(f"\nYour score: {score:.1f}", fg=typer.colors.BLUE, bold=True)
     typer.secho(f"Your maturity level: {level}", fg=typer.colors.GREEN, bold=True)
     typer.secho(f"Badge URL: {get_badge_url(level)}\n", fg=typer.colors.CYAN)
 
