@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
 from core.scorer import calculate_score, score_to_level
 from core.badge import get_badge_url
+from core import __version__  # Import the package version
 
 app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")
@@ -106,7 +107,12 @@ init_db()
 def read_form(request: Request):
     return templates.TemplateResponse(
         "form.html",
-        {"request": request, "criteria": criteria, "categories": categories},
+        {
+            "request": request,
+            "__version__": __version__,
+            "criteria": criteria,
+            "categories": categories,
+        },
     )
 
 
