@@ -28,8 +28,8 @@ devops-maturity assess
 dm assess
 ```
 
-> [!NOTE]
-> 💡 Tip: `dm` is a convenient alias for `devops-maturity`, making it quicker to type.
+> [!TIP]
+> `dm` is a convenient alias for `devops-maturity`, making it quicker to type.
 
 You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
 
