@@ -12,7 +12,7 @@ app = typer.Typer(help="Run DevOps maturity assessment interactively.")
 
 def version_callback(value: bool):
     if value:
-        typer.echo(f"DevOps Maturity CLI Version: {__version__}")
+        typer.echo(f"Version: {__version__}")
         raise typer.Exit()
 
 
