@@ -7,7 +7,7 @@ from core.scorer import calculate_score, score_to_level
 from web.main import criteria
 from core.badge import get_badge_url
 
-app = typer.Typer(help="Run DevOps maturity assessment interactively.")
+app = typer.Typer(help="Run DevOps maturity assessment interactively.", add_completion=False)
 
 
 def version_callback(value: bool):
