@@ -33,7 +33,7 @@ dm assess
 
 You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
 
-[![asciicast](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz.svg)](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz)
+[![asciicast](https://asciinema.org/a/dQAJpEOkXnclqBSu8F32Eskg6.svg)](https://asciinema.org/a/dQAJpEOkXnclqBSu8F32Eskg6)
 
 ### Launch the Web Interface
 
