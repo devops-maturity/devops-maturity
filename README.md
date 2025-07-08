@@ -33,7 +33,7 @@ dm assess
 
 You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
 
-[![asciicast](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz.svg)](https://asciinema.org/a/09BaFxLcu6J8xTrNCYQSlqDLz)
+![DevOps Maturity CLI Demo][CLIDemo]
 
 ### Launch the Web Interface
 
@@ -78,6 +78,7 @@ This project is licensed under the [Apache License 2.0][LICENSE].
 
 [LICENSE]: https://github.com/devops-maturity/devops-maturity/blob/main/LICENSE
 [Specification]: https://devops-maturity.github.io/
+[CLIDemo]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/demo.gif?raw=true
 [WebHome]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/home.png?raw=true
 [WebResult]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/result.png?raw=true
 [WebList]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/list.png?raw=true
