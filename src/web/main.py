@@ -2,103 +2,18 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from core.model import Criteria, UserResponse, Assessment, SessionLocal, init_db
+from core.model import UserResponse, Assessment, SessionLocal, init_db
 from core.scorer import calculate_score, score_to_level
 from core.badge import get_badge_url
-from core import __version__  # Import the package version
+from core import __version__
+from config.loader import load_criteria_config
 
 app = FastAPI()
 templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
-# categories of criteria
-categories = [
-    "Basics",
-    "Quality",
-    "Security",
-    "Supply Chain Security",
-    "Analysis",
-    "Reporting",
-]
-
-criteria = [
-    # Basics
-    Criteria(id="D101", category="Basics", criteria="Branch Builds (🟢)", weight=1.0),
-    Criteria(
-        id="D102", category="Basics", criteria="Pull Request Builds (🟢)", weight=1.0
-    ),
-    Criteria(
-        id="D103",
-        category="Basics",
-        criteria="Clean Build Environments (🟡)",
-        weight=0.5,
-    ),
-    # Quality
-    Criteria(id="D201", category="Quality", criteria="Unit Testing (🟢)", weight=1.0),
-    Criteria(
-        id="D202", category="Quality", criteria="Functional Testing (🟢)", weight=1.0
-    ),
-    Criteria(
-        id="D203", category="Quality", criteria="Performance Testing (🟡)", weight=0.5
-    ),
-    Criteria(id="D204", category="Quality", criteria="Code Coverage (🟡)", weight=0.5),
-    Criteria(
-        id="D205", category="Quality", criteria="Accessibility Testing (🟡)", weight=0.5
-    ),
-    # Security
-    Criteria(
-        id="D301", category="Security", criteria="Security Scanning (🟢)", weight=1.0
-    ),
-    Criteria(
-        id="D302", category="Security", criteria="License Scanning (🟡)", weight=0.5
-    ),
-    # Supply Chain Security
-    Criteria(
-        id="D401",
-        category="Supply Chain Security",
-        criteria="Documented Build Process (🟢)",
-        weight=1.0,
-    ),
-    Criteria(
-        id="D402",
-        category="Supply Chain Security",
-        criteria="CI/CD as Code (🟢)",
-        weight=1.0,
-    ),
-    Criteria(
-        id="D403",
-        category="Supply Chain Security",
-        criteria="Artifact Signing (🟡)",
-        weight=0.5,
-    ),
-    Criteria(
-        id="D404",
-        category="Supply Chain Security",
-        criteria="Dependency Pinning (🟡)",
-        weight=0.5,
-    ),
-    # Analysis
-    Criteria(
-        id="D501", category="Analysis", criteria="Static Code Analysis (🟡)", weight=0.5
-    ),
-    Criteria(
-        id="D502",
-        category="Analysis",
-        criteria="Dynamic Code Analysis (🟡)",
-        weight=0.5,
-    ),
-    Criteria(id="D503", category="Analysis", criteria="Code Linting (🟡)", weight=0.5),
-    # Reporting
-    Criteria(
-        id="D601",
-        category="Reporting",
-        criteria="Notifications & Alerts (🟢)",
-        weight=1.0,
-    ),
-    Criteria(
-        id="D602", category="Reporting", criteria="Attached Reports (🟡)", weight=0.5
-    ),
-]
+# Load criteria and categories from config
+categories, criteria = load_criteria_config()
 
 init_db()
 
