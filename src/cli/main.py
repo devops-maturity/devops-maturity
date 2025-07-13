@@ -3,9 +3,12 @@ import typer
 import yaml
 from core.model import UserResponse, Assessment, SessionLocal
 from core.scorer import calculate_score, score_to_level
-from web.main import criteria
 from core.badge import get_badge_url
-from core import __version__  # Import the package version
+from core import __version__
+from config.loader import load_criteria_config
+
+# Load criteria and categories from config
+categories, criteria = load_criteria_config()
 
 app = typer.Typer(
     help="Run DevOps maturity assessment interactively.", add_completion=False

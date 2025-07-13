@@ -12,6 +12,16 @@
 
 It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
 
+## Features
+
+- **Interactive CLI**: Perform assessments directly from your terminal.
+- **Web Interface**: Easy-to-use web app for taking assessments and viewing results.
+- **Maturity Scoring**: Receive a maturity score, level, and badge based on your answers.
+- **Progress Tracking**: View your assessment history to monitor improvement over time.
+- **Customizable Criteria**: Adapt the assessment to fit your organization’s specific needs.
+- **Open Source**: Built with Python and open to community contributions.
+
+
 ## Quick Start
 
 ### Run the CLI

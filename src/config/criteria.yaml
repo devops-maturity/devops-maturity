@@ -1,0 +1,109 @@
+categories:
+  - "Basics"
+  - "Quality"
+  - "Security"
+  - "Supply Chain Security"
+  - "Analysis"
+  - "Reporting"
+
+criteria:
+  # Basics
+  - id: "D101"
+    category: "Basics"
+    criteria: "Branch Builds (🟢)"
+    weight: 1.0
+
+  - id: "D102"
+    category: "Basics"
+    criteria: "Pull Request Builds (🟢)"
+    weight: 1.0
+
+  - id: "D103"
+    category: "Basics"
+    criteria: "Clean Build Environments (🟡)"
+    weight: 0.5
+
+  # Quality
+  - id: "D201"
+    category: "Quality"
+    criteria: "Unit Testing (🟢)"
+    weight: 1.0
+
+  - id: "D202"
+    category: "Quality"
+    criteria: "Functional Testing (🟢)"
+    weight: 1.0
+
+  - id: "D203"
+    category: "Quality"
+    criteria: "Performance Testing (🟡)"
+    weight: 0.5
+
+  - id: "D204"
+    category: "Quality"
+    criteria: "Code Coverage (🟡)"
+    weight: 0.5
+
+  - id: "D205"
+    category: "Quality"
+    criteria: "Accessibility Testing (🟡)"
+    weight: 0.5
+
+  # Security
+  - id: "D301"
+    category: "Security"
+    criteria: "Security Scanning (🟢)"
+    weight: 1.0
+
+  - id: "D302"
+    category: "Security"
+    criteria: "License Scanning (🟡)"
+    weight: 0.5
+
+  # Supply Chain Security
+  - id: "D401"
+    category: "Supply Chain Security"
+    criteria: "Documented Build Process (🟢)"
+    weight: 1.0
+
+  - id: "D402"
+    category: "Supply Chain Security"
+    criteria: "CI/CD as Code (🟢)"
+    weight: 1.0
+
+  - id: "D403"
+    category: "Supply Chain Security"
+    criteria: "Artifact Signing (🟡)"
+    weight: 0.5
+
+  - id: "D404"
+    category: "Supply Chain Security"
+    criteria: "Dependency Pinning (🟡)"
+    weight: 0.5
+
+  # Analysis
+  - id: "D501"
+    category: "Analysis"
+    criteria: "Static Code Analysis (🟡)"
+    weight: 0.5
+
+  - id: "D502"
+    category: "Analysis"
+    criteria: "Dynamic Code Analysis (🟡)"
+    weight: 0.5
+
+  - id: "D503"
+    category: "Analysis"
+    criteria: "Code Linting (🟡)"
+    weight: 0.5
+
+  # Reporting
+  - id: "D601"
+    category: "Reporting"
+    criteria: "Notifications & Alerts (🟢)"
+    weight: 1.0
+
+  - id: "D602"
+    category: "Reporting"
+    criteria: "Attached Reports (🟡)"
+    weight: 0.5
