@@ -26,8 +26,27 @@
             <li class="nav-item">
                 <a class="nav-link" href="/assessments">All Assessments</a>
             </li>
+            {% if user %}
+            <li class="nav-item ms-auto">
+                <span class="nav-link disabled">Welcome, {{ user.username }}</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item ms-auto">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Register</a>
+            </li>
+            {% endif %}
         </ul>
         <form method="post" action="/submit">
+            <div class="mb-3">
+                <label for="project_name" class="form-label fw-bold">Project Name <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="project_name" name="project_name" required>
+            </div>
             {% for cat in categories %}
                 <div class="category-title">{{ cat }}</div>
                 {% for c in criteria if cat == c.category %}
