@@ -92,16 +92,20 @@ oauth = OAuth(config)
 
 oauth.register(
     name="google",
-    client_id=os.environ.get("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_ID"),
-    client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", "GOOGLE_CLIENT_SECRET"),
+    client_id=os.environ.get("GOOGLE_CLIENT_ID", None),
+    client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", None),
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
     client_kwargs={"scope": "openid email profile"},
 )
 
+# Validate required environment variables for Google OAuth
+if not os.environ.get("GOOGLE_CLIENT_ID") or not os.environ.get("GOOGLE_CLIENT_SECRET"):
+    raise ValueError("Missing required environment variables: GOOGLE_CLIENT_ID and/or GOOGLE_CLIENT_SECRET")
+
 oauth.register(
     name="github",
-    client_id=os.environ.get("GITHUB_CLIENT_ID", "GITHUB_CLIENT_ID"),
-    client_secret=os.environ.get("GITHUB_CLIENT_SECRET", "GITHUB_CLIENT_SECRET"),
+    client_id=os.environ.get("GITHUB_CLIENT_ID", None),
+    client_secret=os.environ.get("GITHUB_CLIENT_SECRET", None),
     access_token_url="https://github.com/login/oauth/access_token",
     access_token_params=None,
     authorize_url="https://github.com/login/oauth/authorize",
