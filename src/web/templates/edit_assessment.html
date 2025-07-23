@@ -56,11 +56,11 @@
                         <label class="form-label fw-bold">{{ c.criteria }}</label>
                         <div>
                             <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes" {% if assessment.responses[c.id] %}checked{% endif %}>
+                                <input type="radio" class="form-check-input" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes" {% if assessment.responses.get(c.id, False) %}checked{% endif %}>
                                 <label for="{{ c.id }}-yes" class="form-check-label">Yes</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="{{ c.id }}" value="no" id="{{ c.id }}-no" {% if not assessment.responses[c.id] %}checked{% endif %}>
+                                <input type="radio" class="form-check-input" name="{{ c.id }}" value="no" id="{{ c.id }}-no" {% if not assessment.responses.get(c.id, False) %}checked{% endif %}>
                                 <label for="{{ c.id }}-no" class="form-check-label">No</label>
                             </div>
                         </div>
