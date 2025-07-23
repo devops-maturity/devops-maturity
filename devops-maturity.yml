@@ -2,6 +2,9 @@
 # https://devops-maturity.github.io/
 # https://github.com/devops-maturity/devops-maturity
 
+# Project Information
+project_name: "devops-maturity"
+
 # Basics
 D101: true    # Branch Builds (must have)
 D102: true    # Pull Request Builds (must have)
