@@ -98,10 +98,6 @@ oauth.register(
     client_kwargs={"scope": "openid email profile"},
 )
 
-# Validate required environment variables for Google OAuth
-if not os.environ.get("GOOGLE_CLIENT_ID") or not os.environ.get("GOOGLE_CLIENT_SECRET"):
-    raise ValueError("Missing required environment variables: GOOGLE_CLIENT_ID and/or GOOGLE_CLIENT_SECRET")
-
 oauth.register(
     name="github",
     client_id=os.environ.get("GITHUB_CLIENT_ID", None),
