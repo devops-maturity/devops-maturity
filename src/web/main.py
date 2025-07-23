@@ -21,10 +21,7 @@ from dotenv import load_dotenv
 
 
 app = FastAPI()
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=os.environ.get("SESSION_SECRET_KEY", "devops-maturity-secret"),
-)
+# Removed duplicate SessionMiddleware addition to avoid conflicts.
 templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
