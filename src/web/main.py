@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 
 
 app = FastAPI()
-# Removed duplicate SessionMiddleware addition to avoid conflicts.
+# Ensured that SessionMiddleware is added only once to avoid conflicts.
 templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
