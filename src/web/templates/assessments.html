@@ -22,11 +22,28 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/assessments">All Assessments</a>
             </li>
+            {% if user %}
+            <li class="nav-item ms-auto">
+                <span class="nav-link disabled">Welcome, {{ user.username }}</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item ms-auto">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Register</a>
+            </li>
+            {% endif %}
         </ul>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Project Name</th>
+                    <th>User</th>
                     <th>Responses</th>
                     <th>Point</th>
                 </tr>
@@ -35,6 +52,14 @@
                 {% for a in assessments %}
                 <tr>
                     <td>{{ a.id }}</td>
+                    <td>{{ a.project_name }}</td>
+                    <td>
+                        {% if a.user %}
+                            {{ a.user.username }} ({{ a.user.email }})
+                        {% else %}
+                            <span class="text-muted">Anonymous</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <ul class="mb-0">
                         {% for key, value in a.responses.items() %}
@@ -48,6 +73,9 @@
                             </li>
                         {% endfor %}
                         </ul>
+                        {% if user and a.user and user.id == a.user.id %}
+                            <a href="/edit-assessment/{{ a.id }}" class="btn btn-sm btn-outline-primary mt-2">Edit</a>
+                        {% endif %}
                     </td>
                     <td>{{ '%.1f' | format(a.point) }}</td>
                 </tr>

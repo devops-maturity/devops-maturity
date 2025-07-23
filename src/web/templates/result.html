@@ -26,6 +26,21 @@
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/submit">Last Assessment</a>
         </li>
+        {% if user %}
+        <li class="nav-item ms-auto">
+            <span class="nav-link disabled">Welcome, {{ user.username }}</span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item ms-auto">
+            <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+        </li>
+        {% endif %}
     </ul>
     <h2 class="mb-4 text-center">Assessment Result</h2>
     <div class="text-center mb-4">

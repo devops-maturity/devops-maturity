@@ -1,14 +1,122 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
+import os
+from fastapi import FastAPI
+from fastapi import HTTPException
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi.templating import Jinja2Templates
-from core.model import UserResponse, Assessment, SessionLocal, init_db
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from fastapi import Request
+from fastapi import Form
+from fastapi.responses import FileResponse, RedirectResponse
+from core.model import UserResponse, Assessment, SessionLocal, init_db, User
 from core.scorer import calculate_score, score_to_level
 from core.badge import get_badge_url
 from core import __version__
 from config.loader import load_criteria_config
+from passlib.hash import bcrypt
+from sqlalchemy.exc import IntegrityError
+from authlib.integrations.starlette_client import OAuth
+from starlette.config import Config
+from dotenv import load_dotenv
+
 
 app = FastAPI()
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.environ.get("SESSION_SECRET_KEY", "devops-maturity-secret"),
+)
+templates = Jinja2Templates(directory="src/web/templates")
+app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
+
+
+@app.get("/edit-assessment/{assessment_id}", response_class=HTMLResponse)
+def edit_assessment_form(request: Request, assessment_id: int):
+    user = get_current_user(request)
+    db = SessionLocal()
+    assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
+    db.close()
+    if not assessment:
+        raise HTTPException(status_code=404, detail="Assessment not found")
+    if not user or assessment.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Not allowed")
+    return templates.TemplateResponse(
+        "edit_assessment.html",
+        {
+            "request": request,
+            "assessment": assessment,
+            "criteria": criteria,
+            "categories": categories,
+            "user": user,
+        },
+    )
+
+
+@app.post("/edit-assessment/{assessment_id}", response_class=HTMLResponse)
+async def edit_assessment_submit(request: Request, assessment_id: int):
+    user = get_current_user(request)
+    db = SessionLocal()
+    assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
+    if not assessment:
+        db.close()
+        raise HTTPException(status_code=404, detail="Assessment not found")
+    if not user or assessment.user_id != user.id:
+        db.close()
+        raise HTTPException(status_code=403, detail="Not allowed")
+    form = await request.form()
+    project_name = form.get("project_name")
+    if not project_name:
+        db.close()
+        return templates.TemplateResponse(
+            "edit_assessment.html",
+            {
+                "request": request,
+                "assessment": assessment,
+                "criteria": criteria,
+                "categories": categories,
+                "user": user,
+                "error": "Project Name is required.",
+            },
+        )
+    responses_dict = {}
+    for k, v in form.items():
+        if k == "project_name":
+            continue
+        responses_dict[k] = v == "yes"
+    assessment.project_name = project_name
+    assessment.responses = responses_dict
+    db.commit()
+    db.close()
+    return RedirectResponse("/assessments", status_code=302)
+
+
+load_dotenv()
+config = Config(".env")
+oauth = OAuth(config)
+
+oauth.register(
+    name="google",
+    client_id=os.environ.get("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_ID"),
+    client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", "GOOGLE_CLIENT_SECRET"),
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={"scope": "openid email profile"},
+)
+
+oauth.register(
+    name="github",
+    client_id=os.environ.get("GITHUB_CLIENT_ID", "GITHUB_CLIENT_ID"),
+    client_secret=os.environ.get("GITHUB_CLIENT_SECRET", "GITHUB_CLIENT_SECRET"),
+    access_token_url="https://github.com/login/oauth/access_token",
+    access_token_params=None,
+    authorize_url="https://github.com/login/oauth/authorize",
+    authorize_params=None,
+    api_base_url="https://api.github.com/",
+    client_kwargs={"scope": "user:email"},
+)
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.environ.get("SESSION_SECRET_KEY", "devops-maturity-secret"),
+)
 templates = Jinja2Templates(directory="src/web/templates")
 app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 
@@ -18,8 +126,143 @@ categories, criteria = load_criteria_config()
 init_db()
 
 
+def get_current_user(request: Request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return None
+    db = SessionLocal()
+    user = db.query(User).filter(User.id == user_id).first()
+    db.close()
+    return user
+
+
+@app.get("/register", response_class=HTMLResponse)
+def register_form(request: Request):
+    user = get_current_user(request)
+    if user:
+        return RedirectResponse("/", status_code=302)
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
+@app.post("/register", response_class=HTMLResponse)
+async def register(
+    request: Request,
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+):
+    db = SessionLocal()
+    hashed_password = bcrypt.hash(password)
+    user = User(username=username, email=email, password_hash=hashed_password)
+    db.add(user)
+    try:
+        db.commit()
+        db.refresh(user)
+        request.session["user_id"] = user.id
+        db.close()
+        return RedirectResponse("/", status_code=302)
+    except IntegrityError:
+        db.rollback()
+        db.close()
+        return templates.TemplateResponse(
+            "register.html",
+            {"request": request, "error": "Username or email already exists."},
+        )
+
+
+@app.get("/login", response_class=HTMLResponse)
+def login_form(request: Request):
+    user = get_current_user(request)
+    if user:
+        return RedirectResponse("/", status_code=302)
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.post("/login", response_class=HTMLResponse)
+async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    db = SessionLocal()
+    user = (
+        db.query(User)
+        .filter((User.username == username) | (User.email == username))
+        .first()
+    )
+    db.close()
+    if (
+        not user
+        or not user.password_hash
+        or not bcrypt.verify(password, user.password_hash)
+    ):
+        return templates.TemplateResponse(
+            "login.html", {"request": request, "error": "Invalid credentials."}
+        )
+    request.session["user_id"] = user.id
+    return RedirectResponse("/", status_code=302)
+
+
+@app.get("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/login", status_code=302)
+
+
+@app.get("/auth/{provider}")
+async def oauth_login(request: Request, provider: str):
+    if provider not in ("google", "github"):
+        return RedirectResponse("/login")
+    redirect_uri = request.url_for("oauth_callback", provider=provider)
+    return await oauth.create_client(provider).authorize_redirect(request, redirect_uri)
+
+
+@app.route("/auth/callback/{provider}")
+async def oauth_callback(request: Request, provider: str):
+    if provider not in ("google", "github"):
+        return RedirectResponse("/login")
+    client = oauth.create_client(provider)
+    token = await client.authorize_access_token(request)
+    if provider == "google":
+        user_info = await client.parse_id_token(request, token)
+        email = user_info.get("email")
+        username = user_info.get("name") or email.split("@")[0]
+        oauth_id = user_info.get("sub")
+    elif provider == "github":
+        resp = await client.get("user", token=token)
+        profile = resp.json()
+        email = profile.get("email")
+        if not email:
+            # fetch primary email
+            emails_resp = await client.get("user/emails", token=token)
+            emails = emails_resp.json()
+            email = next((e["email"] for e in emails if e.get("primary")), None)
+        username = profile.get("login")
+        oauth_id = str(profile.get("id"))
+    else:
+        return RedirectResponse("/login")
+    db = SessionLocal()
+    user = db.query(User).filter_by(oauth_provider=provider, oauth_id=oauth_id).first()
+    if not user:
+        # If user with this email exists, link accounts
+        user = db.query(User).filter_by(email=email).first()
+        if user:
+            user.oauth_provider = provider
+            user.oauth_id = oauth_id
+        else:
+            user = User(
+                username=username,
+                email=email,
+                oauth_provider=provider,
+                oauth_id=oauth_id,
+            )
+            db.add(user)
+        db.commit()
+        db.refresh(user)
+    request.session["user_id"] = user.id
+    db.close()
+    return RedirectResponse("/", status_code=302)
+
+
 @app.get("/", response_class=HTMLResponse)
 def read_form(request: Request):
+    user = get_current_user(request)
     return templates.TemplateResponse(
         "form.html",
         {
@@ -27,6 +270,7 @@ def read_form(request: Request):
             "__version__": __version__,
             "criteria": criteria,
             "categories": categories,
+            "user": user,
         },
     )
 
@@ -34,16 +278,36 @@ def read_form(request: Request):
 @app.post("/submit")
 async def submit(request: Request):
     form = await request.form()
+    project_name = form.get("project_name")
+    if not project_name:
+        return templates.TemplateResponse(
+            "form.html",
+            {
+                "request": request,
+                "__version__": __version__,
+                "criteria": criteria,
+                "categories": categories,
+                "user": get_current_user(request),
+                "error": "Project Name is required.",
+            },
+        )
     responses = []
     responses_dict = {}
     for k, v in form.items():
+        if k == "project_name":
+            continue
         answer = v == "yes"
         responses.append(UserResponse(id=k, answer=answer))
         responses_dict[k] = answer  # store as dict for database
 
+    user = get_current_user(request)
+    user_id = user.id if user else None
+
     # Save to database
     db = SessionLocal()
-    assessment = Assessment(responses=responses_dict)
+    assessment = Assessment(
+        project_name=project_name, user_id=user_id, responses=responses_dict
+    )
     db.add(assessment)
     db.commit()
     db.close()
@@ -58,6 +322,8 @@ async def submit(request: Request):
             "score": score,
             "level": level,
             "badge_url": badge_url,
+            "project_name": project_name,
+            "user": user,
         },
     )
 
@@ -69,20 +335,30 @@ def get_badge():
 
 @app.get("/assessments", response_class=HTMLResponse)
 def list_assessments(request: Request):
+    user = get_current_user(request)
     db = SessionLocal()
     assessments = db.query(Assessment).all()
+    users = {u.id: u for u in db.query(User).all()}
     db.close()
     assessment_data = []
     for a in assessments:
-        # Convert responses from dict to UserResponse objects
         responses = [UserResponse(id=k, answer=v) for k, v in a.responses.items()]
         point = calculate_score(criteria, responses)
-        assessment_data.append({"id": a.id, "responses": a.responses, "point": point})
+        assessment_data.append(
+            {
+                "id": a.id,
+                "project_name": getattr(a, "project_name", ""),
+                "user": users.get(a.user_id),
+                "responses": a.responses,
+                "point": point,
+            }
+        )
     return templates.TemplateResponse(
         "assessments.html",
         {
             "request": request,
             "assessments": assessment_data,
             "criteria_list": criteria,
+            "user": user,
         },
     )
