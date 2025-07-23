@@ -3,7 +3,7 @@
 # https://github.com/devops-maturity/devops-maturity
 
 # Project Information
-project_name: "devops-maturity"
+project_name: devops-maturity
 
 # Basics
 D101: true    # Branch Builds (must have)

@@ -235,7 +235,11 @@ async def oauth_callback(request: Request, provider: str):
     else:
         return RedirectResponse("/login")
     db = SessionLocal()
-    user = db.query(User).filter((User.oauth_provider == provider) & (User.oauth_id == oauth_id)).first()
+    user = (
+        db.query(User)
+        .filter((User.oauth_provider == provider) & (User.oauth_id == oauth_id))
+        .first()
+    )
     if not user:
         # If user with this email exists, link accounts
         user = db.query(User).filter(User.email == email).first()
