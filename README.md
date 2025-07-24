@@ -72,6 +72,32 @@ Experience the full web interface workflow:
 ![DevOps Maturity Assessment List][WebList]
 
 
+## Configuration
+
+### OAuth Setup (Optional)
+
+To enable Google and GitHub OAuth login for the web interface:
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **For Google OAuth:**
+   - Go to [Google Cloud Console](https://console.developers.google.com/apis/credentials)
+   - Create OAuth 2.0 credentials
+   - Set authorized redirect URI to: `http://localhost:8000/auth/callback/google`
+   - Copy the client ID and secret to your `.env` file
+
+3. **For GitHub OAuth:**
+   - Go to [GitHub Developer Settings](https://github.com/settings/applications/new)
+   - Create a new OAuth app
+   - Set authorization callback URL to: `http://localhost:8000/auth/callback/github`
+   - Copy the client ID and secret to your `.env` file
+
+If OAuth credentials are not configured, users can still register and login with username/password.
+
+
 ## Show Your Support
 
 If you find this tool helpful, please consider giving it a ⭐️ — your support helps others discover and adopt it.

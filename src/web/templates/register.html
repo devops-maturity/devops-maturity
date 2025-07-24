@@ -51,6 +51,19 @@
             <button type="submit" class="btn btn-primary btn-lg px-5">Register</button>
         </div>
     </form>
+    {% if oauth_providers.google or oauth_providers.github %}
+    <div class="text-center mt-3">
+        <span>Or register with:</span>
+        <div class="mt-2">
+            {% if oauth_providers.google %}
+            <a href="/auth/google" class="btn btn-outline-primary me-2">Google</a>
+            {% endif %}
+            {% if oauth_providers.github %}
+            <a href="/auth/github" class="btn btn-outline-primary">GitHub</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
     <div class="text-center mt-3">
         <span>Already have an account? <a href="/login">Login here</a>.</span>
     </div>
