@@ -181,3 +181,38 @@ footer {
         font-size: 1.1em;
     }
 }
+
+/* Assessment details toggle */
+.assessment-details {
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-left: 2px solid #5b7965;
+}
+
+.criteria-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.criteria-item {
+    padding: 2px 0;
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-size: 0.9em;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.criteria-item:last-child {
+    border-bottom: none;
+}
+
+.response-value {
+    font-weight: bold;
+}
+
+.badge-level {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #5b7965;
+    vertical-align: middle;
+}
