@@ -66,7 +66,7 @@
                             <img src="{{ a.badge_url }}" alt="DevOps Maturity Badge" style="height: 20px;">
                             <span class="ms-2 badge-level">{{ a.level }}</span>
                         </div>
-                        
+
                         <!-- Buttons in one line -->
                         <div class="d-flex gap-2 mb-2">
                             <button class="btn btn-sm btn-outline-primary" onclick="toggleAssessmentDetails({{ a.id }})">
@@ -76,7 +76,7 @@
                                 <a href="/edit-assessment/{{ a.id }}" class="btn btn-sm btn-outline-primary">Edit</a>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Hidden detailed criteria -->
                         <div id="assessment-details-{{ a.id }}" style="display: none;" class="assessment-details">
                             <ul class="mb-0 criteria-list">
@@ -112,7 +112,7 @@
     function toggleAssessmentDetails(assessmentId) {
         const details = document.getElementById('assessment-details-' + assessmentId);
         const toggleText = document.getElementById('assessment-toggle-' + assessmentId);
-        
+
         if (details.style.display === 'none') {
             details.style.display = 'block';
             toggleText.textContent = 'Hide Details';
