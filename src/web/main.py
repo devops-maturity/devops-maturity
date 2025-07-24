@@ -90,25 +90,32 @@ load_dotenv()
 config = Config(".env")
 oauth = OAuth(config)
 
-oauth.register(
-    name="google",
-    client_id=os.environ.get("GOOGLE_CLIENT_ID", None),
-    client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", None),
-    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
-    client_kwargs={"scope": "openid email profile"},
-)
+# Only register OAuth providers if credentials are provided
+google_client_id = os.environ.get("GOOGLE_CLIENT_ID")
+google_client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+if google_client_id and google_client_secret:
+    oauth.register(
+        name="google",
+        client_id=google_client_id,
+        client_secret=google_client_secret,
+        server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+        client_kwargs={"scope": "openid email profile"},
+    )
 
-oauth.register(
-    name="github",
-    client_id=os.environ.get("GITHUB_CLIENT_ID", None),
-    client_secret=os.environ.get("GITHUB_CLIENT_SECRET", None),
-    access_token_url="https://github.com/login/oauth/access_token",
-    access_token_params=None,
-    authorize_url="https://github.com/login/oauth/authorize",
-    authorize_params=None,
-    api_base_url="https://api.github.com/",
-    client_kwargs={"scope": "user:email"},
-)
+github_client_id = os.environ.get("GITHUB_CLIENT_ID")
+github_client_secret = os.environ.get("GITHUB_CLIENT_SECRET")
+if github_client_id and github_client_secret:
+    oauth.register(
+        name="github",
+        client_id=github_client_id,
+        client_secret=github_client_secret,
+        access_token_url="https://github.com/login/oauth/access_token",
+        access_token_params=None,
+        authorize_url="https://github.com/login/oauth/authorize",
+        authorize_params=None,
+        api_base_url="https://api.github.com/",
+        client_kwargs={"scope": "user:email"},
+    )
 
 app.add_middleware(
     SessionMiddleware,
@@ -121,6 +128,21 @@ app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 categories, criteria = load_criteria_config()
 
 init_db()
+
+
+def is_oauth_provider_enabled(provider: str) -> bool:
+    """Check if OAuth provider is configured and enabled"""
+    if provider == "google":
+        return bool(
+            os.environ.get("GOOGLE_CLIENT_ID")
+            and os.environ.get("GOOGLE_CLIENT_SECRET")
+        )
+    elif provider == "github":
+        return bool(
+            os.environ.get("GITHUB_CLIENT_ID")
+            and os.environ.get("GITHUB_CLIENT_SECRET")
+        )
+    return False
 
 
 def get_current_user(request: Request):
@@ -138,7 +160,16 @@ def register_form(request: Request):
     user = get_current_user(request)
     if user:
         return RedirectResponse("/", status_code=302)
-    return templates.TemplateResponse("register.html", {"request": request})
+
+    # Check which OAuth providers are available
+    oauth_providers = {
+        "google": is_oauth_provider_enabled("google"),
+        "github": is_oauth_provider_enabled("github"),
+    }
+
+    return templates.TemplateResponse(
+        "register.html", {"request": request, "oauth_providers": oauth_providers}
+    )
 
 
 @app.post("/register", response_class=HTMLResponse)
@@ -161,9 +192,18 @@ async def register(
     except IntegrityError:
         db.rollback()
         db.close()
+        # Check which OAuth providers are available for error response
+        oauth_providers = {
+            "google": is_oauth_provider_enabled("google"),
+            "github": is_oauth_provider_enabled("github"),
+        }
         return templates.TemplateResponse(
             "register.html",
-            {"request": request, "error": "Username or email already exists."},
+            {
+                "request": request,
+                "error": "Username or email already exists.",
+                "oauth_providers": oauth_providers,
+            },
         )
 
 
@@ -172,7 +212,22 @@ def login_form(request: Request):
     user = get_current_user(request)
     if user:
         return RedirectResponse("/", status_code=302)
-    return templates.TemplateResponse("login.html", {"request": request})
+
+    # Check for OAuth error
+    error = request.query_params.get("error")
+    if error == "oauth_not_configured":
+        error = "OAuth login is not configured. Please contact the administrator."
+
+    # Check which OAuth providers are available
+    oauth_providers = {
+        "google": is_oauth_provider_enabled("google"),
+        "github": is_oauth_provider_enabled("github"),
+    }
+
+    return templates.TemplateResponse(
+        "login.html",
+        {"request": request, "error": error, "oauth_providers": oauth_providers},
+    )
 
 
 @app.post("/login", response_class=HTMLResponse)
@@ -206,6 +261,11 @@ def logout(request: Request):
 async def oauth_login(request: Request, provider: str):
     if provider not in ("google", "github"):
         return RedirectResponse("/login")
+
+    # Check if the OAuth provider is configured
+    if not is_oauth_provider_enabled(provider):
+        return RedirectResponse("/login?error=oauth_not_configured")
+
     redirect_uri = request.url_for("oauth_callback", provider=provider)
     return await oauth.create_client(provider).authorize_redirect(request, redirect_uri)
 
@@ -214,6 +274,11 @@ async def oauth_login(request: Request, provider: str):
 async def oauth_callback(request: Request, provider: str):
     if provider not in ("google", "github"):
         return RedirectResponse("/login")
+
+    # Check if the OAuth provider is configured
+    if not is_oauth_provider_enabled(provider):
+        return RedirectResponse("/login?error=oauth_not_configured")
+
     client = oauth.create_client(provider)
     token = await client.authorize_access_token(request)
     if provider == "google":
