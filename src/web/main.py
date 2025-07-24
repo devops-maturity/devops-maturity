@@ -345,6 +345,8 @@ def list_assessments(request: Request):
     for a in assessments:
         responses = [UserResponse(id=k, answer=v) for k, v in a.responses.items()]
         point = calculate_score(criteria, responses)
+        level = score_to_level(point)
+        badge_url = get_badge_url(level)
         assessment_data.append(
             {
                 "id": a.id,
@@ -352,6 +354,7 @@ def list_assessments(request: Request):
                 "user": users.get(a.user_id),
                 "responses": a.responses,
                 "point": point,
+                "badge_url": badge_url,
             }
         )
     return templates.TemplateResponse(
