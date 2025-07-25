@@ -34,11 +34,13 @@ dependencies = [
   "pyyaml",
   "python-multipart",
   "sqlalchemy",
-  "passlib[bcrypt]",
+  "passlib[bcrypt]==1.7.4",
+  "bcrypt==4.0.1",
   "authlib",
   "python-dotenv",
   "itsdangerous",
   "httpx",
+  "uvicorn",
 ]
 
 [project.scripts]
