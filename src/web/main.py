@@ -13,7 +13,17 @@ from core.scorer import calculate_score, score_to_level
 from core.badge import get_badge_url
 from core import __version__
 from config.loader import load_criteria_config
-from passlib.hash import bcrypt
+
+# Handle bcrypt version compatibility issue
+try:
+    from passlib.hash import bcrypt
+except (ImportError, AttributeError):
+    # Fallback for bcrypt version compatibility issues
+    import passlib.hash
+
+    # Force bcrypt to use the correct backend
+    bcrypt = passlib.hash.bcrypt.using(rounds=12)
+
 from sqlalchemy.exc import IntegrityError
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
