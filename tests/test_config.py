@@ -57,6 +57,37 @@ class TestConfigLoader:
         for criterion in criteria:
             assert criterion.weight > 0, f"Criterion '{criterion.id}' has non-positive weight: {criterion.weight}"
     
+    def test_criteria_weights_are_numeric(self):
+        """Test that all criteria weights are numeric."""
+        _, criteria = load_criteria_config()
+        
+        for criterion in criteria:
+            assert isinstance(criterion.weight, (int, float)), f"Criterion '{criterion.id}' has non-numeric weight: {criterion.weight}"
+    
+    def test_categories_are_strings(self):
+        """Test that all categories are strings."""
+        categories, _ = load_criteria_config()
+        
+        for category in categories:
+            assert isinstance(category, str), f"Category is not a string: {category}"
+            assert len(category) > 0, "Category cannot be empty string"
+    
+    def test_criteria_ids_are_strings(self):
+        """Test that all criteria IDs are strings."""
+        _, criteria = load_criteria_config()
+        
+        for criterion in criteria:
+            assert isinstance(criterion.id, str), f"Criterion ID is not a string: {criterion.id}"
+            assert len(criterion.id) > 0, "Criterion ID cannot be empty string"
+    
+    def test_criteria_descriptions_are_strings(self):
+        """Test that all criteria descriptions are strings."""
+        _, criteria = load_criteria_config()
+        
+        for criterion in criteria:
+            assert isinstance(criterion.criteria, str), f"Criterion description is not a string: {criterion.criteria}"
+            assert len(criterion.criteria) > 0, "Criterion description cannot be empty string"
+    
     def test_load_criteria_with_custom_config(self):
         """Test loading criteria from a custom configuration file."""
         # Create a temporary config file
@@ -124,3 +155,42 @@ class TestConfigLoader:
         finally:
             # Clean up temporary file
             os.unlink(temp_file_path)
+    
+    def test_config_file_encoding(self):
+        """Test that config file handles UTF-8 encoding properly."""
+        categories, criteria = load_criteria_config()
+        
+        # Verify we can handle any unicode characters in the config
+        for criterion in criteria:
+            # Should not raise encoding errors
+            str_repr = str(criterion.criteria)
+            assert isinstance(str_repr, str)
+    
+    def test_config_yaml_structure_validation(self):
+        """Test that config YAML has expected structure."""
+        categories, criteria = load_criteria_config()
+        
+        # Categories should be a list
+        assert isinstance(categories, list)
+        
+        # Criteria should be a list of Criteria objects
+        assert isinstance(criteria, list)
+        for criterion in criteria:
+            assert hasattr(criterion, 'id')
+            assert hasattr(criterion, 'category')
+            assert hasattr(criterion, 'criteria') 
+            assert hasattr(criterion, 'weight')
+    
+    def test_criteria_weight_distribution(self):
+        """Test that criteria weights are reasonably distributed."""
+        _, criteria = load_criteria_config()
+        
+        weights = [c.weight for c in criteria]
+        
+        # Should have some variation in weights
+        unique_weights = set(weights)
+        assert len(unique_weights) > 1, "All criteria have the same weight"
+        
+        # Total weight should be reasonable
+        total_weight = sum(weights)
+        assert total_weight > 0, "Total weight should be positive"

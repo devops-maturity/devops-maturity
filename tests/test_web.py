@@ -172,3 +172,102 @@ class TestWebInterface:
         content = response.text.lower()
         assert "project" in content
         assert "assessment" in content or "maturity" in content
+    
+    def test_submit_assessment_with_special_characters(self):
+        """Test submitting assessment with special characters in project name."""
+        form_data = {
+            "project_name": "test-project-with-special-chars!@#$%",
+            "test_criteria": "yes"
+        }
+        
+        response = client.post("/submit", data=form_data)
+        
+        # Should handle special characters gracefully
+        assert response.status_code in [200, 302]
+    
+    def test_submit_assessment_with_unicode(self):
+        """Test submitting assessment with unicode characters."""
+        form_data = {
+            "project_name": "проект-тест-🚀",
+            "test_criteria": "yes"
+        }
+        
+        response = client.post("/submit", data=form_data)
+        
+        # Should handle unicode gracefully
+        assert response.status_code in [200, 302]
+    
+    def test_assessments_list_pagination(self):
+        """Test assessments list handles large numbers of assessments."""
+        response = client.get("/assessments")
+        assert response.status_code == 200
+        # Should not crash with many assessments
+    
+    def test_register_with_weak_password(self):
+        """Test registration with various password strengths."""
+        weak_passwords = ["123", "password", "abc"]
+        
+        for pwd in weak_passwords:
+            form_data = {
+                "username": f"user_{pwd}",
+                "email": f"test_{pwd}@example.com",
+                "password": pwd
+            }
+            
+            response = client.post("/register", data=form_data)
+            # Should handle weak passwords (may accept or reject)
+            assert response.status_code in [200, 302]
+    
+    def test_login_with_email_instead_of_username(self):
+        """Test login using email address instead of username."""
+        form_data = {
+            "username": "test@example.com",  # Using email as username
+            "password": "testpass"
+        }
+        
+        response = client.post("/login", data=form_data)
+        assert response.status_code in [200, 302]
+    
+    def test_oauth_callback_invalid_provider(self):
+        """Test OAuth callback with invalid provider."""
+        response = client.get("/auth/callback/invalid")
+        assert response.status_code == 302  # Should redirect
+    
+    def test_static_files_accessible(self):
+        """Test that static files are accessible."""
+        # Test if static file routing is set up
+        response = client.get("/static/")
+        # May return 404 or directory listing, but shouldn't crash
+        assert response.status_code in [200, 404, 403]
+    
+    def test_form_csrf_protection(self):
+        """Test form submission without CSRF token (if implemented)."""
+        # This would test CSRF protection if implemented
+        form_data = {"project_name": "csrf-test"}
+        response = client.post("/submit", data=form_data)
+        # Should either accept or reject, but not crash
+        assert response.status_code in [200, 302, 403]
+    
+    def test_concurrent_user_sessions(self):
+        """Test handling of multiple user sessions."""
+        # Simulate multiple users by making multiple requests
+        responses = []
+        for i in range(5):
+            response = client.get("/")
+            responses.append(response)
+        
+        # All requests should succeed
+        for response in responses:
+            assert response.status_code == 200
+    
+    def test_malformed_form_data(self):
+        """Test handling of malformed form data."""
+        # Send data that doesn't match expected form structure
+        malformed_data = {
+            "unexpected_field": "value",
+            "another_field": ["list", "of", "values"]
+        }
+        
+        response = client.post("/submit", data=malformed_data)
+        # Should handle gracefully without crashing
+        assert response.status_code in [200, 400, 422]

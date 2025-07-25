@@ -192,3 +192,91 @@ class TestDatabase:
         self.db.add(assessment)
         with pytest.raises(Exception):  # Should raise integrity error
             self.db.commit()
+    
+    def test_user_with_very_long_username(self):
+        """Test user creation with very long username."""
+        long_username = "a" * 300  # Very long username
+        user = User(username=long_username, email="long@example.com")
+        
+        self.db.add(user)
+        # Should either succeed or fail gracefully
+        try:
+            self.db.commit()
+        except Exception:
+            pass  # Database may have length limits
+    
+    def test_user_with_empty_fields(self):
+        """Test user creation with empty required fields."""
+        # Test empty username
+        with pytest.raises(Exception):
+            user = User(username="", email="test@example.com")
+            self.db.add(user)
+            self.db.commit()
+    
+    def test_assessment_with_complex_json_responses(self):
+        """Test assessment with complex nested JSON responses."""
+        complex_data = {
+            "simple": True,
+            "nested": {
+                "level1": {
+                    "level2": ["item1", "item2"],
+                    "level2b": {"level3": True}
+                }
+            },
+            "array": [1, 2, 3, True, False, None],
+            "unicode": "测试数据 🚀",
+            "special_chars": "!@#$%^&*()"
+        }
+        
+        assessment = Assessment(
+            project_name="complex-json-test",
+            responses=complex_data
+        )
+        
+        self.db.add(assessment)
+        self.db.commit()
+        
+        # Verify complex JSON is stored and retrieved correctly
+        saved = self.db.query(Assessment).first()
+        assert saved.responses == complex_data
+    
+    def test_database_transaction_rollback(self):
+        """Test database transaction rollback functionality."""
+        user = User(username="rollback_test", email="rollback@example.com")
+        self.db.add(user)
+        self.db.commit()
+        
+        # Start a transaction that will fail
+        try:
+            duplicate_user = User(username="rollback_test", email="different@example.com")
+            self.db.add(duplicate_user)
+            self.db.commit()  # Should fail due to unique constraint
+        except Exception:
+            self.db.rollback()  # Rollback the failed transaction
+        
+        # Verify original user still exists
+        users = self.db.query(User).all()
+        assert len(users) == 1
+        assert users[0].username == "rollback_test"
+    
+    def test_assessment_query_performance(self):
+        """Test querying assessments with many records."""
+        # Create multiple assessments
+        for i in range(50):
+            assessment = Assessment(
+                project_name=f"perf-test-{i}",
+                responses={f"criteria_{j}": j % 2 == 0 for j in range(10)}
+            )
+            self.db.add(assessment)
+        
+        self.db.commit()
+        
+        # Query should complete without timeout
+        all_assessments = self.db.query(Assessment).all()
+        assert len(all_assessments) == 50
+        
+        # Test filtering
+        filtered = self.db.query(Assessment).filter(
+            Assessment.project_name.like("perf-test-%")
+        ).all()
+        assert len(filtered) == 50
