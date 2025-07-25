@@ -17,7 +17,7 @@ from config.loader import load_criteria_config
 # Handle bcrypt version compatibility issue
 try:
     from passlib.hash import bcrypt
-except Exception:
+except (ImportError, AttributeError):
     # Fallback for bcrypt version compatibility issues
     import passlib.hash
 
