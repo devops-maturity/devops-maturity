@@ -16,6 +16,15 @@ build/
 # Python test files
 .coverage
 .nox
+.pytest_cache/
+htmlcov/
+pytest.ini
+.tox/
+
+# Test temporary files
+tests/temp_*
+tests/*.tmp
+*.db-test
 
 # Web server files
 devops_maturity.db
