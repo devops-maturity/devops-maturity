@@ -81,6 +81,11 @@ criteria:
     criteria: "Dependency Pinning (🟡)"
     weight: 0.5
 
+  - id: "D405"
+    category: "Supply Chain Security"
+    criteria: "SBOM Generation (🟡)"
+    weight: 0.5
+
   # Analysis
   - id: "D501"
     category: "Analysis"
@@ -106,4 +111,9 @@ criteria:
   - id: "D602"
     category: "Reporting"
     criteria: "Attached Reports (🟡)"
+    weight: 0.5
+
+  - id: "D603"
+    category: "Reporting"
+    criteria: "Compliance Mapping & Auditability (🟡)"
     weight: 0.5
