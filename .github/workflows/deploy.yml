@@ -22,7 +22,7 @@ jobs:
   runs-on: ubuntu-latest
   environment: dev
   steps:
-  # checkout the repo 
+  # checkout the repo
   - uses: actions/checkout@v3
   # setup python
   - name: Setup Python
