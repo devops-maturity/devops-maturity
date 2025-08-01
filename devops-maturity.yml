@@ -1,6 +1,7 @@
 # DevOps Maturity Assessment
 # https://devops-maturity.github.io/
 # https://github.com/devops-maturity/devops-maturity
+# Use `dm config --file devops-maturity.yml` to generate badge 
 
 # Project Information
 project_name: devops-maturity
@@ -26,6 +27,7 @@ D401: true    # Documented Build Process (must have)
 D402: true    # CI/CD as Code (must have)
 D403: false   # Artifact Signing (nice to have)
 D404: false   # Dependency Pinning (nice to have)
+D405: false   # SBOM Generation (nice to have)
 
 # Analytics
 D501: false   # Static Code Analysis (nice to have)
@@ -35,3 +37,4 @@ D503: true    # Code Linting (nice to have)
 # Reporting
 D601: true    # Notifications & Alerts (must have)
 D602: false   # Attached Reports (nice to have)
+D603: false   # Compliance Mapping & Auditability	(nice to have)
