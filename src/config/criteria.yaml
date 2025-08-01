@@ -52,7 +52,7 @@ criteria:
   # Security
   - id: "D301"
     category: "Security"
-    criteria: "Security Scanning (🟢)"
+    criteria: "Vulnerability Scanning (🟢)"
     weight: 1.0
 
   - id: "D302"
