@@ -1,7 +1,7 @@
 # DevOps Maturity Assessment
 # https://devops-maturity.github.io/
 # https://github.com/devops-maturity/devops-maturity
-# Use `dm config --file devops-maturity.yml` to generate badge 
+# Use `dm config --file devops-maturity.yml` to generate badge
 
 # Project Information
 project_name: devops-maturity
