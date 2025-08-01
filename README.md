@@ -3,7 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)](https://pypi.org/project/devops-maturity/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/devops-maturity)
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
-[![PASSING](https://img.shields.io/badge/DevOps%20Maturity-BRONZE-yellow.svg)](https://devops-maturity.github.io/)
+[![PASSING](https://img.shields.io/badge/DevOps%20Maturity-PASSING-green.svg)](https://devops-maturity.github.io/)
 
 
 ## Overview
