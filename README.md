@@ -5,6 +5,12 @@
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
 [![PASSING](https://img.shields.io/badge/DevOps%20Maturity-PASSING-green.svg)](https://devops-maturity.github.io/)
 
+## Demo
+
+Explore how the DevOps Maturity Assessment works in both interfaces:
+
+- [Web App Demo on YouTube](https://www.youtube.com/watch?v=BGpz0iP61c4)
+- [CLI Demo on YouTube](https://www.youtube.com/watch?v=RZJtcynyC08)
 
 ## Overview
 
