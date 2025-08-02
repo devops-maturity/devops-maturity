@@ -5,12 +5,18 @@
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
 [![PASSING](https://img.shields.io/badge/DevOps%20Maturity-PASSING-green.svg)](https://devops-maturity.github.io/)
 
-
 ## Overview
 
 **DevOps Maturity Assessment** helps you evaluate and improve your DevOps practices.
 
 It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
+
+## 🎥 Demo
+
+Explore how the DevOps Maturity Assessment works in both interfaces:
+
+- [Web App Demo on YouTube](https://www.youtube.com/watch?v=BGpz0iP61c4)
+- [CLI Demo on YouTube](https://www.youtube.com/watch?v=RZJtcynyC08)
 
 ## Features
 
