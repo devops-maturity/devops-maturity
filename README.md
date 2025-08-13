@@ -103,7 +103,6 @@ To enable Google and GitHub OAuth login for the web interface:
 
 If OAuth credentials are not configured, users can still register and login with username/password.
 
-
 ## Show Your Support
 
 If you find this tool helpful, please consider giving it a ⭐️ — your support helps others discover and adopt it.
@@ -113,6 +112,17 @@ Want to show your project aligns with the [DevOps Maturity Specification][Specif
 ```markdown
 [![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity%20Specification-1.0.0-yellow)](https://devops-maturity.github.io/)
 ```
+
+
+## Contributing
+
+We welcome contributions from the community! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
+
+- 📖 **Read our [Contributing Guide](CONTRIBUTING.md)** for detailed instructions
+- 🐛 **Report bugs** or suggest features via [GitHub Issues](https://github.com/devops-maturity/devops-maturity/issues)
+- 💬 **Join discussions** in [GitHub Discussions](https://github.com/devops-maturity/devops-maturity/discussions)
+- 🔒 **Security**: See our [Security Policy](SECURITY.md) for reporting vulnerabilities
+- 📋 **Governance**: Learn about our project governance in [GOVERNANCE.md](GOVERNANCE.md)
 
 ## License
 
