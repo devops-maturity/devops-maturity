@@ -21,7 +21,7 @@ We appreciate responsible disclosure of security vulnerabilities. If you discove
 
 **Please DO NOT** report security vulnerabilities through public GitHub issues, discussions, or pull requests.
 
-Instead, please report security vulnerabilities by via **[GitHub Security Advisories](https://github.com/devops-maturity/devops-maturity/security/advisories/new)**.
+Instead, please report security vulnerabilities via **[GitHub Security Advisories](https://github.com/devops-maturity/devops-maturity/security/advisories/new)**.
 
 ### What to Include
 
