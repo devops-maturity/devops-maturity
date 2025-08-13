@@ -105,7 +105,7 @@ We love feature suggestions! Please open an issue with:
 
 ### Development Environment
 
-The project uses `nox` for task automation. run `nox -l` to see available sessions.
+The project uses `nox` for task automation. Run `nox -l` to see available sessions.
 
 ## Pull Request Process
 
