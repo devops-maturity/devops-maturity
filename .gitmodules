@@ -1,0 +1,3 @@
+[submodule "src/enterprise"]
+	path = src/enterprise
+	url = https://github.com/devops-maturity/devops-maturity-enterprise.git
