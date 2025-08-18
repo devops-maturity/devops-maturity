@@ -101,7 +101,7 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
 async def delete_assessment(request: Request, assessment_id: int):
     user = get_current_user(request)
     if not user or not getattr(user, "is_admin", 0):
-        return RedirectResponse("/assessments", status_code=status.HTTP_403_FORBIDDEN)
+        return RedirectResponse("/assessments", status_code=302)
     db = SessionLocal()
     assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
     if assessment:
