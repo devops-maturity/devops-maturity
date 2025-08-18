@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI
+from fastapi import status
 from fastapi import HTTPException
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.templating import Jinja2Templates
@@ -44,7 +45,7 @@ def edit_assessment_form(request: Request, assessment_id: int):
     db.close()
     if not assessment:
         raise HTTPException(status_code=404, detail="Assessment not found")
-    if not user or assessment.user_id != user.id:
+    if not user or (assessment.user_id != user.id and not getattr(user, "is_admin", 0)):
         raise HTTPException(status_code=403, detail="Not allowed")
     return templates.TemplateResponse(
         "edit_assessment.html",
@@ -92,6 +93,20 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
     assessment.project_name = project_name
     assessment.responses = responses_dict
     db.commit()
+    db.close()
+    return RedirectResponse("/assessments", status_code=302)
+
+
+@app.post("/delete-assessment/{assessment_id}")
+async def delete_assessment(request: Request, assessment_id: int):
+    user = get_current_user(request)
+    if not user or not getattr(user, "is_admin", 0):
+        return RedirectResponse("/assessments", status_code=status.HTTP_403_FORBIDDEN)
+    db = SessionLocal()
+    assessment = db.query(Assessment).filter(Assessment.id == assessment_id).first()
+    if assessment:
+        db.delete(assessment)
+        db.commit()
     db.close()
     return RedirectResponse("/assessments", status_code=302)
 
@@ -191,7 +206,14 @@ async def register(
 ):
     db = SessionLocal()
     hashed_password = bcrypt.hash(password)
-    user = User(username=username, email=email, password_hash=hashed_password)
+    # Check if this is the first user
+    is_first_user = db.query(User).count() == 0
+    user = User(
+        username=username,
+        email=email,
+        password_hash=hashed_password,
+        is_admin=1 if is_first_user else 0,
+    )
     db.add(user)
     try:
         db.commit()
@@ -355,6 +377,7 @@ def read_form(request: Request):
 async def submit(request: Request):
     form = await request.form()
     project_name = form.get("project_name")
+    project_url = form.get("project_url")
     if not project_name:
         return templates.TemplateResponse(
             "form.html",
@@ -370,7 +393,7 @@ async def submit(request: Request):
     responses = []
     responses_dict = {}
     for k, v in form.items():
-        if k == "project_name":
+        if k in ["project_name", "project_url"]:
             continue
         answer = v == "yes"
         responses.append(UserResponse(id=k, answer=answer))
@@ -382,7 +405,10 @@ async def submit(request: Request):
     # Save to database
     db = SessionLocal()
     assessment = Assessment(
-        project_name=project_name, user_id=user_id, responses=responses_dict
+        project_name=project_name,
+        project_url=project_url,
+        user_id=user_id,
+        responses=responses_dict,
     )
     db.add(assessment)
     db.commit()
@@ -399,6 +425,7 @@ async def submit(request: Request):
             "level": level,
             "badge_url": badge_url,
             "project_name": project_name,
+            "project_url": project_url,
             "user": user,
         },
     )
@@ -426,6 +453,7 @@ def list_assessments(request: Request):
             {
                 "id": a.id,
                 "project_name": getattr(a, "project_name", ""),
+                "project_url": getattr(a, "project_url", ""),
                 "user": users.get(a.user_id),
                 "responses": a.responses,
                 "point": point,

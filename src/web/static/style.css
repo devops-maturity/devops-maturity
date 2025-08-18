@@ -26,7 +26,7 @@ body {
 
 /* Container styles */
 .container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: -60px auto 0 auto; /* Center the container */
     background: #fff;
     border-radius: 16px;
