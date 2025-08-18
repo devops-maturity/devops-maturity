@@ -95,7 +95,7 @@
                         </div>
                     </td>
                     <td class="text-end">
-                        {% if user and (a.user and user.id == a.user.id or user.is_admin) %}
+                        {% if user and a.user and (user.id == a.user.id or user.is_admin) %}
                             <a href="/edit-assessment/{{ a.id }}" class="action-icon me-2" title="Edit">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                     <path d="M12.146.854a.5.5 0 0 1 .708 0l2.292 2.292a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-4 1a.5.5 0 0 1-.62-.62l1-4a.5.5 0 0 1 .11-.168l10-10zm.708-.708a1.5 1.5 0 0 0-2.121 0l-10 10a1.5 1.5 0 0 0-.328.507l-1 4a1.5 1.5 0 0 0 1.86 1.86l4-1a1.5 1.5 0 0 0 .507-.328l10-10a1.5 1.5 0 0 0 0-2.121l-2.292-2.292z"/>
