@@ -1,6 +1,5 @@
 import os
 from fastapi import FastAPI
-from fastapi import status
 from fastapi import HTTPException
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.templating import Jinja2Templates
