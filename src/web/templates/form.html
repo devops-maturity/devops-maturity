@@ -47,6 +47,10 @@
                 <label for="project_name" class="form-label fw-bold">Project Name <span style="color:red">*</span></label>
                 <input type="text" class="form-control" id="project_name" name="project_name" required>
             </div>
+            <div class="mb-3">
+                <label for="project_url" class="form-label fw-bold">Project URL</label>
+                <input type="url" class="form-control" id="project_url" name="project_url" placeholder="https://your.project.url.git">
+            </div>
             {% for cat in categories %}
                 <div class="category-title">{{ cat }}</div>
                 {% for c in criteria if cat == c.category %}
@@ -68,7 +72,7 @@
                 {% endfor %}
             {% endfor %}
             <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg px-5">Submit Assessment</button>
+                <button type="submit" class="btn btn-primary btn-lg px-5">Submit</button>
             </div>
         </form>
         <footer class="mt-5 text-center text-muted">

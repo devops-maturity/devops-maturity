@@ -25,6 +25,7 @@ class Assessment(Base):  # type: ignore
     __tablename__ = "assessments"
     id = Column(Integer, primary_key=True, index=True)
     project_name = Column(String, nullable=False)
+    project_url = Column(String, nullable=True)
     user_id = Column(Integer)
     responses = Column(JSON)
 
@@ -37,6 +38,7 @@ class User(Base):  # type: ignore
     password_hash = Column(String, nullable=True)  # nullable for OAuth users
     oauth_provider = Column(String, nullable=True)  # e.g., 'google', 'github'
     oauth_id = Column(String, nullable=True)  # provider user id
+    is_admin = Column(Integer, default=0)  # 1 for admin, 0 for regular user
 
 
 def init_db():
