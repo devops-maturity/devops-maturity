@@ -1,4 +1,3 @@
-import pytest
 from src.config.loader import load_criteria_config
 
 

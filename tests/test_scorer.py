@@ -9,7 +9,9 @@ def sample_criteria():
         Criteria(id="D101", category="Basics", criteria="Branch Builds", weight=1.0),
         Criteria(id="D102", category="Basics", criteria="PR Builds", weight=1.0),
         Criteria(id="D201", category="Quality", criteria="Unit Testing", weight=1.0),
-        Criteria(id="D202", category="Quality", criteria="Functional Testing", weight=1.0),
+        Criteria(
+            id="D202", category="Quality", criteria="Functional Testing", weight=1.0
+        ),
     ]
 
 

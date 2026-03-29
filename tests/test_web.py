@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 from src.web.main import app
 from src.config.loader import load_criteria_config
@@ -34,7 +33,11 @@ class TestSubmit:
         data = make_full_submission(project_name="My Project", all_yes=False)
         response = client.post("/submit", data=data)
         assert response.status_code == 200
-        assert "score" in response.text.lower() or "level" in response.text.lower() or "wip" in response.text.lower()
+        assert (
+            "score" in response.text.lower()
+            or "level" in response.text.lower()
+            or "wip" in response.text.lower()
+        )
 
     def test_submit_all_yes(self):
         data = make_full_submission(project_name="Gold Project", all_yes=True)
@@ -80,12 +83,18 @@ class TestRegister:
     def test_get_register_form(self):
         response = client.get("/register")
         assert response.status_code == 200
-        assert "register" in response.text.lower() or "username" in response.text.lower()
+        assert (
+            "register" in response.text.lower() or "username" in response.text.lower()
+        )
 
     def test_register_new_user(self):
         response = client.post(
             "/register",
-            data={"username": "testuser_unique", "email": "testunique@example.com", "password": "secret"},
+            data={
+                "username": "testuser_unique",
+                "email": "testunique@example.com",
+                "password": "secret",
+            },
             follow_redirects=False,
         )
         assert response.status_code in (200, 302)
@@ -94,13 +103,21 @@ class TestRegister:
         # Register once
         client.post(
             "/register",
-            data={"username": "dupeuser", "email": "dupe@example.com", "password": "secret"},
+            data={
+                "username": "dupeuser",
+                "email": "dupe@example.com",
+                "password": "secret",
+            },
             follow_redirects=False,
         )
         # Register again with same username
         response = client.post(
             "/register",
-            data={"username": "dupeuser", "email": "dupe2@example.com", "password": "secret"},
+            data={
+                "username": "dupeuser",
+                "email": "dupe2@example.com",
+                "password": "secret",
+            },
             follow_redirects=False,
         )
         assert response.status_code in (200, 302)
@@ -122,13 +139,19 @@ class TestLogin:
         # When rendering the login page after failed credentials, the template
         # requires oauth_providers — verify no template error occurred
         if response.status_code == 200:
-            assert "invalid" in response.text.lower() or "login" in response.text.lower()
+            assert (
+                "invalid" in response.text.lower() or "login" in response.text.lower()
+            )
 
     def test_login_valid_credentials(self):
         # First register a user
         client.post(
             "/register",
-            data={"username": "loginuser", "email": "login@example.com", "password": "mypassword"},
+            data={
+                "username": "loginuser",
+                "email": "login@example.com",
+                "password": "mypassword",
+            },
             follow_redirects=False,
         )
         # Then login
@@ -169,4 +192,3 @@ class TestOAuthRoutes:
         response = client.get("/login?error=oauth_not_configured")
         assert response.status_code == 200
         assert "not configured" in response.text.lower()
-

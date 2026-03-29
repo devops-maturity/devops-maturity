@@ -1,4 +1,3 @@
-import pytest
 from urllib.parse import urlparse
 from src.core.badge import get_badge_url
 
