@@ -35,7 +35,9 @@ def save_responses(responses, project_name=None, project_url=None):
     db = SessionLocal()
     responses_dict = {r.id: r.answer for r in responses}
     assessment = Assessment(
-        project_name=project_name or "default", project_url=project_url or None, responses=responses_dict
+        project_name=project_name or "default",
+        project_url=project_url or None,
+        responses=responses_dict,
     )
     db.add(assessment)
     db.commit()

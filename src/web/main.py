@@ -386,7 +386,10 @@ async def submit(request: Request):
     # Save to database
     db = SessionLocal()
     assessment = Assessment(
-        project_name=project_name, project_url=project_url, user_id=user_id, responses=responses_dict
+        project_name=project_name,
+        project_url=project_url,
+        user_id=user_id,
+        responses=responses_dict,
     )
     db.add(assessment)
     db.commit()
