@@ -14,15 +14,32 @@ from core.badge import get_badge_url
 from core import __version__
 from config.loader import load_criteria_config
 
-# Handle bcrypt version compatibility issue
-try:
-    from passlib.hash import bcrypt
-except (ImportError, AttributeError):
-    # Fallback for bcrypt version compatibility issues
-    import passlib.hash
+# Use bcrypt directly to avoid incompatibility between passlib 1.7.4 and bcrypt 5.0.0.
+# passlib 1.7.4's wrap-bug detection passes a 73-byte test password to bcrypt, which
+# bcrypt 5.0.0 rejects with ValueError instead of silently truncating.
+import bcrypt as _bcrypt
 
-    # Force bcrypt to use the correct backend
-    bcrypt = passlib.hash.bcrypt.using(rounds=12)
+
+class _Bcrypt:
+    """Thin wrapper around the bcrypt library providing hash/verify methods."""
+
+    def hash(self, password: str) -> str:
+        if isinstance(password, str):
+            password = password.encode("utf-8")
+        return _bcrypt.hashpw(password, _bcrypt.gensalt()).decode("utf-8")
+
+    def verify(self, password: str, hashed: str) -> bool:
+        if isinstance(password, str):
+            password = password.encode("utf-8")
+        if isinstance(hashed, str):
+            hashed = hashed.encode("utf-8")
+        try:
+            return _bcrypt.checkpw(password, hashed)
+        except (ValueError, TypeError):
+            return False
+
+
+bcrypt = _Bcrypt()
 
 from sqlalchemy.exc import IntegrityError
 from authlib.integrations.starlette_client import OAuth
@@ -47,9 +64,9 @@ def edit_assessment_form(request: Request, assessment_id: int):
     if not user or assessment.user_id != user.id:
         raise HTTPException(status_code=403, detail="Not allowed")
     return templates.TemplateResponse(
+        request,
         "edit_assessment.html",
-        {
-            "request": request,
+        context={
             "assessment": assessment,
             "criteria": criteria,
             "categories": categories,
@@ -74,9 +91,9 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
     if not project_name:
         db.close()
         return templates.TemplateResponse(
+            request,
             "edit_assessment.html",
-            {
-                "request": request,
+            context={
                 "assessment": assessment,
                 "criteria": criteria,
                 "categories": categories,
@@ -178,7 +195,9 @@ def register_form(request: Request):
     }
 
     return templates.TemplateResponse(
-        "register.html", {"request": request, "oauth_providers": oauth_providers}
+        request,
+        "register.html",
+        context={"oauth_providers": oauth_providers},
     )
 
 
@@ -208,9 +227,9 @@ async def register(
             "github": is_oauth_provider_enabled("github"),
         }
         return templates.TemplateResponse(
+            request,
             "register.html",
-            {
-                "request": request,
+            context={
                 "error": "Username or email already exists.",
                 "oauth_providers": oauth_providers,
             },
@@ -235,8 +254,9 @@ def login_form(request: Request):
     }
 
     return templates.TemplateResponse(
+        request,
         "login.html",
-        {"request": request, "error": error, "oauth_providers": oauth_providers},
+        context={"error": error, "oauth_providers": oauth_providers},
     )
 
 
@@ -255,7 +275,15 @@ async def login(request: Request, username: str = Form(...), password: str = For
         or not bcrypt.verify(password, user.password_hash)
     ):
         return templates.TemplateResponse(
-            "login.html", {"request": request, "error": "Invalid credentials."}
+            request,
+            "login.html",
+            context={
+                "error": "Invalid credentials.",
+                "oauth_providers": {
+                    "google": is_oauth_provider_enabled("google"),
+                    "github": is_oauth_provider_enabled("github"),
+                },
+            },
         )
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=302)
@@ -280,7 +308,7 @@ async def oauth_login(request: Request, provider: str):
     return await oauth.create_client(provider).authorize_redirect(request, redirect_uri)
 
 
-@app.route("/auth/callback/{provider}")
+@app.api_route("/auth/callback/{provider}", methods=["GET", "POST"])
 async def oauth_callback(request: Request, provider: str):
     if provider not in ("google", "github"):
         return RedirectResponse("/login")
@@ -340,9 +368,9 @@ async def oauth_callback(request: Request, provider: str):
 def read_form(request: Request):
     user = get_current_user(request)
     return templates.TemplateResponse(
+        request,
         "form.html",
-        {
-            "request": request,
+        context={
             "__version__": __version__,
             "criteria": criteria,
             "categories": categories,
@@ -357,9 +385,9 @@ async def submit(request: Request):
     project_name = form.get("project_name")
     if not project_name:
         return templates.TemplateResponse(
+            request,
             "form.html",
-            {
-                "request": request,
+            context={
                 "__version__": __version__,
                 "criteria": criteria,
                 "categories": categories,
@@ -392,9 +420,9 @@ async def submit(request: Request):
     level = score_to_level(score)
     badge_url = get_badge_url(level)
     return templates.TemplateResponse(
+        request,
         "result.html",
-        {
-            "request": request,
+        context={
             "score": score,
             "level": level,
             "badge_url": badge_url,
@@ -433,9 +461,9 @@ def list_assessments(request: Request):
             }
         )
     return templates.TemplateResponse(
+        request,
         "assessments.html",
-        {
-            "request": request,
+        context={
             "assessments": assessment_data,
             "criteria_list": criteria,
             "user": user,
