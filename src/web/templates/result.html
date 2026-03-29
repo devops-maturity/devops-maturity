@@ -48,6 +48,11 @@
             Your score: {{ "%.1f"|format(score) }}
         </span>
     </div>
+    {% if project_url %}
+    <div class="text-center mb-3">
+        <a href="{{ project_url }}" target="_blank" rel="noopener noreferrer">{{ project_url }}</a>
+    </div>
+    {% endif %}
     <div class="text-center mb-2">
         <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
     </div>

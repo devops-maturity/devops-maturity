@@ -25,6 +25,7 @@ class Assessment(Base):  # type: ignore
     __tablename__ = "assessments"
     id = Column(Integer, primary_key=True, index=True)
     project_name = Column(String, nullable=False)
+    project_url = Column(String, nullable=True)
     user_id = Column(Integer)
     responses = Column(JSON)
 
