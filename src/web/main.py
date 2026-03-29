@@ -66,7 +66,7 @@ def edit_assessment_form(request: Request, assessment_id: int):
     return templates.TemplateResponse(
         request,
         "edit_assessment.html",
-        context={
+        {
             "assessment": assessment,
             "criteria": criteria,
             "categories": categories,
@@ -93,7 +93,7 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
         return templates.TemplateResponse(
             request,
             "edit_assessment.html",
-            context={
+            {
                 "assessment": assessment,
                 "criteria": criteria,
                 "categories": categories,
@@ -101,12 +101,14 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
                 "error": "Project Name is required.",
             },
         )
+    project_url = form.get("project_url") or None
     responses_dict = {}
     for k, v in form.items():
-        if k == "project_name":
+        if k in ("project_name", "project_url"):
             continue
         responses_dict[k] = v == "yes"
     assessment.project_name = project_name
+    assessment.project_url = project_url
     assessment.responses = responses_dict
     db.commit()
     db.close()
@@ -195,9 +197,7 @@ def register_form(request: Request):
     }
 
     return templates.TemplateResponse(
-        request,
-        "register.html",
-        context={"oauth_providers": oauth_providers},
+        request, "register.html", {"oauth_providers": oauth_providers}
     )
 
 
@@ -229,7 +229,7 @@ async def register(
         return templates.TemplateResponse(
             request,
             "register.html",
-            context={
+            {
                 "error": "Username or email already exists.",
                 "oauth_providers": oauth_providers,
             },
@@ -256,7 +256,7 @@ def login_form(request: Request):
     return templates.TemplateResponse(
         request,
         "login.html",
-        context={"error": error, "oauth_providers": oauth_providers},
+        {"error": error, "oauth_providers": oauth_providers},
     )
 
 
@@ -275,15 +275,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
         or not bcrypt.verify(password, user.password_hash)
     ):
         return templates.TemplateResponse(
-            request,
-            "login.html",
-            context={
-                "error": "Invalid credentials.",
-                "oauth_providers": {
-                    "google": is_oauth_provider_enabled("google"),
-                    "github": is_oauth_provider_enabled("github"),
-                },
-            },
+            request, "login.html", {"error": "Invalid credentials."}
         )
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=302)
@@ -308,7 +300,7 @@ async def oauth_login(request: Request, provider: str):
     return await oauth.create_client(provider).authorize_redirect(request, redirect_uri)
 
 
-@app.api_route("/auth/callback/{provider}", methods=["GET", "POST"])
+@app.get("/auth/callback/{provider}")
 async def oauth_callback(request: Request, provider: str):
     if provider not in ("google", "github"):
         return RedirectResponse("/login")
@@ -370,7 +362,7 @@ def read_form(request: Request):
     return templates.TemplateResponse(
         request,
         "form.html",
-        context={
+        {
             "__version__": __version__,
             "criteria": criteria,
             "categories": categories,
@@ -387,7 +379,7 @@ async def submit(request: Request):
         return templates.TemplateResponse(
             request,
             "form.html",
-            context={
+            {
                 "__version__": __version__,
                 "criteria": criteria,
                 "categories": categories,
@@ -395,10 +387,11 @@ async def submit(request: Request):
                 "error": "Project Name is required.",
             },
         )
+    project_url = form.get("project_url") or None
     responses = []
     responses_dict = {}
     for k, v in form.items():
-        if k == "project_name":
+        if k in ("project_name", "project_url"):
             continue
         answer = v == "yes"
         responses.append(UserResponse(id=k, answer=answer))
@@ -410,7 +403,10 @@ async def submit(request: Request):
     # Save to database
     db = SessionLocal()
     assessment = Assessment(
-        project_name=project_name, user_id=user_id, responses=responses_dict
+        project_name=project_name,
+        project_url=project_url,
+        user_id=user_id,
+        responses=responses_dict,
     )
     db.add(assessment)
     db.commit()
@@ -422,11 +418,12 @@ async def submit(request: Request):
     return templates.TemplateResponse(
         request,
         "result.html",
-        context={
+        {
             "score": score,
             "level": level,
             "badge_url": badge_url,
             "project_name": project_name,
+            "project_url": project_url,
             "user": user,
         },
     )
@@ -454,6 +451,7 @@ def list_assessments(request: Request):
             {
                 "id": a.id,
                 "project_name": getattr(a, "project_name", ""),
+                "project_url": getattr(a, "project_url", None),
                 "user": users.get(a.user_id),
                 "responses": a.responses,
                 "point": point,
@@ -463,7 +461,7 @@ def list_assessments(request: Request):
     return templates.TemplateResponse(
         request,
         "assessments.html",
-        context={
+        {
             "assessments": assessment_data,
             "criteria_list": criteria,
             "user": user,

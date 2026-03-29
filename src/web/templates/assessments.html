@@ -52,7 +52,13 @@
                 {% for a in assessments %}
                 <tr>
                     <td>{{ a.id }}</td>
-                    <td>{{ a.project_name }}</td>
+                    <td>
+                        {% if a.project_url %}
+                            <a href="{{ a.project_url }}" target="_blank" rel="noopener noreferrer">{{ a.project_name }}</a>
+                        {% else %}
+                            {{ a.project_name }}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if a.user %}
                             {{ a.user.username }} ({{ a.user.email }})
