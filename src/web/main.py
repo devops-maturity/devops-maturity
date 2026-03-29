@@ -47,9 +47,9 @@ def edit_assessment_form(request: Request, assessment_id: int):
     if not user or assessment.user_id != user.id:
         raise HTTPException(status_code=403, detail="Not allowed")
     return templates.TemplateResponse(
+        request,
         "edit_assessment.html",
         {
-            "request": request,
             "assessment": assessment,
             "criteria": criteria,
             "categories": categories,
@@ -74,9 +74,9 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
     if not project_name:
         db.close()
         return templates.TemplateResponse(
+            request,
             "edit_assessment.html",
             {
-                "request": request,
                 "assessment": assessment,
                 "criteria": criteria,
                 "categories": categories,
@@ -178,7 +178,7 @@ def register_form(request: Request):
     }
 
     return templates.TemplateResponse(
-        "register.html", {"request": request, "oauth_providers": oauth_providers}
+        request, "register.html", {"oauth_providers": oauth_providers}
     )
 
 
@@ -208,9 +208,9 @@ async def register(
             "github": is_oauth_provider_enabled("github"),
         }
         return templates.TemplateResponse(
+            request,
             "register.html",
             {
-                "request": request,
                 "error": "Username or email already exists.",
                 "oauth_providers": oauth_providers,
             },
@@ -235,8 +235,9 @@ def login_form(request: Request):
     }
 
     return templates.TemplateResponse(
+        request,
         "login.html",
-        {"request": request, "error": error, "oauth_providers": oauth_providers},
+        {"error": error, "oauth_providers": oauth_providers},
     )
 
 
@@ -255,7 +256,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
         or not bcrypt.verify(password, user.password_hash)
     ):
         return templates.TemplateResponse(
-            "login.html", {"request": request, "error": "Invalid credentials."}
+            request, "login.html", {"error": "Invalid credentials."}
         )
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=302)
@@ -280,7 +281,7 @@ async def oauth_login(request: Request, provider: str):
     return await oauth.create_client(provider).authorize_redirect(request, redirect_uri)
 
 
-@app.route("/auth/callback/{provider}")
+@app.get("/auth/callback/{provider}")
 async def oauth_callback(request: Request, provider: str):
     if provider not in ("google", "github"):
         return RedirectResponse("/login")
@@ -340,9 +341,9 @@ async def oauth_callback(request: Request, provider: str):
 def read_form(request: Request):
     user = get_current_user(request)
     return templates.TemplateResponse(
+        request,
         "form.html",
         {
-            "request": request,
             "__version__": __version__,
             "criteria": criteria,
             "categories": categories,
@@ -357,9 +358,9 @@ async def submit(request: Request):
     project_name = form.get("project_name")
     if not project_name:
         return templates.TemplateResponse(
+            request,
             "form.html",
             {
-                "request": request,
                 "__version__": __version__,
                 "criteria": criteria,
                 "categories": categories,
@@ -392,9 +393,9 @@ async def submit(request: Request):
     level = score_to_level(score)
     badge_url = get_badge_url(level)
     return templates.TemplateResponse(
+        request,
         "result.html",
         {
-            "request": request,
             "score": score,
             "level": level,
             "badge_url": badge_url,
@@ -433,9 +434,9 @@ def list_assessments(request: Request):
             }
         )
     return templates.TemplateResponse(
+        request,
         "assessments.html",
         {
-            "request": request,
             "assessments": assessment_data,
             "criteria_list": criteria,
             "user": user,
