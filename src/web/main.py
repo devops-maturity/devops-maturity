@@ -1,4 +1,5 @@
 import os
+import bcrypt as _bcrypt
 from fastapi import FastAPI
 from fastapi import HTTPException
 from starlette.middleware.sessions import SessionMiddleware
@@ -8,6 +9,10 @@ from fastapi.responses import HTMLResponse
 from fastapi import Request
 from fastapi import Form
 from fastapi.responses import FileResponse, RedirectResponse
+from sqlalchemy.exc import IntegrityError
+from authlib.integrations.starlette_client import OAuth
+from starlette.config import Config
+from dotenv import load_dotenv
 from core.model import UserResponse, Assessment, SessionLocal, init_db, User
 from core.scorer import calculate_score, score_to_level
 from core.badge import get_badge_url
@@ -17,34 +22,25 @@ from config.loader import load_criteria_config
 # Use bcrypt directly to avoid incompatibility between passlib 1.7.4 and bcrypt 5.0.0.
 # passlib 1.7.4's wrap-bug detection passes a 73-byte test password to bcrypt, which
 # bcrypt 5.0.0 rejects with ValueError instead of silently truncating.
-import bcrypt as _bcrypt
 
 
 class _Bcrypt:
     """Thin wrapper around the bcrypt library providing hash/verify methods."""
 
     def hash(self, password: str) -> str:
-        if isinstance(password, str):
-            password = password.encode("utf-8")
-        return _bcrypt.hashpw(password, _bcrypt.gensalt()).decode("utf-8")
+        encoded: bytes = password.encode("utf-8") if isinstance(password, str) else password
+        return _bcrypt.hashpw(encoded, _bcrypt.gensalt()).decode("utf-8")
 
     def verify(self, password: str, hashed: str) -> bool:
-        if isinstance(password, str):
-            password = password.encode("utf-8")
-        if isinstance(hashed, str):
-            hashed = hashed.encode("utf-8")
+        encoded_pw: bytes = password.encode("utf-8") if isinstance(password, str) else password
+        encoded_hash: bytes = hashed.encode("utf-8") if isinstance(hashed, str) else hashed
         try:
-            return _bcrypt.checkpw(password, hashed)
+            return _bcrypt.checkpw(encoded_pw, encoded_hash)
         except (ValueError, TypeError):
             return False
 
 
 bcrypt = _Bcrypt()
-
-from sqlalchemy.exc import IntegrityError
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
-from dotenv import load_dotenv
 
 
 app = FastAPI()
@@ -275,7 +271,15 @@ async def login(request: Request, username: str = Form(...), password: str = For
         or not bcrypt.verify(password, user.password_hash)
     ):
         return templates.TemplateResponse(
-            request, "login.html", {"error": "Invalid credentials."}
+            request,
+            "login.html",
+            {
+                "error": "Invalid credentials.",
+                "oauth_providers": {
+                    "google": is_oauth_provider_enabled("google"),
+                    "github": is_oauth_provider_enabled("github"),
+                },
+            },
         )
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=302)
