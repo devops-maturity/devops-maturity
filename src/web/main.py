@@ -84,12 +84,14 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
                 "error": "Project Name is required.",
             },
         )
+    project_url = form.get("project_url") or None
     responses_dict = {}
     for k, v in form.items():
-        if k == "project_name":
+        if k in ("project_name", "project_url"):
             continue
         responses_dict[k] = v == "yes"
     assessment.project_name = project_name
+    assessment.project_url = project_url
     assessment.responses = responses_dict
     db.commit()
     db.close()
@@ -368,10 +370,11 @@ async def submit(request: Request):
                 "error": "Project Name is required.",
             },
         )
+    project_url = form.get("project_url") or None
     responses = []
     responses_dict = {}
     for k, v in form.items():
-        if k == "project_name":
+        if k in ("project_name", "project_url"):
             continue
         answer = v == "yes"
         responses.append(UserResponse(id=k, answer=answer))
@@ -383,7 +386,7 @@ async def submit(request: Request):
     # Save to database
     db = SessionLocal()
     assessment = Assessment(
-        project_name=project_name, user_id=user_id, responses=responses_dict
+        project_name=project_name, project_url=project_url, user_id=user_id, responses=responses_dict
     )
     db.add(assessment)
     db.commit()
@@ -400,6 +403,7 @@ async def submit(request: Request):
             "level": level,
             "badge_url": badge_url,
             "project_name": project_name,
+            "project_url": project_url,
             "user": user,
         },
     )
@@ -427,6 +431,7 @@ def list_assessments(request: Request):
             {
                 "id": a.id,
                 "project_name": getattr(a, "project_name", ""),
+                "project_url": getattr(a, "project_url", None),
                 "user": users.get(a.user_id),
                 "responses": a.responses,
                 "point": point,

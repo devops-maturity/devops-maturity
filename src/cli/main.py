@@ -24,7 +24,7 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
-def save_responses(responses, project_name=None):
+def save_responses(responses, project_name=None, project_url=None):
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
     typer.secho(f"\nYour score: {score:.1f}", fg=typer.colors.BLUE, bold=True)
@@ -35,7 +35,7 @@ def save_responses(responses, project_name=None):
     db = SessionLocal()
     responses_dict = {r.id: r.answer for r in responses}
     assessment = Assessment(
-        project_name=project_name or "default", responses=responses_dict
+        project_name=project_name or "default", project_url=project_url or None, responses=responses_dict
     )
     db.add(assessment)
     db.commit()
@@ -51,6 +51,12 @@ def assess(
         "-p",
         help="Name of the project for this assessment",
     ),
+    project_url: str = typer.Option(
+        None,
+        "--project-url",
+        "-u",
+        help="URL of the project for this assessment (optional)",
+    ),
 ):
     """Run an interactive DevOps maturity assessment."""
     responses = []
@@ -63,7 +69,7 @@ def assess(
     for c in criteria:
         answer = typer.confirm(f"{c.id} {c.criteria} (yes/no)", default=False)
         responses.append(UserResponse(id=c.id, answer=answer))
-    save_responses(responses, project_name)
+    save_responses(responses, project_name, project_url)
 
 
 @app.command(name="list")
@@ -90,6 +96,12 @@ def assess_from_file(
         "-p",
         help="Name of the project for this assessment (overrides project_name in YAML file)",
     ),
+    project_url: str = typer.Option(
+        None,
+        "--project-url",
+        "-u",
+        help="URL of the project for this assessment (overrides project_url in YAML file, optional)",
+    ),
 ):
     """
     Read answers from a YAML file and generate the DevOps maturity assessment result.
@@ -112,12 +124,14 @@ def assess_from_file(
 
     # Get project name from CLI argument, YAML file, or default
     final_project_name = project_name or data.get("project_name") or "default"
+    # Get project URL from CLI argument or YAML file
+    final_project_url = project_url or data.get("project_url") or None
 
     responses = []
     for c in criteria:
         answer = bool(data.get(c.id, False))
         responses.append(UserResponse(id=c.id, answer=answer))
-    save_responses(responses, final_project_name)
+    save_responses(responses, final_project_name, final_project_url)
 
 
 @app.callback()

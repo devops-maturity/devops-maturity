@@ -48,6 +48,10 @@
             <label for="project_name" class="form-label fw-bold">Project Name <span style="color:red">*</span></label>
             <input type="text" class="form-control" id="project_name" name="project_name" value="{{ assessment.project_name }}" required>
         </div>
+        <div class="mb-3">
+            <label for="project_url" class="form-label fw-bold">Project URL <span class="text-muted fw-normal">(optional)</span></label>
+            <input type="url" class="form-control" id="project_url" name="project_url" value="{{ assessment.project_url or '' }}" placeholder="https://example.com/my-project">
+        </div>
         {% for cat in categories %}
             <div class="category-title">{{ cat }}</div>
             {% for c in criteria if cat == c.category %}
