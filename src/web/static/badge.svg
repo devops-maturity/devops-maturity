@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20">
+  <rect width="200" height="20" rx="3" fill="#555"/>
+  <rect x="130" width="70" height="20" rx="3" fill="#4c1"/>
+  <text x="65" y="14" fill="#fff" font-size="11" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" text-anchor="middle">DevOps Maturity</text>
+  <text x="165" y="14" fill="#fff" font-size="11" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" text-anchor="middle">WIP</text>
+</svg>

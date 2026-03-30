@@ -257,8 +257,14 @@ async def login(request: Request, username: str = Form(...), password: str = For
         or not user.password_hash
         or not bcrypt.verify(password, user.password_hash)
     ):
+        oauth_providers = {
+            "google": is_oauth_provider_enabled("google"),
+            "github": is_oauth_provider_enabled("github"),
+        }
         return templates.TemplateResponse(
-            request, "login.html", {"error": "Invalid credentials."}
+            request,
+            "login.html",
+            {"error": "Invalid credentials.", "oauth_providers": oauth_providers},
         )
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=302)
