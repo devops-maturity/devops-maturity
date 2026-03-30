@@ -1,7 +1,6 @@
 import os
 import tempfile
 
-import pytest
 import yaml
 from typer.testing import CliRunner
 
@@ -28,9 +27,7 @@ def test_config_with_valid_yaml_file():
         "D101": True,
         "D201": True,
     }
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".yml", delete=False
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as f:
         yaml.dump(data, f)
         tmpfile = f.name
     try:
@@ -43,9 +40,7 @@ def test_config_with_valid_yaml_file():
 
 def test_config_with_project_name_override():
     data = {"project_name": "original-name", "D101": True}
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".yml", delete=False
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as f:
         yaml.dump(data, f)
         tmpfile = f.name
     try:
