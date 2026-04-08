@@ -14,6 +14,7 @@ class Criteria(BaseModel):
     category: str
     criteria: str
     weight: float
+    description: str = ""
 
 
 class UserResponse(BaseModel):

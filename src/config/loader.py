@@ -18,6 +18,7 @@ def load_criteria_config() -> tuple[List[str], List[Criteria]]:
             category=item["category"],
             criteria=item["criteria"],
             weight=item["weight"],
+            description=item.get("description", ""),
         )
         for item in config["criteria"]
     ]

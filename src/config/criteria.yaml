@@ -12,108 +12,129 @@ criteria:
     category: "Basics"
     criteria: "Branch Builds (🟢)"
     weight: 1.0
+    description: "Trigger an automated build on every branch push. This ensures issues are caught early before code reaches the main branch."
 
   - id: "D102"
     category: "Basics"
     criteria: "Pull Request Builds (🟢)"
     weight: 1.0
+    description: "Run a full build and test suite on every pull request. This prevents broken code from merging and gives reviewers confidence."
 
   - id: "D103"
     category: "Basics"
     criteria: "Clean Build Environments (🟡)"
     weight: 0.5
+    description: "Use ephemeral, isolated environments for each build (e.g., containers or fresh VMs). This eliminates environment-specific failures and improves reproducibility."
 
   # Quality
   - id: "D201"
     category: "Quality"
     criteria: "Unit Testing (🟢)"
     weight: 1.0
+    description: "Write and run automated unit tests as part of every build. Unit tests validate individual components in isolation and catch regressions quickly."
 
   - id: "D202"
     category: "Quality"
     criteria: "Functional Testing (🟢)"
     weight: 1.0
+    description: "Run integration or end-to-end tests that validate system behavior from a user's perspective. These complement unit tests by testing component interactions."
 
   - id: "D203"
     category: "Quality"
     criteria: "Performance Testing (🟡)"
     weight: 0.5
+    description: "Include automated performance, load, or stress tests in your CI/CD pipeline. This prevents performance regressions from reaching production."
 
   - id: "D204"
     category: "Quality"
     criteria: "Code Coverage (🟡)"
     weight: 0.5
+    description: "Measure code coverage during test runs and enforce a minimum threshold. This helps identify untested code paths and encourages thorough testing."
 
   - id: "D205"
     category: "Quality"
     criteria: "Accessibility Testing (🟡)"
     weight: 0.5
+    description: "Automate accessibility checks (e.g., WCAG compliance) in CI. This ensures your application is usable by people with disabilities."
 
   # Security
   - id: "D301"
     category: "Security"
     criteria: "Vulnerability Scanning (🟢)"
     weight: 1.0
+    description: "Scan code and dependencies for known security vulnerabilities using SAST/SCA tools (e.g., Snyk, Trivy, CodeQL). Block builds with critical findings."
 
   - id: "D302"
     category: "Security"
     criteria: "License Scanning (🟡)"
     weight: 0.5
+    description: "Scan dependencies for license compliance issues. Ensure third-party licenses are compatible with your project's licensing and legal requirements."
 
   # Supply Chain Security
   - id: "D401"
     category: "Supply Chain Security"
     criteria: "Documented Build Process (🟢)"
     weight: 1.0
+    description: "Document how your project is built, tested, and deployed. Clear build documentation enables reproducibility and onboards new contributors quickly."
 
   - id: "D402"
     category: "Supply Chain Security"
     criteria: "CI/CD as Code (🟢)"
     weight: 1.0
+    description: "Define CI/CD pipelines as code (e.g., YAML, Jenkinsfile) stored in source control. This enables version tracking, peer review, and reproducibility."
 
   - id: "D403"
     category: "Supply Chain Security"
     criteria: "Artifact Signing (🟡)"
     weight: 0.5
+    description: "Cryptographically sign build artifacts (e.g., using Sigstore/Cosign). This allows consumers to verify the integrity and provenance of your releases."
 
   - id: "D404"
     category: "Supply Chain Security"
     criteria: "Dependency Pinning (🟡)"
     weight: 0.5
+    description: "Pin all dependency versions (e.g., via lock files) to ensure reproducible builds. This prevents unexpected breakage from upstream dependency updates."
 
   - id: "D405"
     category: "Supply Chain Security"
     criteria: "SBOM Generation (🟡)"
     weight: 0.5
+    description: "Generate a Software Bill of Materials (SBOM) for each release. An SBOM lists all dependencies and their versions, supporting transparency and compliance."
 
   # Analysis
   - id: "D501"
     category: "Analysis"
     criteria: "Static Code Analysis (🟡)"
     weight: 0.5
+    description: "Run static analysis tools (SAST) to detect bugs, code smells, and security issues without executing code (e.g., SonarQube, Semgrep, Bandit)."
 
   - id: "D502"
     category: "Analysis"
     criteria: "Dynamic Code Analysis (🟡)"
     weight: 0.5
+    description: "Run dynamic analysis or fuzzing tools that test the application at runtime (e.g., OWASP ZAP, AFL). These catch vulnerabilities that static analysis may miss."
 
   - id: "D503"
     category: "Analysis"
     criteria: "Code Linting (🟡)"
     weight: 0.5
+    description: "Enforce code style and quality rules via linters (e.g., ESLint, Flake8, Ruff). Consistent style improves readability and reduces review friction."
 
   # Reporting
   - id: "D601"
     category: "Reporting"
     criteria: "Notifications & Alerts (🟢)"
     weight: 1.0
+    description: "Send automated notifications for build failures, security alerts, and deployment events (e.g., via Slack, email, or PagerDuty). Fast feedback enables quick remediation."
 
   - id: "D602"
     category: "Reporting"
     criteria: "Attached Reports (🟡)"
     weight: 0.5
+    description: "Attach test results, coverage reports, and analysis outputs as CI artifacts. This makes results accessible for review without re-running the pipeline."
 
   - id: "D603"
     category: "Reporting"
     criteria: "Compliance Mapping & Auditability (🟡)"
     weight: 0.5
+    description: "Map CI/CD pipeline controls to compliance frameworks (e.g., SOC 2, ISO 27001). Maintain audit trails of builds, deployments, and approvals for regulatory requirements."
