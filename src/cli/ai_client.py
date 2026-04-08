@@ -36,6 +36,7 @@ litellm.suppress_debug_info = True
 
 # ── Prompt builder ─────────────────────────────────────────────────────────────
 
+
 def build_assessment_prompt(criteria: list[Criteria], repo_context: dict) -> str:
     """
     Build the LLM prompt that asks the model to assess a repository against
@@ -43,9 +44,7 @@ def build_assessment_prompt(criteria: list[Criteria], repo_context: dict) -> str
 
     Returns a string ready to send as the user message.
     """
-    file_list = "\n".join(
-        f"  - {f}" for f in repo_context.get("files", [])[:100]
-    )
+    file_list = "\n".join(f"  - {f}" for f in repo_context.get("files", [])[:100])
     readme_excerpt = repo_context.get("readme", "")[:2000]
 
     ci_sections = ""
@@ -59,12 +58,12 @@ def build_assessment_prompt(criteria: list[Criteria], repo_context: dict) -> str
     criteria_ids = ", ".join(f'"{c.id}"' for c in criteria)
 
     return f"""You are a DevOps expert performing a maturity assessment for the repository \
-{repo_context.get('owner', 'unknown')}/{repo_context.get('repo', 'unknown')}.
+{repo_context.get("owner", "unknown")}/{repo_context.get("repo", "unknown")}.
 
 ## Repository Information
-- Provider: {repo_context.get('provider', 'unknown')}
-- Language: {repo_context.get('language', 'unknown')}
-- Description: {repo_context.get('description', 'N/A')}
+- Provider: {repo_context.get("provider", "unknown")}
+- Language: {repo_context.get("language", "unknown")}
+- Description: {repo_context.get("description", "N/A")}
 
 ## File Tree (up to 100 files)
 {file_list if file_list else "  (no files detected)"}
@@ -113,6 +112,7 @@ def _resolve_model(provider: str, model: str) -> str:
 
 # ── Public facade ──────────────────────────────────────────────────────────────
 
+
 def call_ai(
     provider: str,
     model: str,
@@ -149,8 +149,7 @@ def call_ai(
 
     if provider != "ollama" and not api_key:
         raise ValueError(
-            f"An API key is required for {provider!r}. "
-            f"Set {provider.upper()}_API_KEY."
+            f"An API key is required for {provider!r}. Set {provider.upper()}_API_KEY."
         )
 
     litellm_model = _resolve_model(provider, model)
@@ -208,15 +207,12 @@ def parse_ai_response(
             )
 
     responses = [
-        UserResponse(id=c.id, answer=bool(data.get(c.id, False)))
-        for c in criteria
+        UserResponse(id=c.id, answer=bool(data.get(c.id, False))) for c in criteria
     ]
 
     raw_suggestions = data.get("suggestions", [])
     suggestions: list[str] = (
-        [str(s) for s in raw_suggestions]
-        if isinstance(raw_suggestions, list)
-        else []
+        [str(s) for s in raw_suggestions] if isinstance(raw_suggestions, list) else []
     )
 
     return responses, suggestions

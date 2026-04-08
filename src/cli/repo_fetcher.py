@@ -94,9 +94,8 @@ def _decode_base64_content(b64: str) -> str:
 
 # ── GitHub ─────────────────────────────────────────────────────────────────────
 
-def fetch_github_context(
-    owner: str, repo: str, token: Optional[str] = None
-) -> dict:
+
+def fetch_github_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
     """Fetch repository context from the GitHub REST API."""
     headers: dict = {"Accept": "application/vnd.github.v3+json"}
     if token:
@@ -125,17 +124,15 @@ def fetch_github_context(
         r = client.get(f"{base}/git/trees/HEAD?recursive=1")
         if r.is_success:
             ctx["files"] = [
-                i["path"]
-                for i in r.json().get("tree", [])
-                if i.get("type") == "blob"
+                i["path"] for i in r.json().get("tree", []) if i.get("type") == "blob"
             ][:_MAX_FILE_LIST]
 
         # README
         r = client.get(f"{base}/readme")
         if r.is_success:
-            ctx["readme"] = _decode_base64_content(
-                r.json().get("content", "")
-            )[:_MAX_README_CHARS]
+            ctx["readme"] = _decode_base64_content(r.json().get("content", ""))[
+                :_MAX_README_CHARS
+            ]
 
         # CI/CD-relevant files
         fetched = 0
@@ -154,9 +151,8 @@ def fetch_github_context(
 
 # ── GitLab ─────────────────────────────────────────────────────────────────────
 
-def fetch_gitlab_context(
-    owner: str, repo: str, token: Optional[str] = None
-) -> dict:
+
+def fetch_gitlab_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
     """Fetch repository context from the GitLab REST API."""
     import urllib.parse
 
@@ -185,9 +181,9 @@ def fetch_gitlab_context(
         # File tree (GitLab paginates at 100 items)
         r = client.get(f"{base}/repository/tree?recursive=true&per_page=100")
         if r.is_success:
-            ctx["files"] = [
-                i["path"] for i in r.json() if i.get("type") == "blob"
-            ][:_MAX_FILE_LIST]
+            ctx["files"] = [i["path"] for i in r.json() if i.get("type") == "blob"][
+                :_MAX_FILE_LIST
+            ]
 
         # README
         for readme_name in ("README.md", "README.rst", "README"):
@@ -214,9 +210,8 @@ def fetch_gitlab_context(
 
 # ── Bitbucket ──────────────────────────────────────────────────────────────────
 
-def fetch_bitbucket_context(
-    owner: str, repo: str, token: Optional[str] = None
-) -> dict:
+
+def fetch_bitbucket_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
     """Fetch repository context from the Bitbucket REST API."""
     base = f"https://api.bitbucket.org/2.0/repositories/{owner}/{repo}"
     headers: dict = {}
@@ -271,6 +266,7 @@ def fetch_bitbucket_context(
 
 
 # ── Public facade ──────────────────────────────────────────────────────────────
+
 
 def fetch_repo_context(
     provider: str, owner: str, repo: str, token: Optional[str] = None

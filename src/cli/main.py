@@ -225,8 +225,7 @@ def _run_auto_assess(
         resolved_ai_key = os.environ.get(env_var)
         if not resolved_ai_key:
             typer.secho(
-                f"Error: API key required for {ai!r}. "
-                f"Set {env_var} or pass --ai-key.",
+                f"Error: API key required for {ai!r}. Set {env_var} or pass --ai-key.",
                 fg=typer.colors.RED,
                 bold=True,
             )
