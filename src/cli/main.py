@@ -2,7 +2,7 @@ import os
 import typer
 import yaml
 from core.model import UserResponse, Assessment, SessionLocal, init_db
-from core.scorer import calculate_score, score_to_level
+from core.scorer import calculate_score, score_to_level, calculate_category_scores
 from core.badge import get_badge_url
 from core import __version__
 from config.loader import load_criteria_config
@@ -27,9 +27,34 @@ def version_callback(value: bool):
 def save_responses(responses, project_name=None, project_url=None):
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
-    typer.secho(f"\nYour score: {score:.1f}", fg=typer.colors.BLUE, bold=True)
+    typer.secho(f"\nYour score: {score:.1f}%", fg=typer.colors.BLUE, bold=True)
     typer.secho(f"Your maturity level: {level}", fg=typer.colors.GREEN, bold=True)
     typer.secho(f"Badge URL: {get_badge_url(level)}\n", fg=typer.colors.CYAN)
+
+    # Category breakdown
+    category_scores = calculate_category_scores(criteria, responses)
+    typer.secho("Category Breakdown:", fg=typer.colors.YELLOW, bold=True)
+    for cat, cat_score in category_scores.items():
+        bar_len = int(cat_score / 5)  # 20 chars = 100%
+        bar = "█" * bar_len + "░" * (20 - bar_len)
+        color = typer.colors.GREEN if cat_score >= 60 else typer.colors.RED
+        typer.secho(f"  {cat:<22} [{bar}] {cat_score:.0f}%", fg=color)
+
+    # Improvement recommendations
+    response_map = {r.id: r.answer for r in responses}
+    missing = [c for c in criteria if not response_map.get(c.id)]
+    if missing:
+        typer.secho("\nImprovement Recommendations:", fg=typer.colors.YELLOW, bold=True)
+        current_cat = None
+        for c in missing:
+            if c.category != current_cat:
+                current_cat = c.category
+                typer.secho(f"\n  {current_cat}:", fg=typer.colors.CYAN, bold=True)
+            typer.secho(f"    [{c.id}] {c.criteria}", fg=typer.colors.WHITE)
+            if c.description:
+                typer.secho(f"         {c.description}", fg=typer.colors.BRIGHT_BLACK)
+
+    typer.echo("")
 
     # Save to database
     db = SessionLocal()

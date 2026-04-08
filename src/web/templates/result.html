@@ -42,10 +42,10 @@
         </li>
         {% endif %}
     </ul>
-    <h2 class="mb-4 text-center">Assessment Result</h2>
+    <h2 class="mb-4 text-center">Assessment Result for <em>{{ project_name }}</em></h2>
     <div class="text-center mb-4">
         <span class="fs-5 fw-bold" style="color:#5b7965;">
-            Your score: {{ "%.1f"|format(score) }}
+            Overall score: {{ "%.1f"|format(score) }}%
         </span>
     </div>
     {% if project_url %}
@@ -56,6 +56,56 @@
     <div class="text-center mb-2">
         <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
     </div>
+
+    {% if category_scores %}
+    <hr>
+    <h4 class="mt-4 mb-3">Category Breakdown</h4>
+    <div class="row g-3 mb-4">
+        {% for cat in categories %}
+        {% set cat_score = category_scores.get(cat, 0) %}
+        <div class="col-md-6">
+            <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">{{ cat }}</span>
+                <span class="text-muted">{{ "%.0f"|format(cat_score) }}%</span>
+            </div>
+            <div class="progress" style="height: 18px;" role="progressbar" aria-label="{{ cat }} score" aria-valuenow="{{ cat_score|int }}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar {% if cat_score >= 90 %}bg-success{% elif cat_score >= 60 %}bg-warning{% else %}bg-danger{% endif %}"
+                     style="width: {{ cat_score }}%">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% set missing = criteria_results | selectattr("answer", "equalto", false) | list %}
+    {% if missing %}
+    <hr>
+    <h4 class="mt-4 mb-3">Improvement Recommendations</h4>
+    <p class="text-muted mb-3">The following practices are not yet in place. Addressing them will improve your maturity score.</p>
+    {% for cat in categories %}
+    {% set cat_missing = missing | selectattr("category", "equalto", cat) | list %}
+    {% if cat_missing %}
+    <h6 class="text-uppercase text-muted mt-3 mb-2" style="font-size:0.78rem; letter-spacing:0.05em;">{{ cat }}</h6>
+    <div class="list-group mb-3">
+        {% for item in cat_missing %}
+        <div class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <span class="fw-semibold">{{ item.criteria }}</span>
+                <span class="badge bg-secondary ms-2" style="white-space:nowrap;">{{ item.id }}</span>
+            </div>
+            {% if item.description %}
+            <p class="mb-0 mt-1 text-muted small">{{ item.description }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <hr>
+    <h5 class="mb-3">Add this badge to your project</h5>
     <div>
         <strong>Markdown:</strong>
         <div class="input-group mb-2">

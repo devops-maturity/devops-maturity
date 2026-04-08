@@ -9,7 +9,7 @@ from fastapi import Request
 from fastapi import Form
 from fastapi.responses import FileResponse, RedirectResponse
 from core.model import UserResponse, Assessment, SessionLocal, init_db, User
-from core.scorer import calculate_score, score_to_level
+from core.scorer import calculate_score, score_to_level, calculate_category_scores
 from core.badge import get_badge_url
 from core import __version__
 from config.loader import load_criteria_config
@@ -404,6 +404,18 @@ async def submit(request: Request):
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
     badge_url = get_badge_url(level)
+    category_scores = calculate_category_scores(criteria, responses)
+    # Build per-criterion result: include answer and description for recommendations
+    criteria_results = [
+        {
+            "id": c.id,
+            "category": c.category,
+            "criteria": c.criteria,
+            "description": c.description,
+            "answer": responses_dict.get(c.id, False),
+        }
+        for c in criteria
+    ]
     return templates.TemplateResponse(
         request,
         "result.html",
@@ -414,6 +426,9 @@ async def submit(request: Request):
             "project_name": project_name,
             "project_url": project_url,
             "user": user,
+            "category_scores": category_scores,
+            "criteria_results": criteria_results,
+            "categories": categories,
         },
     )
 
@@ -444,6 +459,7 @@ def list_assessments(request: Request):
                 "user": users.get(a.user_id),
                 "responses": a.responses,
                 "point": point,
+                "level": level,
                 "badge_url": badge_url,
             }
         )

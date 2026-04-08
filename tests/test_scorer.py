@@ -1,4 +1,4 @@
-from src.core.scorer import calculate_score, score_to_level
+from src.core.scorer import calculate_score, calculate_category_scores, score_to_level
 from src.core.model import Criteria, UserResponse
 
 
@@ -86,3 +86,57 @@ def test_score_to_level_silver():
 def test_score_to_level_gold():
     assert score_to_level(90) == "GOLD"
     assert score_to_level(100) == "GOLD"
+
+
+# ── calculate_category_scores ──────────────────────────────────────────────────
+
+
+def _make_multi_category_criteria():
+    return [
+        Criteria(id="A1", category="Alpha", criteria="A1", weight=1.0),
+        Criteria(id="A2", category="Alpha", criteria="A2", weight=1.0),
+        Criteria(id="B1", category="Beta", criteria="B1", weight=1.0),
+        Criteria(id="B2", category="Beta", criteria="B2", weight=0.5),
+    ]
+
+
+def test_category_scores_all_yes():
+    criteria = _make_multi_category_criteria()
+    responses = _make_responses(["A1", "A2", "B1", "B2"])
+    scores = calculate_category_scores(criteria, responses)
+    assert scores["Alpha"] == 100.0
+    assert scores["Beta"] == 100.0
+
+
+def test_category_scores_all_no():
+    criteria = _make_multi_category_criteria()
+    responses = _make_responses(["A1", "A2", "B1", "B2"], answer=False)
+    scores = calculate_category_scores(criteria, responses)
+    assert scores["Alpha"] == 0.0
+    assert scores["Beta"] == 0.0
+
+
+def test_category_scores_partial():
+    criteria = _make_multi_category_criteria()
+    responses = [
+        UserResponse(id="A1", answer=True),
+        UserResponse(id="A2", answer=False),
+        UserResponse(id="B1", answer=True),
+        UserResponse(id="B2", answer=False),
+    ]
+    scores = calculate_category_scores(criteria, responses)
+    assert scores["Alpha"] == 50.0
+    # B1 weight=1.0, B2 weight=0.5 => 1.0 / 1.5 * 100 ≈ 66.67
+    assert abs(scores["Beta"] - 66.67) < 0.01
+
+
+def test_category_scores_keys_match_categories():
+    criteria = _make_multi_category_criteria()
+    responses = _make_responses(["A1", "A2", "B1", "B2"])
+    scores = calculate_category_scores(criteria, responses)
+    assert set(scores.keys()) == {"Alpha", "Beta"}
+
+
+def test_category_scores_empty():
+    scores = calculate_category_scores([], [])
+    assert scores == {}
