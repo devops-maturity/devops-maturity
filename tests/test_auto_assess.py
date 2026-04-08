@@ -15,6 +15,7 @@ from typer.testing import CliRunner
 from src.cli.ai_client import (
     DEFAULT_MODELS,
     build_assessment_prompt,
+    call_ai,
     parse_ai_response,
 )
 from src.cli.repo_fetcher import (
@@ -206,6 +207,53 @@ def test_default_models_defined_for_all_providers():
     for provider in ("openai", "anthropic", "gemini", "ollama"):
         assert provider in DEFAULT_MODELS
         assert DEFAULT_MODELS[provider]
+
+
+# ── ai_client: call_ai via litellm ────────────────────────────────────────────
+
+def _make_litellm_response(content: str) -> MagicMock:
+    """Build a mock that mimics a litellm ModelResponse object."""
+    msg = MagicMock()
+    msg.content = content
+    choice = MagicMock()
+    choice.message = msg
+    resp = MagicMock()
+    resp.choices = [choice]
+    return resp
+
+
+def test_call_ai_openai_invokes_litellm(sample_criteria, sample_repo_context):
+    content = json.dumps({"D101": True, "D201": False, "D301": True})
+    with patch("src.cli.ai_client.litellm.completion", return_value=_make_litellm_response(content)) as mock_llm:
+        result = call_ai("openai", "gpt-4o", "test prompt", api_key="sk-test")
+    mock_llm.assert_called_once()
+    call_kwargs = mock_llm.call_args[1] if mock_llm.call_args[1] else mock_llm.call_args[0][0]
+    assert result == content
+
+
+def test_call_ai_unsupported_provider_raises():
+    with pytest.raises(ValueError, match="Unsupported AI provider"):
+        call_ai("unknown", "gpt-4o", "test prompt", api_key="key")
+
+
+def test_call_ai_missing_key_raises():
+    with pytest.raises(ValueError, match="API key"):
+        call_ai("openai", "gpt-4o", "test prompt", api_key=None)
+
+
+def test_call_ai_ollama_no_key_required():
+    content = json.dumps({"D101": True})
+    with patch("src.cli.ai_client.litellm.completion", return_value=_make_litellm_response(content)):
+        result = call_ai("ollama", "ollama/llama3", "test prompt")
+    assert result == content
+
+
+def test_call_ai_gemini_adds_prefix():
+    content = json.dumps({"D101": True})
+    with patch("src.cli.ai_client.litellm.completion", return_value=_make_litellm_response(content)) as mock_llm:
+        call_ai("gemini", "gemini-1.5-flash", "test prompt", api_key="gkey")
+    called_model = mock_llm.call_args[1]["model"]
+    assert called_model == "gemini/gemini-1.5-flash"
 
 
 # ── CLI: --auto validation ─────────────────────────────────────────────────────

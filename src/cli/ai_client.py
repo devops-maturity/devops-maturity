@@ -1,27 +1,37 @@
 """AI client for automated DevOps Maturity assessment.
 
-Supports OpenAI, Anthropic, Google Gemini, and Ollama via their HTTP APIs.
-All network calls are made with ``httpx`` (already a project dependency).
+Uses ``litellm`` to support OpenAI, Anthropic, Google Gemini, Ollama, and
+many other providers through a single unified interface.
 """
 
 import json
+import os
 import re
 from typing import Optional
 
-import httpx
+import litellm
 
 from core.model import Criteria, UserResponse
 
-# Default models per provider
+# litellm model names per provider (used when no --model is given)
 DEFAULT_MODELS: dict[str, str] = {
     "openai": "gpt-4o",
     "anthropic": "claude-3-haiku-20240307",
-    "gemini": "gemini-1.5-flash",
-    "ollama": "llama3",
+    "gemini": "gemini/gemini-1.5-flash",
+    "ollama": "ollama/llama3",
+}
+
+# Provider name → litellm model prefix that must be prepended
+_PROVIDER_MODEL_PREFIX: dict[str, str] = {
+    "gemini": "gemini/",
+    "ollama": "ollama/",
 }
 
 _JSON_BLOCK_RE = re.compile(r"```(?:json)?\s*([\s\S]+?)\s*```")
 _JSON_OBJ_RE = re.compile(r"\{[\s\S]+\}")
+
+# Suppress litellm's verbose logging by default
+litellm.suppress_debug_info = True
 
 
 # ── Prompt builder ─────────────────────────────────────────────────────────────
@@ -87,71 +97,18 @@ Respond ONLY with valid JSON. Do not include any prose, markdown, or explanation
 """
 
 
-# ── Provider-specific callers ──────────────────────────────────────────────────
+def _resolve_model(provider: str, model: str) -> str:
+    """
+    Ensure the model name uses the litellm prefix required for the provider.
 
-def _call_openai(prompt: str, model: str, api_key: str) -> str:
-    url = "https://api.openai.com/v1/chat/completions"
-    payload = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "response_format": {"type": "json_object"},
-        "temperature": 0.1,
-    }
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-    with httpx.Client(timeout=120) as client:
-        resp = client.post(url, json=payload, headers=headers)
-        resp.raise_for_status()
-        return resp.json()["choices"][0]["message"]["content"]
-
-
-def _call_anthropic(prompt: str, model: str, api_key: str) -> str:
-    url = "https://api.anthropic.com/v1/messages"
-    payload = {
-        "model": model,
-        "max_tokens": 2048,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    headers = {
-        "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
-        "Content-Type": "application/json",
-    }
-    with httpx.Client(timeout=120) as client:
-        resp = client.post(url, json=payload, headers=headers)
-        resp.raise_for_status()
-        return resp.json()["content"][0]["text"]
-
-
-def _call_gemini(prompt: str, model: str, api_key: str) -> str:
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{model}:generateContent?key={api_key}"
-    )
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseMimeType": "application/json"},
-    }
-    with httpx.Client(timeout=120) as client:
-        resp = client.post(url, json=payload)
-        resp.raise_for_status()
-        return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
-
-
-def _call_ollama(prompt: str, model: str, base_url: str) -> str:
-    url = f"{base_url.rstrip('/')}/api/chat"
-    payload = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "stream": False,
-        "format": "json",
-    }
-    with httpx.Client(timeout=300) as client:
-        resp = client.post(url, json=payload)
-        resp.raise_for_status()
-        return resp.json()["message"]["content"]
+    e.g. "gemini-1.5-flash" → "gemini/gemini-1.5-flash"
+         "llama3"           → "ollama/llama3"
+    OpenAI and Anthropic models need no prefix.
+    """
+    prefix = _PROVIDER_MODEL_PREFIX.get(provider, "")
+    if prefix and not model.startswith(prefix):
+        return f"{prefix}{model}"
+    return model
 
 
 # ── Public facade ──────────────────────────────────────────────────────────────
@@ -164,38 +121,59 @@ def call_ai(
     ollama_url: str = "http://localhost:11434",
 ) -> str:
     """
-    Call the specified AI *provider* and return the raw response text.
+    Call the specified AI *provider* via litellm and return the response text.
+
+    litellm provides a unified OpenAI-compatible interface that supports
+    OpenAI, Anthropic, Google Gemini, Ollama, and 100+ other providers
+    without requiring provider-specific SDKs.
 
     Args:
         provider:   One of "openai", "anthropic", "gemini", "ollama".
         model:      Model name (e.g. "gpt-4o", "claude-3-haiku-20240307").
+                    Provider-specific prefixes (e.g. "gemini/", "ollama/")
+                    are added automatically when needed.
         prompt:     The user prompt to send.
         api_key:    API key (not required for Ollama).
         ollama_url: Base URL for the Ollama server (default: localhost:11434).
 
     Raises:
         ValueError: For unsupported providers or missing API keys.
-        httpx.HTTPStatusError: If the provider returns an error response.
+        litellm.exceptions.APIError: If the provider returns an error response.
     """
-    if provider == "openai":
-        if not api_key:
-            raise ValueError("An API key is required for OpenAI. Set OPENAI_API_KEY.")
-        return _call_openai(prompt, model, api_key)
-    elif provider == "anthropic":
-        if not api_key:
-            raise ValueError("An API key is required for Anthropic. Set ANTHROPIC_API_KEY.")
-        return _call_anthropic(prompt, model, api_key)
-    elif provider == "gemini":
-        if not api_key:
-            raise ValueError("An API key is required for Gemini. Set GEMINI_API_KEY.")
-        return _call_gemini(prompt, model, api_key)
-    elif provider == "ollama":
-        return _call_ollama(prompt, model, ollama_url)
-    else:
+    valid_providers = {"openai", "anthropic", "gemini", "ollama"}
+    if provider not in valid_providers:
         raise ValueError(
             f"Unsupported AI provider: {provider!r}. "
-            "Choose from: openai, anthropic, gemini, ollama."
+            f"Choose from: {', '.join(sorted(valid_providers))}."
         )
+
+    if provider != "ollama" and not api_key:
+        raise ValueError(
+            f"An API key is required for {provider!r}. "
+            f"Set {provider.upper()}_API_KEY."
+        )
+
+    litellm_model = _resolve_model(provider, model)
+
+    kwargs: dict = {
+        "model": litellm_model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.1,
+    }
+
+    if api_key:
+        kwargs["api_key"] = api_key
+
+    if provider == "ollama":
+        kwargs["api_base"] = ollama_url
+    elif provider == "openai":
+        kwargs["response_format"] = {"type": "json_object"}
+
+    # Set a generous timeout so large prompts complete
+    os.environ.setdefault("LITELLM_REQUEST_TIMEOUT", "120")
+
+    response = litellm.completion(**kwargs)
+    return response.choices[0].message.content  # type: ignore[union-attr]
 
 
 def parse_ai_response(
