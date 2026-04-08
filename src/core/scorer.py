@@ -28,9 +28,7 @@ def calculate_category_scores(
         if response_map.get(c.id):
             totals[c.category] = totals.get(c.category, 0.0) + c.weight
 
-    return {
-        cat: (totals.get(cat, 0.0) / maxes[cat]) * 100 for cat in maxes
-    }
+    return {cat: (totals.get(cat, 0.0) / maxes[cat]) * 100 for cat in maxes}
 
 
 def score_to_level(score: float) -> str:
