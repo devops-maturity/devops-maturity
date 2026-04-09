@@ -21,6 +21,7 @@ Explore how the DevOps Maturity Assessment works in both interfaces:
 ## Features
 
 - **Interactive CLI**: Perform assessments directly from your terminal.
+- **AI-Powered Automated Assessment**: Let an LLM assess your repository automatically using its git history, CI config, and README — no manual answers required.
 - **Web Interface**: Easy-to-use web app for taking assessments and viewing results.
 - **Maturity Scoring**: Receive a maturity score, level, and badge based on your answers.
 - **Progress Tracking**: View your assessment history to monitor improvement over time.
@@ -50,6 +51,42 @@ dm assess
 You'll be guided through a series of questions and receive a maturity score, level, and badge. See it in action:
 
 ![DevOps Maturity CLI Demo][CLIDemo]
+
+### AI-Powered Automated Assessment
+
+Skip the manual questions and let an LLM assess your repository automatically.
+The tool fetches your file tree, README, and CI/CD configuration files from the
+repository platform and sends them to the AI model of your choice.
+
+**Supported AI providers**: OpenAI, Anthropic, Google Gemini, Ollama (local)
+
+```bash
+# OpenAI — provider auto-detected from the git remote URL
+OPENAI_API_KEY=sk-... devops-maturity assess --auto --ai openai
+
+# Anthropic
+ANTHROPIC_API_KEY=... devops-maturity assess --auto --ai anthropic --model claude-3-5-sonnet-20241022
+
+# Google Gemini
+GEMINI_API_KEY=... devops-maturity assess --auto --ai gemini
+
+# Ollama (no API key required, runs locally)
+devops-maturity assess --auto --ai ollama --model llama3
+```
+
+| Flag | Env var fallback | Default | Notes |
+|---|---|---|---|
+| `--auto` | — | — | Enable AI-powered mode |
+| `--ai` | — | — | AI provider: `openai`, `anthropic`, `gemini`, `ollama` |
+| `--model` | — | Provider default | Model name (e.g. `gpt-4o`, `claude-3-haiku-20240307`) |
+| `--provider` | — | Auto-detected | Repo platform: `github`, `gitlab`, `bitbucket` |
+| `--repo-token` | `GITHUB_TOKEN` / `GITLAB_TOKEN` / `BITBUCKET_TOKEN` | — | Required for private repos |
+| `--ai-key` | `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY` | — | AI provider API key |
+| `--ollama-url` | — | `http://localhost:11434` | Ollama server base URL |
+
+> [!NOTE]
+> The `--provider` flag is auto-detected from the `origin` remote URL of the current git repository.
+> For public repositories no `--repo-token` is needed.
 
 ### Launch the Web Interface
 
