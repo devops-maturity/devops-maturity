@@ -7,9 +7,19 @@
 
 ## Overview
 
-**DevOps Maturity Assessment** helps you evaluate and improve your DevOps practices.
+**DevOps Maturity Assessment** helps teams turn broad DevOps, DevSecOps, and software supply chain expectations into a score, a gap list, and a shareable badge.
+
+Use it when you want a quick baseline before a platform improvement program, an audit-ready checklist for delivery practices, or a lightweight badge that makes engineering maturity visible in a README.
 
 It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
+
+## Why teams use it
+
+- **Fast baseline**: answer a short weighted checklist and get a maturity level in minutes.
+- **Clear next steps**: see category scores and prioritized missing practices instead of a raw pass/fail list.
+- **Repository-aware AI mode**: optionally let an LLM inspect repository metadata, README content, and CI configuration.
+- **Shareable signal**: publish a badge that makes DevOps maturity visible to users, contributors, and stakeholders.
+- **Portable scoring model**: use the same criteria from the CLI, web UI, or a YAML file in automation.
 
 ## 🎥 Demo
 
@@ -21,7 +31,7 @@ Explore how the DevOps Maturity Assessment works in both interfaces:
 ## Features
 
 - **Interactive CLI**: Perform assessments directly from your terminal.
-- **AI-Powered Automated Assessment**: Let an LLM assess your repository automatically using its git history, CI config, and README — no manual answers required.
+- **AI-Powered Automated Assessment**: Let an LLM assess your repository automatically using repository metadata, CI config, and README content — no manual answers required.
 - **Web Interface**: Easy-to-use web app for taking assessments and viewing results.
 - **Maturity Scoring**: Receive a maturity score, level, and badge based on your answers.
 - **Progress Tracking**: View your assessment history to monitor improvement over time.
@@ -30,6 +40,21 @@ Explore how the DevOps Maturity Assessment works in both interfaces:
 
 
 ## Quick Start
+
+### Try it in 60 seconds
+
+```bash
+pip install devops-maturity
+dm assess
+```
+
+You will get:
+
+- an overall percentage score
+- a maturity level (`WIP`, `PASSING`, `BRONZE`, `SILVER`, or `GOLD`)
+- per-category scores
+- improvement recommendations
+- a badge URL you can add to your README
 
 ### Run the CLI
 
@@ -52,11 +77,20 @@ You'll be guided through a series of questions and receive a maturity score, lev
 
 ![DevOps Maturity CLI Demo][CLIDemo]
 
+### Run from a YAML file
+
+Use `devops-maturity.yml` when you want a repeatable baseline that can be reviewed in pull requests:
+
+```bash
+dm config --file devops-maturity.yml
+```
+
+This is useful for CI jobs, internal platform reviews, and recurring maturity checkpoints.
+
 ### AI-Powered Automated Assessment
 
 Skip the manual questions and let an LLM assess your repository automatically.
-The tool fetches your file tree, README, and CI/CD configuration files from the
-repository platform and sends them to the AI model of your choice.
+The tool fetches your file tree, README, and CI/CD configuration files from the repository platform and sends that context to the AI model of your choice.
 
 **Supported AI providers**: OpenAI, Anthropic, Google Gemini, Ollama (local)
 
@@ -87,6 +121,9 @@ devops-maturity assess --auto --ai ollama --model llama3
 > [!NOTE]
 > The `--provider` flag is auto-detected from the `origin` remote URL of the current git repository.
 > For public repositories no `--repo-token` is needed.
+
+> [!IMPORTANT]
+> AI mode sends repository context to the selected provider unless you use local Ollama. Use `--repo-token` only for private repositories you are allowed to assess.
 
 ### Launch the Web Interface
 

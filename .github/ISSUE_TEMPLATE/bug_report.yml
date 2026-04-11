@@ -1,0 +1,58 @@
+name: Bug report
+description: Report a reproducible problem in the CLI, web UI, scoring, or packaging.
+title: "bug: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve DevOps Maturity Assessment. Clear reproduction steps help maintainers fix issues faster.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the behavior you saw and what you expected instead.
+      placeholder: The CLI exited with...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include commands, input files, or pages visited.
+      placeholder: |
+        1. Run `dm assess`
+        2. Answer...
+        3. See...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: Run `devops-maturity --version`.
+      placeholder: "Version: 0.0.0"
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "Python 3.12.3"
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Affected area
+      options:
+        - CLI
+        - Web UI
+        - AI auto-assessment
+        - Scoring criteria
+        - Packaging or installation
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Paste relevant output. Remove secrets and private repository data.
+      render: shell

@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest a new capability, criterion, workflow, or UX improvement.
+title: "feat: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for ideas that make assessments clearer, faster, more accurate, or easier to adopt.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user need, workflow, or DevOps maturity gap should this address?
+      placeholder: Teams need a way to...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe how the feature should work.
+      placeholder: Add a command that...
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - Web UI
+        - AI auto-assessment
+        - Scoring criteria
+        - Badges and sharing
+        - Documentation
+        - Project/community
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Mention workarounds or other approaches.
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example usage
+      description: Commands, API shape, screenshots, or expected output.

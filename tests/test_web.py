@@ -17,6 +17,14 @@ def test_read_form():
     assert "form" in response.text.lower()
 
 
+def test_read_form_highlights_value_and_cli_path():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Turn a long DevOps checklist into a clear next action" in response.text
+    assert "pip install devops-maturity" in response.text
+    assert "Get my maturity score" in response.text
+
+
 # ── Auth pages ─────────────────────────────────────────────────────────────────
 
 
@@ -148,6 +156,18 @@ def test_submit_with_project_name():
     assert response.status_code == 200
     # result.html shows score and badge
     assert "score" in response.text.lower()
+
+
+def test_submit_result_includes_next_actions_and_badge_copy():
+    response = client.post(
+        "/submit",
+        data={"project_name": "Result UX Project", "D101": "yes", "D201": "no"},
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert "Next actions" in response.text
+    assert "Improvement recommendations" in response.text
+    assert "data-copy-value" in response.text
 
 
 def test_submit_all_no():

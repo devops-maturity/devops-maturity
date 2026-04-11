@@ -34,6 +34,8 @@ def test_config_with_valid_yaml_file():
         result = runner.invoke(app, ["config", "--file", tmpfile])
         assert result.exit_code == 0
         assert "score" in result.output.lower()
+        assert "Markdown badge" in result.output
+        assert "Next steps" in result.output
     finally:
         os.unlink(tmpfile)
 

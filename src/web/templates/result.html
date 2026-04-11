@@ -11,8 +11,11 @@
 <body>
 <div class="header-bg">
     <div class="header-center">
-        <div class="logo-title mt-2">DevOps Maturity Assessment</div>
         <img src="/static/logo.png" alt="DevOps Maturity Logo" height="100" class="logo-img">
+        <div>
+            <div class="logo-title mt-2">DevOps Maturity Assessment</div>
+            <p class="hero-subtitle">A score is useful when it points to the next practice to improve.</p>
+        </div>
     </div>
 </div>
 <div class="container bg-white p-4 rounded shadow-sm">
@@ -42,24 +45,37 @@
         </li>
         {% endif %}
     </ul>
-    <h2 class="mb-4 text-center">Assessment Result for <em>{{ project_name }}</em></h2>
-    <div class="text-center mb-4">
-        <span class="fs-5 fw-bold" style="color:#5b7965;">
-            Overall score: {{ "%.1f"|format(score) }}%
-        </span>
-    </div>
-    {% if project_url %}
-    <div class="text-center mb-3">
-        <a href="{{ project_url }}" target="_blank" rel="noopener noreferrer">{{ project_url }}</a>
-    </div>
-    {% endif %}
-    <div class="text-center mb-2">
-        <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
-    </div>
+    {% set missing = criteria_results | selectattr("answer", "equalto", false) | list %}
+    <section class="result-hero" aria-labelledby="result-title">
+        <div>
+            <p class="eyebrow">Assessment result</p>
+            <h1 id="result-title">{{ project_name }}</h1>
+            {% if project_url %}
+            <a href="{{ project_url }}" target="_blank" rel="noopener noreferrer">{{ project_url }}</a>
+            {% endif %}
+        </div>
+        <div class="score-card" aria-label="Overall maturity score">
+            <span>{{ "%.1f"|format(score) }}%</span>
+            <strong>{{ level }}</strong>
+            <img class="badge-img" src="{{ badge_url }}" alt="DevOps Maturity Badge">
+        </div>
+    </section>
+
+    <section class="next-actions" aria-labelledby="next-actions-title">
+        <div>
+            <h2 id="next-actions-title">Next actions</h2>
+            {% if missing %}
+            <p>Start with the first few missing practices below, then publish the badge to make the improvement path visible.</p>
+            {% else %}
+            <p>All configured practices are in place. Publish the badge and keep the assessment current as your delivery system changes.</p>
+            {% endif %}
+        </div>
+        <a class="btn btn-outline-primary" href="/">Run another assessment</a>
+    </section>
 
     {% if category_scores %}
     <hr>
-    <h4 class="mt-4 mb-3">Category Breakdown</h4>
+    <h2 class="mt-4 mb-3 section-title">Category breakdown</h2>
     <div class="row g-3 mb-4">
         {% for cat in categories %}
         {% set cat_score = category_scores.get(cat, 0) %}
@@ -78,11 +94,23 @@
     </div>
     {% endif %}
 
-    {% set missing = criteria_results | selectattr("answer", "equalto", false) | list %}
     {% if missing %}
     <hr>
-    <h4 class="mt-4 mb-3">Improvement Recommendations</h4>
-    <p class="text-muted mb-3">The following practices are not yet in place. Addressing them will improve your maturity score.</p>
+    <h2 class="mt-4 mb-3 section-title">Improvement recommendations</h2>
+    <p class="text-muted mb-3">These practices are not yet in place. Addressing them will improve your maturity score.</p>
+    <div class="priority-list" aria-label="Highest-priority recommendations">
+        {% for item in missing[:5] %}
+        <div class="priority-item">
+            <span class="criterion-id">{{ item.id }}</span>
+            <div>
+                <strong>{{ item.criteria }}</strong>
+                {% if item.description %}
+                <p>{{ item.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     {% for cat in categories %}
     {% set cat_missing = missing | selectattr("category", "equalto", cat) | list %}
     {% if cat_missing %}
@@ -105,11 +133,11 @@
     {% endif %}
 
     <hr>
-    <h5 class="mb-3">Add this badge to your project</h5>
+    <h2 class="mb-3 section-title">Add this badge to your project</h2>
     <div>
         <strong>Markdown:</strong>
         <div class="input-group mb-2">
-            <div class="form-control copy-box" id="copy-markdown">[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)</div>
+            <div class="form-control copy-box" id="copy-markdown" data-copy-value="[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)">[![DevOps Maturity Badge]({{ badge_url }})](https://devops-maturity.github.io/)</div>
             <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-markdown')" aria-label="Copy Markdown code">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
@@ -118,7 +146,7 @@
         </div>
         <strong>reStructuredText:</strong>
         <div class="input-group mb-2">
-            <div class="form-control copy-box" id="copy-rst">.. image:: {{ badge_url }}<br>&nbsp;&nbsp;:target: https://devops-maturity.github.io/<br>&nbsp;&nbsp;:alt: DevOps Maturity Badge</div>
+            <div class="form-control copy-box" id="copy-rst" data-copy-value=".. image:: {{ badge_url }}&#10;  :target: https://devops-maturity.github.io/&#10;  :alt: DevOps Maturity Badge">.. image:: {{ badge_url }}<br>&nbsp;&nbsp;:target: https://devops-maturity.github.io/<br>&nbsp;&nbsp;:alt: DevOps Maturity Badge</div>
             <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-rst')" aria-label="Copy reStructuredText code">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
@@ -127,7 +155,7 @@
         </div>
         <strong>HTML:</strong>
         <div class="input-group mb-2">
-            <div class="form-control copy-box" id="copy-html">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
+            <div class="form-control copy-box" id="copy-html" data-copy-value="&lt;img src=&quot;{{ badge_url }}&quot; alt=&quot;DevOps Maturity Badge&quot;&gt;">&lt;img src="{{ badge_url }}" alt="DevOps Maturity Badge"&gt;</div>
             <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-html')" aria-label="Copy HTML code">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path d="M10 1.5v1h2A1.5 1.5 0 0 1 13.5 4v9A1.5 1.5 0 0 1 12 14.5h-8A1.5 1.5 0 0 1 2.5 13V4A1.5 1.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
@@ -136,16 +164,17 @@
         </div>
         <strong>AsciiDoc:</strong>
         <div class="input-group mb-2">
-            <div class="form-control copy-box" id="copy-asciidoc">link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]</div>
+            <div class="form-control copy-box" id="copy-asciidoc" data-copy-value="link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]">link:https://devops-maturity.github.io/[[.badge]#image:{{ badge_url }}[DevOps Maturity Badge]#]</div>
             <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard('copy-asciidoc')" aria-label="Copy AsciiDoc code">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path d="M10 1.5v1h2A1.5.5 0 0 1 13.5 4v9A1.5.5 0 0 1 12 14.5h-8A1.5.5 0 0 1 2.5 13V4A1.5.5 0 0 1 4 2.5h2v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5zM6 2v1h4V2H6z"/>
                 </svg>
             </button>
         </div>
+        <p id="copy-status" class="copy-status" aria-live="polite"></p>
     </div>
      <footer class="mt-5 text-center text-muted">
-        &copy; 2025 DevOps Maturity Team
+        &copy; 2026 DevOps Maturity Team
         &nbsp;|&nbsp;
         <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" class="github-link" style="color:inherit; text-decoration:none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" style="vertical-align:middle;">
@@ -157,14 +186,13 @@
 <script>
 function copyToClipboard(elementId) {
     const el = document.getElementById(elementId);
-    // Remove <br> tags for reStructuredText
-    let text = el.textContent.replace(/<br>/g, '\n').replace(/&nbsp;/g, ' ');
-    // Use Clipboard API to copy text
+    const status = document.getElementById('copy-status');
+    const text = el.dataset.copyValue || el.textContent;
     navigator.clipboard.writeText(text).then(() => {
-        alert("Text copied to clipboard!");
+        status.textContent = "Copied to clipboard.";
     }).catch(err => {
         console.error("Failed to copy text: ", err);
-        alert("Failed to copy text. Please try again.");
+        status.textContent = "Copy failed. Select the snippet and copy it manually.";
     });
 }
 </script>
