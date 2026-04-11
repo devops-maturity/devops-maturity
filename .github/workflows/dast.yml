@@ -1,0 +1,52 @@
+name: DAST
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 06:00 UTC
+
+jobs:
+  zap-scan:
+    name: OWASP ZAP Baseline Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Start web application
+        run: |
+          uvicorn src.web.main:app --host 0.0.0.0 --port 8000 &
+          echo "Waiting for app to start..."
+          timeout 60 bash -c 'until curl -sf http://localhost:8000/ > /dev/null; do sleep 1; done'
+          echo "App is ready!"
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: 'http://localhost:8000'
+          fail_action: false
+          allow_issue_writing: false
+          artifact_name: 'zap-baseline-report'
+          cmd_options: '-I'

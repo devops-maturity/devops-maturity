@@ -47,6 +47,15 @@ def vulnerability_scan(session):
 
 
 @nox.session
+def licenses(session):
+    """Scan dependency licenses."""
+    session.install("pip-licenses", ".")
+    session.run(
+        "pip-licenses", "--order=license", "--format=plain-vertical", "--with-urls"
+    )
+
+
+@nox.session
 def deploy(session):
     """Deploy the project"""
     if not RENDER:

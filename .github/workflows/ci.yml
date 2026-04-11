@@ -41,7 +41,7 @@ jobs:
           devops-maturity config --file devops-maturity.yml
           devops-maturity list
 
-  vulnerability-scan:
+  scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -56,3 +56,5 @@ jobs:
           pip install nox
       - name: Run vulnerability scan
         run: nox -s vulnerability_scan
+      - name: Scan dependency licenses
+        run: nox -s licenses
