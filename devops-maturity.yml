@@ -25,7 +25,7 @@ D302: false   # License Scanning (nice to have)
 # Supply Chain Security
 D401: true    # Documented Build Process (must have)
 D402: true    # CI/CD as Code (must have)
-D403: false   # Artifact Signing (nice to have)
+D403: true    # Artifact Signing (nice to have)
 D404: false   # Dependency Pinning (nice to have)
 D405: false   # SBOM Generation (nice to have)
 

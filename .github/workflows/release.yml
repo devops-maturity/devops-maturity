@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+  attestations: write
 
 jobs:
   deploy:
@@ -30,6 +32,10 @@ jobs:
       run: python -m pip wheel -w dist --no-deps .
     - name: Check distribution
       run: twine check dist/*
+    - name: Attest build provenance
+      uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.3.0
+      with:
+        subject-path: dist/*
     - name: Publish package (to TestPyPI)
       if: github.event_name == 'workflow_dispatch' && github.repository == 'devops-maturity/devops-maturity'
       env:
