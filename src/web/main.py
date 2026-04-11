@@ -30,10 +30,11 @@ from starlette.config import Config
 from dotenv import load_dotenv
 
 
-app = FastAPI()
-# Ensured that SessionMiddleware is added only once to avoid conflicts.
-templates = Jinja2Templates(directory="src/web/templates")
-app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
+app = FastAPI(
+    title="DevOps Maturity Assessment",
+    description="Assess DevOps, DevSecOps, and supply chain maturity from the web or CLI.",
+    version=__version__,
+)
 
 
 @app.get("/edit-assessment/{assessment_id}", response_class=HTMLResponse)
@@ -140,6 +141,24 @@ app.mount("/static", StaticFiles(directory="src/web/static"), name="static")
 categories, criteria = load_criteria_config()
 
 init_db()
+
+
+def get_assessment_template_context(request: Request, **extra):
+    """Build shared context for the assessment form."""
+    category_counts = {
+        category: len([c for c in criteria if c.category == category])
+        for category in categories
+    }
+    context = {
+        "__version__": __version__,
+        "criteria": criteria,
+        "criteria_count": len(criteria),
+        "categories": categories,
+        "category_counts": category_counts,
+        "user": get_current_user(request),
+    }
+    context.update(extra)
+    return context
 
 
 def is_oauth_provider_enabled(provider: str) -> bool:
@@ -347,16 +366,10 @@ async def oauth_callback(request: Request, provider: str):
 
 @app.get("/", response_class=HTMLResponse)
 def read_form(request: Request):
-    user = get_current_user(request)
     return templates.TemplateResponse(
         request,
         "form.html",
-        {
-            "__version__": __version__,
-            "criteria": criteria,
-            "categories": categories,
-            "user": user,
-        },
+        get_assessment_template_context(request),
     )
 
 
@@ -368,13 +381,7 @@ async def submit(request: Request):
         return templates.TemplateResponse(
             request,
             "form.html",
-            {
-                "__version__": __version__,
-                "criteria": criteria,
-                "categories": categories,
-                "user": get_current_user(request),
-                "error": "Project Name is required.",
-            },
+            get_assessment_template_context(request, error="Project Name is required."),
         )
     project_url = form.get("project_url") or None
     responses = []

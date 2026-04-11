@@ -40,9 +40,14 @@ def version_callback(value: bool):
 def save_responses(responses, project_name=None, project_url=None):
     score = calculate_score(criteria, responses)
     level = score_to_level(score)
+    badge_url = get_badge_url(level)
     typer.secho(f"\nYour score: {score:.1f}%", fg=typer.colors.BLUE, bold=True)
     typer.secho(f"Your maturity level: {level}", fg=typer.colors.GREEN, bold=True)
-    typer.secho(f"Badge URL: {get_badge_url(level)}\n", fg=typer.colors.CYAN)
+    typer.secho(f"Badge URL: {badge_url}", fg=typer.colors.CYAN)
+    typer.echo(
+        f"Markdown badge: [![DevOps Maturity Badge]({badge_url})]"
+        "(https://devops-maturity.github.io/)\n"
+    )
 
     # Category breakdown
     category_scores = calculate_category_scores(criteria, responses)
@@ -68,6 +73,10 @@ def save_responses(responses, project_name=None, project_url=None):
                 typer.secho(f"         {c.description}", fg=typer.colors.BRIGHT_BLACK)
 
     typer.echo("")
+    typer.secho("Next steps:", fg=typer.colors.YELLOW, bold=True)
+    typer.echo("  1. Commit a devops-maturity.yml baseline for repeatable reviews.")
+    typer.echo("  2. Add the Markdown badge to your README to make progress visible.")
+    typer.echo("  3. Re-run the assessment after improving the missing practices.\n")
 
     # Save to database
     db = SessionLocal()

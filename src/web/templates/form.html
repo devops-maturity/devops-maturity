@@ -14,11 +14,14 @@
 <body>
     <div class="header-bg">
         <div class="header-center">
-            <div class="logo-title mt-2">DevOps Maturity Assessment</div>
             <img src="/static/logo.png" alt="DevOps Maturity Logo" height="100" class="logo-img">
+            <div>
+                <div class="logo-title mt-2">DevOps Maturity Assessment</div>
+                <p class="hero-subtitle">Score your delivery, quality, security, and reporting practices in one guided assessment.</p>
+            </div>
         </div>
     </div>
-    <div class="container bg-white p-4 rounded shadow-sm">
+    <main class="container app-shell">
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">Assessment</a>
@@ -42,43 +45,117 @@
             </li>
             {% endif %}
         </ul>
-        <form method="post" action="/submit">
-            <div class="mb-3">
-                <label for="project_name" class="form-label fw-bold">Project Name <span style="color:red">*</span></label>
-                <input type="text" class="form-control" id="project_name" name="project_name" required>
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <section class="assessment-hero" aria-labelledby="assessment-title">
+            <div class="assessment-hero-copy">
+                <p class="eyebrow">Open DevOps maturity scorecard</p>
+                <h1 id="assessment-title">Turn a long DevOps checklist into a clear next action.</h1>
+                <p class="lead">
+                    Answer {{ criteria_count }} weighted checks across {{ categories|length }} categories and get a maturity level, category breakdown, prioritized gaps, and a badge for your README.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#assessment-form">Start assessment</a>
+                    <a class="btn btn-outline-primary" href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="project_url" class="form-label fw-bold">Project URL <span class="text-muted fw-normal">(optional)</span></label>
-                <input type="url" class="form-control" id="project_url" name="project_url" placeholder="https://example.com/my-project">
+            <div class="assessment-hero-facts" aria-label="Assessment facts">
+                <div>
+                    <strong>{{ criteria_count }}</strong>
+                    <span>checks</span>
+                </div>
+                <div>
+                    <strong>{{ categories|length }}</strong>
+                    <span>categories</span>
+                </div>
+                <div>
+                    <strong>5 min</strong>
+                    <span>typical run</span>
+                </div>
             </div>
-            {% for cat in categories %}
-                <div class="category-title">{{ cat }}</div>
-                {% for c in criteria if cat == c.category %}
-                    <div class="card">
-                        <div class="card-body">
-                            <label class="form-label fw-bold">{{ c.criteria }}</label>
-                            <div>
-                                <div class="form-check form-check-inline">
-                                    <input type="radio" class="form-check-input" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes">
-                                    <label for="{{ c.id }}-yes" class="form-check-label">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="radio" class="form-check-input" name="{{ c.id }}" value="no" id="{{ c.id }}-no" checked>
-                                    <label for="{{ c.id }}-no" class="form-check-label">No</label>
-                                </div>
-                            </div>
-                        </div>
+        </section>
+
+        <section class="quick-start-strip" aria-labelledby="quick-start-title">
+            <div>
+                <h2 id="quick-start-title">Prefer the terminal?</h2>
+                <p>Run the CLI locally, save the result, and publish the badge from the same scoring model.</p>
+            </div>
+            <code>pip install devops-maturity && dm assess</code>
+        </section>
+
+        <form method="post" action="/submit" id="assessment-form" class="assessment-form">
+            <section class="project-fields" aria-labelledby="project-details-title">
+                <div>
+                    <p class="eyebrow">Step 1</p>
+                    <h2 id="project-details-title">Project details</h2>
+                    <p class="section-copy">Use a repository, service, platform, or product name. Add a public URL if you want the result list to link back to the project.</p>
+                </div>
+                <div class="field-grid">
+                    <div class="mb-3">
+                        <label for="project_name" class="form-label fw-bold">Project Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="project_name" name="project_name" placeholder="acme-api" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="project_url" class="form-label fw-bold">Project URL <span class="text-muted fw-normal">(optional)</span></label>
+                        <input type="url" class="form-control" id="project_url" name="project_url" placeholder="https://github.com/acme/api">
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="assessment-form-title">
+                <div class="form-section-header">
+                    <div>
+                        <p class="eyebrow">Step 2</p>
+                        <h2 id="assessment-form-title">Assessment form</h2>
+                    </div>
+                    <p class="section-copy">Choose <strong>In place</strong> when the practice is documented, automated, and part of normal delivery. Otherwise choose <strong>Not yet</strong>.</p>
+                </div>
+
+                {% for cat in categories %}
+                    <section class="category-section" aria-labelledby="category-{{ loop.index }}">
+                        <div class="category-title-row">
+                            <h3 id="category-{{ loop.index }}" class="category-title">{{ cat }}</h3>
+                            <span class="category-count">{{ category_counts.get(cat, 0) }} checks</span>
+                        </div>
+                        <div class="criteria-grid">
+                        {% for c in criteria if cat == c.category %}
+                            <article class="assessment-item">
+                                <div class="criteria-copy">
+                                    <span class="criterion-id">{{ c.id }}</span>
+                                    <label class="form-label fw-bold" for="{{ c.id }}-yes">{{ c.criteria }}</label>
+                                    {% if c.description %}
+                                    <p>{{ c.description }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="choice-group" role="radiogroup" aria-label="{{ c.criteria }}">
+                                    <input type="radio" class="btn-check" name="{{ c.id }}" value="yes" id="{{ c.id }}-yes">
+                                    <label class="btn btn-choice" for="{{ c.id }}-yes">In place</label>
+
+                                    <input type="radio" class="btn-check" name="{{ c.id }}" value="no" id="{{ c.id }}-no" checked>
+                                    <label class="btn btn-choice" for="{{ c.id }}-no">Not yet</label>
+                                </div>
+                            </article>
+                        {% endfor %}
+                        </div>
+                    </section>
                 {% endfor %}
-            {% endfor %}
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg px-5">Submit Assessment</button>
+            </section>
+
+            <div class="submit-bar">
+                <div>
+                    <strong>Ready for your score?</strong>
+                    <span>Results include category scores, improvement recommendations, and badge snippets.</span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg px-5">Get my maturity score</button>
             </div>
         </form>
         <footer class="mt-5 text-center text-muted">
-            &copy; 2025 DevOps Maturity Team
+            &copy; 2026 DevOps Maturity Team
             &nbsp;|&nbsp;
-            <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" class="github-link" style="color:inherit; text-decoration:none;">
+            <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer" class="github-link" style="color:inherit; text-decoration:none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" style="vertical-align:middle;">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
                 </svg>
@@ -86,7 +163,7 @@
             <br>
             <small>Version: {{ __version__ }}</small>
         </footer>
-    </div>
+    </main>
 </body>
 
 </html>

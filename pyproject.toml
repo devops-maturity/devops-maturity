@@ -16,14 +16,32 @@ dynamic = ["version"]
 # https://pypi.org/classifiers/
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Framework :: FastAPI",
   "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Topic :: Security",
+  "Topic :: Software Development :: Build Tools",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
 ]
 
-keywords = ["devops", "maturity", "assessment", "cli"]
+keywords = [
+  "ai",
+  "ci-cd",
+  "devops",
+  "devsecops",
+  "maturity",
+  "assessment",
+  "security",
+  "supply-chain",
+  "cli",
+]
 
 dependencies = [
   "fastapi",
@@ -49,8 +67,10 @@ dm = "cli.main:app"
 
 [project.urls]
 homepage = "https://github.com/devops-maturity"
+documentation = "https://github.com/devops-maturity/devops-maturity#readme"
 source = "https://github.com/devops-maturity/devops-maturity"
 tracker = "https://github.com/devops-maturity/devops-maturity/issues"
+discussions = "https://github.com/devops-maturity/devops-maturity/discussions"
 
 [project.optional-dependencies]
 dev = [

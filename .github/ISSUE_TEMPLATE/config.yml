@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/devops-maturity/devops-maturity/discussions
+    about: Use discussions for support questions, implementation ideas, and community feedback.
+  - name: Security vulnerability
+    url: https://github.com/devops-maturity/devops-maturity/security/advisories/new
+    about: Please report security vulnerabilities privately through GitHub Security Advisories.

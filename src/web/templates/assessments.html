@@ -10,11 +10,14 @@
 <body>
     <div class="header-bg">
         <div class="header-center">
-            <div class="logo-title mt-2">DevOps Maturity Assessment</div>
             <img src="/static/logo.png" alt="DevOps Maturity Logo" height="100" class="logo-img">
+            <div>
+                <div class="logo-title mt-2">DevOps Maturity Assessment</div>
+                <p class="hero-subtitle">Compare results, revisit gaps, and keep improvement visible.</p>
+            </div>
         </div>
     </div>
-    <div class="container bg-white p-4 rounded shadow-sm">
+    <main class="container app-shell">
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
                 <a class="nav-link" href="/">Assessment</a>
@@ -38,82 +41,99 @@
             </li>
             {% endif %}
         </ul>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Project Name</th>
-                    <th>User</th>
-                    <th>Maturity Level</th>
-                    <th>Point</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for a in assessments %}
-                <tr>
-                    <td>{{ a.id }}</td>
-                    <td>
-                        {% if a.project_url %}
-                            <a href="{{ a.project_url }}" target="_blank" rel="noopener noreferrer">{{ a.project_name }}</a>
-                        {% else %}
-                            {{ a.project_name }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if a.user %}
-                            {{ a.user.username }} ({{ a.user.email }})
-                        {% else %}
-                            <span class="text-muted">Anonymous</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <!-- Show badge by default -->
-                        <div class="mb-2">
-                            <img src="{{ a.badge_url }}" alt="DevOps Maturity Badge" style="height: 20px;">
-                            <span class="ms-2 badge-level">{{ a.level }}</span>
-                        </div>
 
-                        <!-- Buttons in one line -->
-                        <div class="d-flex gap-2 mb-2">
-                            <button class="btn btn-sm btn-outline-primary" onclick="toggleAssessmentDetails({{ a.id }})">
-                                <span id="assessment-toggle-{{ a.id }}">Show Details</span>
-                            </button>
-                            {% if user and a.user and user.id == a.user.id %}
-                                <a href="/edit-assessment/{{ a.id }}" class="btn btn-sm btn-outline-primary">Edit</a>
+        <section class="list-header" aria-labelledby="assessment-list-title">
+            <div>
+                <p class="eyebrow">Assessment history</p>
+                <h1 id="assessment-list-title">All assessments</h1>
+                <p class="section-copy">Use the history to compare maturity levels across projects and spot repeat improvement themes.</p>
+            </div>
+            <a class="btn btn-primary" href="/">New assessment</a>
+        </section>
+
+        {% if assessments %}
+        <div class="table-responsive">
+            <table class="table assessment-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Project Name</th>
+                        <th>User</th>
+                        <th>Maturity Level</th>
+                        <th>Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assessments %}
+                    <tr>
+                        <td>{{ a.id }}</td>
+                        <td>
+                            {% if a.project_url %}
+                                <a href="{{ a.project_url }}" target="_blank" rel="noopener noreferrer">{{ a.project_name }}</a>
+                            {% else %}
+                                {{ a.project_name }}
                             {% endif %}
-                        </div>
+                        </td>
+                        <td>
+                            {% if a.user %}
+                                {{ a.user.username }} ({{ a.user.email }})
+                            {% else %}
+                                <span class="text-muted">Anonymous</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="mb-2">
+                                <img src="{{ a.badge_url }}" alt="DevOps Maturity Badge" style="height: 20px;">
+                                <span class="ms-2 badge-level">{{ a.level }}</span>
+                            </div>
 
-                        <!-- Hidden detailed criteria -->
-                        <div id="assessment-details-{{ a.id }}" style="display: none;" class="assessment-details">
-                            <ul class="mb-0 criteria-list">
-                            {% for key, value in a.responses.items() %}
-                                {% set crit = (criteria_list | selectattr('id', 'equalto', key) | list | first) %}
-                                <li class="criteria-item">
-                                    <strong>{{ key }}</strong>
-                                    {% if crit %} - {{ crit.criteria }}{% endif %}:
-                                    <span class="{% if value %}text-success{% else %}text-danger{% endif %} response-value">
-                                        {{ 'True' if value else 'False' }}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        </div>
-                    </td>
-                    <td>{{ '%.1f' | format(a.point) }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            <div class="d-flex gap-2 mb-2 flex-wrap">
+                                <button class="btn btn-sm btn-outline-primary" onclick="toggleAssessmentDetails({{ a.id }})">
+                                    <span id="assessment-toggle-{{ a.id }}">Show details</span>
+                                </button>
+                                {% if user and a.user and user.id == a.user.id %}
+                                    <a href="/edit-assessment/{{ a.id }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                {% endif %}
+                            </div>
+
+                            <div id="assessment-details-{{ a.id }}" style="display: none;" class="assessment-details">
+                                <ul class="mb-0 criteria-list">
+                                {% for key, value in a.responses.items() %}
+                                    {% set crit = (criteria_list | selectattr('id', 'equalto', key) | list | first) %}
+                                    <li class="criteria-item">
+                                        <strong>{{ key }}</strong>
+                                        {% if crit %} - {{ crit.criteria }}{% endif %}:
+                                        <span class="{% if value %}text-success{% else %}text-danger{% endif %} response-value">
+                                            {{ 'In place' if value else 'Not yet' }}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{ '%.1f' | format(a.point) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <section class="empty-state" aria-label="No assessments yet">
+            <h2>No assessments yet</h2>
+            <p>Run the first assessment to create a baseline and generate a badge for your project.</p>
+            <a class="btn btn-primary" href="/">Start assessment</a>
+        </section>
+        {% endif %}
         <footer class="mt-5 text-center text-muted">
-            &copy; 2025 DevOps Maturity Team
+            &copy; 2026 DevOps Maturity Team
             &nbsp;|&nbsp;
-            <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" class="github-link" style="color:inherit; text-decoration:none;">
+            <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer" class="github-link" style="color:inherit; text-decoration:none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" style="vertical-align:middle;">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
                 </svg>
             </a>
         </footer>
-    </div>
+    </main>
     <script>
     function toggleAssessmentDetails(assessmentId) {
         const details = document.getElementById('assessment-details-' + assessmentId);
