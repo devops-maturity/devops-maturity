@@ -145,8 +145,8 @@ Experience the full web interface workflow:
 **1. Start Your Assessment**
 ![DevOps Maturity Assessment Home][WebHome]
 
-**2. View Your Results**
-![DevOps Maturity Assessment Results][WebResult]
+**2. View Your Assessment**
+![DevOps Maturity Assessment Assessment][WebAssessment]
 
 **3. Track Assessment History**
 ![DevOps Maturity Assessment List][WebList]
@@ -206,5 +206,5 @@ This project is licensed under the [Apache License 2.0][LICENSE].
 [Specification]: https://devops-maturity.github.io/
 [CLIDemo]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/demo.gif?raw=true
 [WebHome]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/home.png?raw=true
-[WebResult]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/result.png?raw=true
+[WebAssessment]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/assessment.png?raw=true
 [WebList]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/list.png?raw=true
