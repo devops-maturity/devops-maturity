@@ -20,7 +20,7 @@ D205: false   # Accessibility Testing (nice to have)
 
 # Security
 D301: false   # Vulnerability Scanning (must have)
-D302: false   # License Scanning (nice to have)
+D302: true    # License Scanning (nice to have)
 
 # Supply Chain Security
 D401: true    # Documented Build Process (must have)
