@@ -74,6 +74,7 @@ discussions = "https://github.com/devops-maturity/devops-maturity/discussions"
 
 [project.optional-dependencies]
 dev = [
+  "pip-audit",
   "ruff",
   "uvicorn",
 ]

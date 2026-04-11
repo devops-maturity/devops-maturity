@@ -39,6 +39,14 @@ def preview(session):
 
 
 @nox.session
+def vulnerability_scan(session):
+    """Scan dependencies for known vulnerabilities."""
+    session.install("pip-audit")
+    session.install("-e", ".")
+    session.run("pip-audit")
+
+
+@nox.session
 def deploy(session):
     """Deploy the project"""
     if not RENDER:
