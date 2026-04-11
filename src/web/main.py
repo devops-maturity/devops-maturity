@@ -100,7 +100,7 @@ async def edit_assessment_submit(request: Request, assessment_id: int):
 
 
 load_dotenv()
-config = Config(".env")
+config = Config(".env") if os.path.exists(".env") else Config(environ=os.environ)
 oauth = OAuth(config)
 
 # Only register OAuth providers if credentials are provided
