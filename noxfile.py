@@ -42,7 +42,9 @@ def preview(session):
 def licenses(session):
     """Scan dependency licenses."""
     session.install("pip-licenses", ".")
-    session.run("pip-licenses", "--order=license", "--format=plain-vertical", "--with-urls")
+    session.run(
+        "pip-licenses", "--order=license", "--format=plain-vertical", "--with-urls"
+    )
 
 
 @nox.session
