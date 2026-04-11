@@ -31,7 +31,7 @@ D405: false   # SBOM Generation (nice to have)
 
 # Analytics
 D501: false   # Static Code Analysis (nice to have)
-D502: false   # Dynamic Code Analysis (nice to have)
+D502: true    # Dynamic Code Analysis (nice to have)
 D503: true    # Code Linting (nice to have)
 
 # Reporting
