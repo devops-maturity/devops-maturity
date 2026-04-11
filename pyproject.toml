@@ -81,6 +81,7 @@ test = [
   "fastapi",
   "httpx",
   "pytest",
+  "pytest-benchmark",
   "pytest-cov",
 ]
 

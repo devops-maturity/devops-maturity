@@ -33,6 +33,9 @@ jobs:
       - name: Run Nox
         run: nox
 
+      - name: Run performance benchmarks
+        run: nox -s performance
+
       - name: Smoke test
         run: |
           pip install dist/*.whl
