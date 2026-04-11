@@ -15,7 +15,7 @@ D103: true    # Clean Build Environments (nice to have)
 D201: true    # Unit Testing (must have)
 D202: false   # Functional Testing (must have)
 D203: false   # Performance Testing (nice to have)
-D204: false   # Code Coverage (nice to have)
+D204: true    # Code Coverage (nice to have)
 D205: false   # Accessibility Testing (nice to have)
 
 # Security

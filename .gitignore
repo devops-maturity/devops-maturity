@@ -15,6 +15,7 @@ build/
 
 # Python test files
 .coverage
+coverage.xml
 .nox
 
 # Web server files
