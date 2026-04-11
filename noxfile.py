@@ -11,7 +11,15 @@ RENDER = os.environ.get("RENDER") == "true"
 def tests(session):
     """Run the tests."""
     session.install("-e", ".[test]")
-    session.run("pytest", "--cov=src", "--cov-report=term-missing", "tests")
+    session.run("mkdir", "-p", "reports", external=True)
+    session.run(
+        "pytest",
+        "--cov=src",
+        "--cov-report=term-missing",
+        "--cov-report=xml:reports/coverage.xml",
+        "--junit-xml=reports/test-results.xml",
+        "tests",
+    )
 
 
 @nox.session

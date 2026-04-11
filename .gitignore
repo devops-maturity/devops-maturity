@@ -16,6 +16,7 @@ build/
 # Python test files
 .coverage
 .nox
+reports/
 
 # Web server files
 devops_maturity.db

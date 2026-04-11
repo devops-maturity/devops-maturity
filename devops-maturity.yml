@@ -36,5 +36,5 @@ D503: true    # Code Linting (nice to have)
 
 # Reporting
 D601: true    # Notifications & Alerts (must have)
-D602: false   # Attached Reports (nice to have)
+D602: true    # Attached Reports (nice to have)
 D603: false   # Compliance Mapping & Auditability	(nice to have)
