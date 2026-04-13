@@ -19,7 +19,7 @@ D204: true    # Code Coverage (nice to have)
 D205: false   # Accessibility Testing (nice to have)
 
 # Security
-D301: false   # Vulnerability Scanning (must have)
+D301: true    # Vulnerability Scanning (must have)
 D302: true    # License Scanning (nice to have)
 
 # Supply Chain Security

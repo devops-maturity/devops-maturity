@@ -50,6 +50,13 @@ def licenses(session):
 
 
 @nox.session
+def vulnerability_scan(session):
+    """Scan dependencies for known vulnerabilities."""
+    session.install("pip-audit", ".")
+    session.run("pip-audit", "--local")
+
+
+@nox.session
 def deploy(session):
     """Deploy the project"""
     if not RENDER:
