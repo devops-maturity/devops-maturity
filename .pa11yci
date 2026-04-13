@@ -2,7 +2,10 @@
   "defaults": {
     "standard": "WCAG2AA",
     "timeout": 30000,
-    "wait": 1000
+    "wait": 1000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--disable-dev-shm-usage"]
+    }
   },
   "urls": [
     "http://localhost:8000/",
