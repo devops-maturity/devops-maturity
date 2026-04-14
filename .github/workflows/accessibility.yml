@@ -1,0 +1,49 @@
+name: Accessibility Testing
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  accessibility:
+    name: Pa11y Accessibility Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pa11y-ci
+        run: npm install -g pa11y-ci
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install application
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Start web application
+        run: |
+          uvicorn src.web.main:app --host 0.0.0.0 --port 8000 &
+          echo "Waiting for app to start..."
+          timeout 60 bash -c 'until curl -sf http://localhost:8000/ > /dev/null; do sleep 1; done' \
+            || { echo "ERROR: application failed to start within 60 seconds"; exit 1; }
+          echo "App is ready!"
+
+      - name: Run pa11y-ci accessibility tests
+        run: pa11y-ci --config .pa11yci
