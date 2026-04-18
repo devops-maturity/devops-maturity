@@ -3,96 +3,599 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DevOps Maturity Documentation</title>
+    <title>DevOps Maturity — Documentation</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <header class="header-bg">
-        <div class="header-center">
-            <p class="eyebrow" style="color:#f8fafc;">Documentation</p>
-            <h1>DevOps Maturity User Guide</h1>
-            <p class="hero-subtitle">Use this guide to run the CLI, use the web interface, and keep your assessment workflow aligned with the current feature set.</p>
-        </div>
-    </header>
 
-    <main class="container">
-        <section class="panel">
-            <p class="eyebrow">Getting started</p>
-            <h2>Choose your entry point</h2>
-            <div class="grid">
-                <article class="card">
-                    <h3>CLI workflow</h3>
-                    <p>Install and run an interactive maturity assessment from your terminal.</p>
-                    <pre><code>pip install devops-maturity
-dm assess</code></pre>
-                </article>
-                <article class="card">
-                    <h3>Web workflow</h3>
-                    <p>Run the app locally and complete the guided form in your browser.</p>
-                    <pre><code>git clone https://github.com/devops-maturity/devops-maturity.git
+    <!-- ── Top navigation bar ── -->
+    <nav class="topbar">
+        <a class="topbar-logo" href="#">
+            DevOps Maturity
+            <span class="version-tag">Docs</span>
+        </a>
+        <div class="topbar-links">
+            <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://pypi.org/project/devops-maturity/" target="_blank" rel="noopener noreferrer">PyPI</a>
+        </div>
+    </nav>
+
+    <div class="docs-layout">
+
+        <!-- ── Sidebar navigation ── -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <p class="sidebar-heading">Introduction</p>
+                <ul class="sidebar-nav">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#features">Features</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-heading">Get Started</p>
+                <ul class="sidebar-nav">
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quickstart">Quick Start</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-heading">Usage</p>
+                <ul class="sidebar-nav">
+                    <li><a href="#cli-interactive">CLI — Interactive mode</a></li>
+                    <li><a href="#cli-config">CLI — YAML config mode</a></li>
+                    <li><a href="#cli-auto">CLI — AI auto mode</a></li>
+                    <li><a href="#web-interface">Web interface</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-heading">Examples</p>
+                <ul class="sidebar-nav">
+                    <li><a href="#example-output">Example output</a></li>
+                    <li><a href="#example-yaml">Example YAML file</a></li>
+                    <li><a href="#example-badge">Adding a badge</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-heading">Reference</p>
+                <ul class="sidebar-nav">
+                    <li><a href="#criteria">Assessment criteria</a></li>
+                    <li><a href="#maturity-levels">Maturity levels</a></li>
+                    <li><a href="#configuration">Configuration</a></li>
+                    <li><a href="#cli-flags">CLI flags</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- ── Main documentation content ── -->
+        <main class="content">
+
+            <!-- Overview -->
+            <section class="doc-section" id="overview">
+                <h1>DevOps Maturity Assessment</h1>
+                <p class="page-subtitle">
+                    A tool for turning broad DevOps, DevSecOps, and software supply‑chain expectations into a measurable score, a prioritised gap list, and a shareable badge.
+                </p>
+
+                <p>
+                    DevOps Maturity Assessment evaluates your project against a standardised set of 20+ weighted criteria across six practice areas.
+                    It works from three entry points: an <strong>interactive CLI</strong>, a <strong>YAML config file</strong>, and an <strong>AI‑powered automated mode</strong> that reads your repository without any manual answers.
+                    A <strong>web interface</strong> is also available for teams who prefer a browser‑based workflow.
+                </p>
+
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="#quickstart">Get started</a>
+                    <a class="btn btn-outline" href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                </div>
+            </section>
+
+            <!-- Features -->
+            <section class="doc-section" id="features">
+                <h2>Features</h2>
+                <ul>
+                    <li><strong>Interactive CLI</strong> — guided question‑and‑answer session in your terminal.</li>
+                    <li><strong>YAML‑driven mode</strong> — reproducible baselines stored in source control and usable in CI pipelines.</li>
+                    <li><strong>AI‑powered auto mode</strong> — let an LLM (OpenAI, Anthropic, Gemini, or local Ollama) inspect your repository and fill in the answers automatically.</li>
+                    <li><strong>Web interface</strong> — browser‑based form with history, category breakdown, and improvement recommendations.</li>
+                    <li><strong>Weighted scoring</strong> — criteria carry different weights; the final score is a percentage with a named level.</li>
+                    <li><strong>Category breakdown</strong> — per‑area scores surface exactly where to improve first.</li>
+                    <li><strong>README badge</strong> — one‑line Markdown snippet makes maturity visible to contributors and stakeholders.</li>
+                    <li><strong>Assessment history</strong> — all runs are stored locally and comparable over time.</li>
+                </ul>
+            </section>
+
+            <!-- Installation -->
+            <section class="doc-section" id="installation">
+                <h2>Installation</h2>
+
+                <h3>Prerequisite</h3>
+                <p>Python 3.9 or later is required. You can check your version with:</p>
+                <pre><code>python --version</code></pre>
+
+                <h3>Install from PyPI</h3>
+                <p>The recommended way to install the CLI is via pip:</p>
+                <pre><code>pip install devops-maturity</code></pre>
+
+                <p>After installation, both <code>devops-maturity</code> and its short alias <code>dm</code> are available on your PATH.</p>
+                <pre><code>dm --version</code></pre>
+
+                <h3>Install for local web development</h3>
+                <p>To run the web interface locally, clone the repository and use <code>nox</code>:</p>
+                <pre><code>git clone https://github.com/devops-maturity/devops-maturity.git
 cd devops-maturity
 pip install nox
 nox -s preview</code></pre>
-                </article>
-            </div>
-            <div class="actions">
-                <a class="btn btn-primary" href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">Repository</a>
-                <a class="btn btn-outline" href="https://pypi.org/project/devops-maturity/" target="_blank" rel="noopener noreferrer">PyPI package</a>
-            </div>
-        </section>
+                <p>Then open <a href="http://127.0.0.1:8000" target="_blank" rel="noopener noreferrer">http://127.0.0.1:8000</a> in your browser.</p>
+            </section>
 
-        <section class="panel">
-            <p class="eyebrow">CLI guide</p>
-            <h2>Run manual, config, and AI-powered assessments</h2>
-            <div class="grid">
-                <article class="card">
-                    <h3>Manual interview mode</h3>
-                    <p>Answer each weighted criterion interactively.</p>
-                    <pre><code>devops-maturity assess</code></pre>
-                </article>
-                <article class="card">
-                    <h3>YAML-driven mode</h3>
-                    <p>Use a versioned baseline in automation pipelines.</p>
-                    <pre><code>dm config --file devops-maturity.yml</code></pre>
-                </article>
-                <article class="card">
-                    <h3>Auto mode with AI</h3>
-                    <p>Use repository context and a configured provider.</p>
-                    <pre><code>OPENAI_API_KEY=... dm assess --auto --ai openai</code></pre>
-                </article>
-                <article class="card">
-                    <h3>Result output</h3>
-                    <p>Every mode returns score, level, category results, and badge URL for README usage.</p>
-                </article>
-            </div>
-        </section>
+            <!-- Quick Start -->
+            <section class="doc-section" id="quickstart">
+                <h2>Quick Start</h2>
+                <p>Run your first assessment in under a minute:</p>
 
-        <section class="panel">
-            <p class="eyebrow">Web guide</p>
-            <h2>Complete and track assessments in the browser</h2>
-            <ol>
-                <li>Open the Assessment tab and enter project details.</li>
-                <li>Mark each practice as <strong>In place</strong> or <strong>Not yet</strong>.</li>
-                <li>Submit to view maturity score, category breakdown, and improvement priorities.</li>
-                <li>Use <strong>All Assessments</strong> to compare runs and edit historical entries.</li>
-            </ol>
-            <p>Preview screenshots:</p>
-            <ul>
-                <li><a href="./img/home.png">Assessment home</a></li>
-                <li><a href="./img/assessment.png">Result and recommendations</a></li>
-                <li><a href="./img/list.png">Assessment history</a></li>
-            </ul>
-        </section>
+                <ol class="steps">
+                    <li>
+                        <strong>Install the package</strong>
+                        <pre><code>pip install devops-maturity</code></pre>
+                    </li>
+                    <li>
+                        <strong>Run the assessment</strong>
+                        <pre><code>dm assess</code></pre>
+                        <p>You will be asked a series of yes/no questions about your project's DevOps practices.</p>
+                    </li>
+                    <li>
+                        <strong>Review your results</strong>
+                        <p>After answering all questions you will see:</p>
+                        <ul>
+                            <li>An overall percentage score</li>
+                            <li>A maturity level — <code>WIP</code>, <code>PASSING</code>, <code>BRONZE</code>, <code>SILVER</code>, or <code>GOLD</code></li>
+                            <li>Per‑category scores with a visual bar</li>
+                            <li>A prioritised list of missing practices</li>
+                            <li>A badge URL you can embed in your README</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
 
-        <section class="panel">
-            <p class="eyebrow">Maintenance</p>
-            <h2>Keep docs in sync with product changes</h2>
-            <p>When a feature changes in CLI, web UI, scoring logic, or criteria configuration, update this documentation in the same pull request. This keeps onboarding and operational guidance reliable for users.</p>
-        </section>
+            <!-- CLI — Interactive mode -->
+            <section class="doc-section" id="cli-interactive">
+                <h2>CLI — Interactive mode</h2>
 
-        <footer>
-            DevOps Maturity Team · <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </footer>
-    </main>
+                <p>
+                    Interactive mode walks you through every criterion with a yes/no prompt.
+                    It is the fastest way to get a baseline for any project, with no configuration files needed.
+                </p>
+
+                <pre><code># Basic interactive assessment
+dm assess
+
+# Provide the project name upfront to skip the prompt
+dm assess --project-name "my-api"
+
+# Also attach a project URL to the saved record
+dm assess --project-name "my-api" --project-url "https://github.com/org/my-api"</code></pre>
+
+                <p>At the end of the session, results are printed to the terminal and saved to the local SQLite database for history tracking.</p>
+            </section>
+
+            <!-- CLI — YAML config mode -->
+            <section class="doc-section" id="cli-config">
+                <h2>CLI — YAML config mode</h2>
+
+                <p>
+                    The config mode reads answers from a <code>devops-maturity.yml</code> file instead of prompting interactively.
+                    Store this file in your repository so that assessments are versioned, reviewable in pull requests, and repeatable in CI.
+                </p>
+
+                <pre><code># Uses devops-maturity.yml in the current directory by default
+dm config
+
+# Specify a custom file path
+dm config --file path/to/my-baseline.yml
+
+# Override the project name from the command line
+dm config --file devops-maturity.yml --project-name "service-x"</code></pre>
+
+                <div class="callout tip">
+                    <strong>Tip</strong>
+                    Add a <code>dm config</code> step to your CI pipeline to track maturity score over time alongside each release.
+                </div>
+
+                <p>See the <a href="#example-yaml">YAML file example</a> for the complete file format.</p>
+            </section>
+
+            <!-- CLI — AI auto mode -->
+            <section class="doc-section" id="cli-auto">
+                <h2>CLI — AI auto mode</h2>
+
+                <p>
+                    Auto mode fetches your repository's file tree, README, and CI/CD configuration from the hosting platform, then sends that context to an AI model to fill in the assessment answers automatically — no manual prompts required.
+                </p>
+
+                <h3>Supported AI providers</h3>
+                <div class="mode-grid">
+                    <div class="mode-card">
+                        <h4>OpenAI</h4>
+                        <p>GPT‑4o and other OpenAI models. Requires an API key.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4>Anthropic</h4>
+                        <p>Claude models. Requires an API key.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4>Google Gemini</h4>
+                        <p>Gemini models. Requires an API key.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h4>Ollama</h4>
+                        <p>Local models such as Llama 3. No API key needed.</p>
+                    </div>
+                </div>
+
+                <h3>Usage</h3>
+                <pre><code># OpenAI (provider auto-detected from the git remote URL)
+OPENAI_API_KEY=sk-... dm assess --auto --ai openai
+
+# Specify a model explicitly
+OPENAI_API_KEY=sk-... dm assess --auto --ai openai --model gpt-4o
+
+# Anthropic
+ANTHROPIC_API_KEY=... dm assess --auto --ai anthropic --model claude-3-5-sonnet-20241022
+
+# Google Gemini
+GEMINI_API_KEY=... dm assess --auto --ai gemini
+
+# Ollama (runs locally, no API key needed)
+dm assess --auto --ai ollama --model llama3
+
+# Private repository — pass a token so the tool can read repo context
+GITHUB_TOKEN=ghp_... dm assess --auto --ai openai</code></pre>
+
+                <div class="callout note">
+                    <strong>Note</strong>
+                    The <code>--provider</code> flag (github / gitlab / bitbucket) is auto‑detected from the <code>origin</code> remote URL of the current git repository. Public repositories do not require a token.
+                </div>
+
+                <div class="callout warn">
+                    <strong>Important</strong>
+                    AI auto mode sends repository context to the chosen provider unless you use a local Ollama server. Only use it for repositories you are allowed to share with that provider.
+                </div>
+            </section>
+
+            <!-- Web interface -->
+            <section class="doc-section" id="web-interface">
+                <h2>Web interface</h2>
+
+                <p>
+                    The web interface provides the same assessment workflow in a browser‑based form, with built‑in history tracking and visual reports.
+                </p>
+
+                <h3>Starting the web app</h3>
+                <pre><code>git clone https://github.com/devops-maturity/devops-maturity.git
+cd devops-maturity
+pip install nox
+nox -s preview</code></pre>
+                <p>Open <a href="http://127.0.0.1:8000" target="_blank" rel="noopener noreferrer">http://127.0.0.1:8000</a> in your browser.</p>
+
+                <h3>Workflow</h3>
+                <ol>
+                    <li>Register or log in (username/password, or Google / GitHub OAuth if configured).</li>
+                    <li>Open the <strong>Assessment</strong> tab and enter your project name and URL.</li>
+                    <li>For each criterion, select <strong>In place</strong> or <strong>Not yet</strong>.</li>
+                    <li>Submit the form to see your maturity score, level, category breakdown, and improvement priorities.</li>
+                    <li>Visit <strong>All Assessments</strong> to compare runs and edit historical entries.</li>
+                </ol>
+
+                <h3>Screenshots</h3>
+                <img class="screenshot" src="./img/home.png" alt="Assessment home — project details form">
+                <p class="screenshot-caption">Assessment home — enter project details and answer criteria</p>
+
+                <img class="screenshot" src="./img/assessment.png" alt="Assessment result — score, level, category breakdown">
+                <p class="screenshot-caption">Assessment result — score, level, category breakdown, and recommendations</p>
+
+                <img class="screenshot" src="./img/list.png" alt="Assessment history — list of all past runs">
+                <p class="screenshot-caption">Assessment history — compare all past runs for a project</p>
+            </section>
+
+            <!-- Example output -->
+            <section class="doc-section" id="example-output">
+                <h2>Example: terminal output</h2>
+
+                <p>Below is an example of what the CLI prints after a completed assessment:</p>
+
+                <pre><code>Your score: 72.5%
+Your maturity level: SILVER
+Badge URL: https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg
+
+Category Breakdown:
+  Basics                 [████████████████░░░░] 80%
+  Quality                [████████████░░░░░░░░] 60%
+  Security               [████████████████░░░░] 80%
+  Supply Chain Security  [████████████░░░░░░░░] 60%
+  Analysis               [████████░░░░░░░░░░░░] 40%
+  Reporting              [████████████████░░░░] 80%
+
+Improvement Recommendations:
+
+  Quality:
+    [D203] Performance Testing (🟡)
+         Include automated performance, load, or stress tests in your CI/CD pipeline.
+    [D205] Accessibility Testing (🟡)
+         Automate accessibility checks (e.g., WCAG compliance) in CI.
+
+  Analysis:
+    [D501] Static Code Analysis (🟡)
+         Run static analysis tools (SAST) to detect bugs, code smells, and security issues.
+    [D502] Dynamic Code Analysis (🟡)
+         Run dynamic analysis or fuzzing tools that test the application at runtime.
+
+Next steps:
+  1. Commit a devops-maturity.yml baseline for repeatable reviews.
+  2. Add the Markdown badge to your README to make progress visible.
+  3. Re-run the assessment after improving the missing practices.</code></pre>
+            </section>
+
+            <!-- Example YAML -->
+            <section class="doc-section" id="example-yaml">
+                <h2>Example: YAML config file</h2>
+
+                <p>
+                    Create a <code>devops-maturity.yml</code> file in your repository root and commit it.
+                    Each key is a criterion ID; set it to <code>true</code> if the practice is in place or <code>false</code> if it is not.
+                </p>
+
+                <pre><code>project_name: my-api
+project_url: https://github.com/org/my-api
+
+# Basics
+D101: true   # Branch Builds
+D102: true   # Pull Request Builds
+D103: false  # Clean Build Environments
+
+# Quality
+D201: true   # Unit Testing
+D202: true   # Functional Testing
+D203: false  # Performance Testing
+D204: true   # Code Coverage
+D205: false  # Accessibility Testing
+
+# Security
+D301: true   # Vulnerability Scanning
+D302: false  # License Scanning
+
+# Supply Chain Security
+D401: true   # Documented Build Process
+D402: true   # CI/CD as Code
+D403: false  # Artifact Signing
+D404: true   # Dependency Pinning
+D405: false  # SBOM Generation
+
+# Analysis
+D501: false  # Static Code Analysis
+D502: false  # Dynamic Code Analysis
+D503: true   # Code Linting
+
+# Reporting
+D601: true   # Notifications &amp; Alerts
+D602: false  # Attached Reports
+D603: false  # Compliance Mapping &amp; Auditability</code></pre>
+
+                <p>Run the assessment against this file:</p>
+                <pre><code>dm config --file devops-maturity.yml</code></pre>
+            </section>
+
+            <!-- Example badge -->
+            <section class="doc-section" id="example-badge">
+                <h2>Example: adding a badge to your README</h2>
+
+                <p>
+                    After every assessment the CLI prints a badge URL and a ready‑to‑paste Markdown snippet.
+                    Add it to your project README to make the maturity level visible to contributors and stakeholders.
+                </p>
+
+                <pre><code>[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg)](https://devops-maturity.github.io/)</code></pre>
+
+                <p>The badge level updates automatically each time you re‑run the assessment and push a new badge URL.</p>
+
+                <p>You can also add the specification badge to indicate your project follows the DevOps Maturity Specification:</p>
+                <pre><code>[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity%20Specification-1.0.0-yellow)](https://devops-maturity.github.io/)</code></pre>
+            </section>
+
+            <!-- Assessment criteria -->
+            <section class="doc-section" id="criteria">
+                <h2>Assessment criteria</h2>
+
+                <p>
+                    The tool evaluates 20 criteria across six categories.
+                    Each criterion has a weight: <span class="badge badge-green">Required (1.0)</span> criteria carry full weight;
+                    <span class="badge badge-yellow">Recommended (0.5)</span> criteria carry half weight.
+                </p>
+
+                <h3>Basics</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D101</td><td>Branch Builds</td><td><span class="badge badge-green">Required</span></td><td>Trigger an automated build on every branch push to catch issues before they reach main.</td></tr>
+                        <tr><td>D102</td><td>Pull Request Builds</td><td><span class="badge badge-green">Required</span></td><td>Run a full build and test suite on every pull request to prevent broken code from merging.</td></tr>
+                        <tr><td>D103</td><td>Clean Build Environments</td><td><span class="badge badge-yellow">Recommended</span></td><td>Use ephemeral, isolated environments (e.g., containers) for reproducible builds.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Quality</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D201</td><td>Unit Testing</td><td><span class="badge badge-green">Required</span></td><td>Automated unit tests validate individual components and catch regressions quickly.</td></tr>
+                        <tr><td>D202</td><td>Functional Testing</td><td><span class="badge badge-green">Required</span></td><td>Integration or end-to-end tests validate system behaviour from a user's perspective.</td></tr>
+                        <tr><td>D203</td><td>Performance Testing</td><td><span class="badge badge-yellow">Recommended</span></td><td>Automated load/stress tests prevent performance regressions from reaching production.</td></tr>
+                        <tr><td>D204</td><td>Code Coverage</td><td><span class="badge badge-yellow">Recommended</span></td><td>Measure coverage and enforce a minimum threshold to identify untested code paths.</td></tr>
+                        <tr><td>D205</td><td>Accessibility Testing</td><td><span class="badge badge-yellow">Recommended</span></td><td>Automate WCAG compliance checks in CI to ensure usability for all users.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Security</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D301</td><td>Vulnerability Scanning</td><td><span class="badge badge-green">Required</span></td><td>Scan code and dependencies for known vulnerabilities using SAST/SCA tools (e.g., Snyk, CodeQL).</td></tr>
+                        <tr><td>D302</td><td>License Scanning</td><td><span class="badge badge-yellow">Recommended</span></td><td>Ensure third-party dependency licences are compatible with your project's requirements.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Supply Chain Security</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D401</td><td>Documented Build Process</td><td><span class="badge badge-green">Required</span></td><td>Document how your project is built, tested, and deployed for reproducibility and onboarding.</td></tr>
+                        <tr><td>D402</td><td>CI/CD as Code</td><td><span class="badge badge-green">Required</span></td><td>Define pipelines as code (e.g., YAML, Jenkinsfile) stored in version control.</td></tr>
+                        <tr><td>D403</td><td>Artifact Signing</td><td><span class="badge badge-yellow">Recommended</span></td><td>Cryptographically sign build artifacts (e.g., Sigstore/Cosign) to verify integrity.</td></tr>
+                        <tr><td>D404</td><td>Dependency Pinning</td><td><span class="badge badge-yellow">Recommended</span></td><td>Pin all dependency versions via lock files to ensure reproducible builds.</td></tr>
+                        <tr><td>D405</td><td>SBOM Generation</td><td><span class="badge badge-yellow">Recommended</span></td><td>Generate a Software Bill of Materials (SBOM) for each release for transparency and compliance.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Analysis</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D501</td><td>Static Code Analysis</td><td><span class="badge badge-yellow">Recommended</span></td><td>Run SAST tools (e.g., SonarQube, Semgrep) to detect bugs and security issues without executing code.</td></tr>
+                        <tr><td>D502</td><td>Dynamic Code Analysis</td><td><span class="badge badge-yellow">Recommended</span></td><td>Run DAST or fuzzing tools at runtime (e.g., OWASP ZAP) to catch vulnerabilities static analysis may miss.</td></tr>
+                        <tr><td>D503</td><td>Code Linting</td><td><span class="badge badge-yellow">Recommended</span></td><td>Enforce code style and quality rules via linters (e.g., ESLint, Flake8, Ruff) to reduce review friction.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reporting</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>ID</th><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>D601</td><td>Notifications &amp; Alerts</td><td><span class="badge badge-green">Required</span></td><td>Send automated notifications for build failures and security alerts (e.g., Slack, email, PagerDuty).</td></tr>
+                        <tr><td>D602</td><td>Attached Reports</td><td><span class="badge badge-yellow">Recommended</span></td><td>Attach test results, coverage reports, and analysis outputs as CI artifacts for review.</td></tr>
+                        <tr><td>D603</td><td>Compliance Mapping &amp; Auditability</td><td><span class="badge badge-yellow">Recommended</span></td><td>Map pipeline controls to frameworks (e.g., SOC 2, ISO 27001) and maintain audit trails.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Maturity levels -->
+            <section class="doc-section" id="maturity-levels">
+                <h2>Maturity levels</h2>
+
+                <p>The overall score (0–100 %) maps to one of five named levels:</p>
+
+                <table class="criteria-table">
+                    <thead><tr><th>Level</th><th>Score range</th><th>Meaning</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="badge badge-yellow">WIP</span></td><td>0 – 39 %</td><td>Foundational practices are not yet in place. Focus on the Required criteria first.</td></tr>
+                        <tr><td><span class="badge badge-blue">PASSING</span></td><td>40 – 59 %</td><td>Core required practices are covered. Begin adopting Recommended criteria.</td></tr>
+                        <tr><td><span class="badge" style="background:#f5ece0;color:#7a4a1e;">BRONZE</span></td><td>60 – 74 %</td><td>Good baseline. Recommended practices are partially in place.</td></tr>
+                        <tr><td><span class="badge" style="background:#e8e8e8;color:#444;">SILVER</span></td><td>75 – 89 %</td><td>Strong DevOps posture. Most practices are in place.</td></tr>
+                        <tr><td><span class="badge" style="background:#fef9d7;color:#7a6500;">GOLD</span></td><td>90 – 100 %</td><td>Comprehensive coverage of all practices across every category.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Configuration -->
+            <section class="doc-section" id="configuration">
+                <h2>Configuration</h2>
+
+                <h3>Environment variables</h3>
+                <p>The CLI reads the following environment variables as fallbacks when flags are not provided:</p>
+
+                <table class="criteria-table">
+                    <thead><tr><th>Variable</th><th>Used for</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>OPENAI_API_KEY</code></td><td>OpenAI API key for AI auto mode</td></tr>
+                        <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic API key for AI auto mode</td></tr>
+                        <tr><td><code>GEMINI_API_KEY</code></td><td>Google Gemini API key for AI auto mode</td></tr>
+                        <tr><td><code>GITHUB_TOKEN</code></td><td>GitHub personal access token for private repos</td></tr>
+                        <tr><td><code>GITLAB_TOKEN</code></td><td>GitLab personal access token for private repos</td></tr>
+                        <tr><td><code>BITBUCKET_TOKEN</code></td><td>Bitbucket access token for private repos</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>OAuth for the web interface (optional)</h3>
+                <p>The web interface supports Google and GitHub OAuth in addition to username/password login.</p>
+
+                <ol>
+                    <li>Copy the example environment file: <pre><code>cp .env.example .env</code></pre></li>
+                    <li>
+                        <strong>Google OAuth</strong> — create credentials in <a href="https://console.developers.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a> with redirect URI <code>http://localhost:8000/auth/callback/google</code>, then add <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> to <code>.env</code>.
+                    </li>
+                    <li>
+                        <strong>GitHub OAuth</strong> — create an OAuth app in <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener noreferrer">GitHub Developer Settings</a> with callback URL <code>http://localhost:8000/auth/callback/github</code>, then add <code>GITHUB_CLIENT_ID</code> and <code>GITHUB_CLIENT_SECRET</code> to <code>.env</code>.
+                    </li>
+                </ol>
+
+                <div class="callout tip">
+                    <strong>Tip</strong>
+                    If OAuth credentials are not configured, users can still register and log in with a username and password.
+                </div>
+            </section>
+
+            <!-- CLI flags reference -->
+            <section class="doc-section" id="cli-flags">
+                <h2>CLI flags reference</h2>
+
+                <h3><code>dm assess</code> — all flags</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>Flag</th><th>Env var fallback</th><th>Default</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>--project-name</code>, <code>-p</code></td><td>—</td><td>Prompted</td><td>Project name for the saved record</td></tr>
+                        <tr><td><code>--project-url</code>, <code>-u</code></td><td>—</td><td>—</td><td>Project URL for the saved record</td></tr>
+                        <tr><td><code>--auto</code></td><td>—</td><td>off</td><td>Enable AI-powered automated assessment</td></tr>
+                        <tr><td><code>--ai</code></td><td>—</td><td>—</td><td>AI provider: <code>openai</code>, <code>anthropic</code>, <code>gemini</code>, <code>ollama</code></td></tr>
+                        <tr><td><code>--model</code></td><td>—</td><td>Provider default</td><td>Model name (e.g., <code>gpt-4o</code>)</td></tr>
+                        <tr><td><code>--provider</code></td><td>—</td><td>Auto-detected</td><td>Repo platform: <code>github</code>, <code>gitlab</code>, <code>bitbucket</code></td></tr>
+                        <tr><td><code>--repo-token</code></td><td><code>GITHUB_TOKEN</code> / <code>GITLAB_TOKEN</code> / <code>BITBUCKET_TOKEN</code></td><td>—</td><td>Token for private repository access</td></tr>
+                        <tr><td><code>--ai-key</code></td><td><code>OPENAI_API_KEY</code> / <code>ANTHROPIC_API_KEY</code> / <code>GEMINI_API_KEY</code></td><td>—</td><td>AI provider API key</td></tr>
+                        <tr><td><code>--ollama-url</code></td><td>—</td><td><code>http://localhost:11434</code></td><td>Ollama server base URL</td></tr>
+                        <tr><td><code>--version</code></td><td>—</td><td>—</td><td>Print the installed version and exit</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><code>dm config</code> — all flags</h3>
+                <table class="criteria-table">
+                    <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>--file</code>, <code>-f</code></td><td><code>devops-maturity.yml</code></td><td>Path to the YAML baseline file</td></tr>
+                        <tr><td><code>--project-name</code>, <code>-p</code></td><td>From YAML / <code>default</code></td><td>Override the project name</td></tr>
+                        <tr><td><code>--project-url</code>, <code>-u</code></td><td>From YAML</td><td>Override the project URL</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><code>dm list</code></h3>
+                <p>Prints all assessments stored in the local database, showing ID, project name, and raw responses.</p>
+                <pre><code>dm list</code></pre>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer class="docs-footer">
+        <span>DevOps Maturity Team</span>
+        <a href="https://github.com/devops-maturity/devops-maturity" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://pypi.org/project/devops-maturity/" target="_blank" rel="noopener noreferrer">PyPI</a>
+    </footer>
+
+    <script>
+        // Highlight the active sidebar link based on scroll position
+        (function () {
+            const links = document.querySelectorAll('.sidebar-nav a');
+            const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
+
+            function onScroll() {
+                const scrollY = window.scrollY + 80;
+                let current = sections[0];
+                for (const s of sections) {
+                    if (s && s.offsetTop <= scrollY) current = s;
+                }
+                links.forEach(l => {
+                    l.classList.toggle('active', l.getAttribute('href') === '#' + (current && current.id));
+                });
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        })();
+    </script>
 </body>
 </html>
