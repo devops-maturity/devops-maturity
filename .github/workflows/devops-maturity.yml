@@ -1,0 +1,23 @@
+name: DevOps Maturity Check
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'devops-maturity.yml'
+  workflow_dispatch:
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: devops-maturity/devops-maturity-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
