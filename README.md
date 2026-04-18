@@ -3,7 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)](https://pypi.org/project/devops-maturity/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/devops-maturity)
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
-[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-PASSING-green.svg)](https://devops-maturity.github.io/)
+[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg)](https://devops-maturity.github.io/)
 
 ## Overview
 
@@ -186,7 +186,7 @@ If you find this tool helpful, please consider giving it a ⭐️ — your suppo
 Want to show your project aligns with the [DevOps Maturity Specification][Specification]? Add this badge to your README:
 
 ```markdown
-[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity%20Specification-1.0.0-yellow)](https://devops-maturity.github.io/)
+[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg)](https://devops-maturity.github.io/)
 ```
 
 
