@@ -58,7 +58,7 @@ dependencies = [
   "itsdangerous",
   "httpx",
   "uvicorn",
-  "litellm",
+  "litellm==1.83.7",
 ]
 
 [project.scripts]
