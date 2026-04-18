@@ -41,6 +41,16 @@ def preview(session):
 
 
 @nox.session
+def docs(session):
+    """Build and serve the MkDocs documentation locally."""
+    session.install("mkdocs", "mkdocs-material")
+    if GITHUB_ACTIONS:
+        session.run("mkdocs", "build", "--strict")
+    else:
+        session.run("mkdocs", "serve")
+
+
+@nox.session
 def licenses(session):
     """Scan dependency licenses."""
     session.install("pip-licenses", ".")

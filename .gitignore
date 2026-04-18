@@ -21,3 +21,7 @@ coverage.xml
 # Web server files
 devops_maturity.db
 src/web/static/devops-maturity.svg
+
+# MkDocs build output
+site/
+

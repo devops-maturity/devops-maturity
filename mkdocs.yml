@@ -1,0 +1,53 @@
+site_name: DevOps Maturity
+site_url: https://devops-maturity.github.io/devops-maturity/
+site_description: A tool for turning DevOps, DevSecOps, and software supply-chain expectations into a measurable score, a prioritised gap list, and a shareable badge.
+site_author: DevOps Maturity Team
+repo_url: https://github.com/devops-maturity/devops-maturity
+repo_name: devops-maturity/devops-maturity
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    primary: custom
+    accent: custom
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Get Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+  - Usage:
+    - CLI — Interactive mode: usage/cli-interactive.md
+    - CLI — YAML config mode: usage/cli-config.md
+    - CLI — AI auto mode: usage/cli-auto.md
+    - Web interface: usage/web-interface.md
+  - Examples:
+    - Terminal output: examples/terminal-output.md
+    - YAML config file: examples/yaml-config.md
+    - Adding a badge: examples/badge.md
+  - Reference:
+    - Assessment criteria: reference/criteria.md
+    - Maturity levels: reference/maturity-levels.md
+    - Configuration: reference/configuration.md
+    - CLI flags: reference/cli-flags.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
