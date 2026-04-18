@@ -13,6 +13,8 @@ Use it when you want a quick baseline before a platform improvement program, an 
 
 It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
 
+User documentation for both interfaces is available at the [DevOps Maturity Docs site][DocsSite].
+
 ## Why teams use it
 
 - **Fast baseline**: answer a short weighted checklist and get a maturity level in minutes.
@@ -204,6 +206,7 @@ This project is licensed under the [Apache License 2.0][LICENSE].
 
 [LICENSE]: https://github.com/devops-maturity/devops-maturity/blob/main/LICENSE
 [Specification]: https://devops-maturity.github.io/
+[DocsSite]: https://devops-maturity.github.io/devops-maturity/
 [CLIDemo]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/demo.gif?raw=true
 [WebHome]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/home.png?raw=true
 [WebAssessment]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/assessment.png?raw=true

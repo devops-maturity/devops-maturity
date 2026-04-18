@@ -113,6 +113,15 @@ pytest tests/test_web.py -v
 
 ## Development Workflows
 
+### Documentation Synchronization (Required)
+- The GitHub Pages documentation site is located in `docs/index.html` and `docs/style.css`.
+- Any functional change to CLI commands (`src/cli/`), web flows/templates (`src/web/`), scoring behavior (`src/core/`), or configuration (`src/config/criteria.yaml`) must include corresponding documentation updates in the same pull request.
+- Keep the documentation UX aligned with the main web interface style (same color system, typography, and component feel).
+- If a feature is added, removed, or changed, update both:
+  - user guidance in the docs site
+  - navigation/link entry points in the web interface when relevant
+- Before finalizing, verify that docs links still work and the docs page remains deployable via GitHub Pages workflow.
+
 ### Adding New Assessment Criteria
 1. Update `src/config/criteria.yaml` with new criteria
 2. Ensure proper categorization and weighting

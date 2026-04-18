@@ -58,7 +58,7 @@ dependencies = [
   "itsdangerous",
   "httpx",
   "uvicorn",
-  "litellm",
+  "litellm>=1.83.7,!=1.83.8,!=1.83.9",
 ]
 
 [project.scripts]
@@ -67,7 +67,7 @@ dm = "cli.main:app"
 
 [project.urls]
 homepage = "https://github.com/devops-maturity"
-documentation = "https://github.com/devops-maturity/devops-maturity#readme"
+documentation = "https://devops-maturity.github.io/devops-maturity/"
 source = "https://github.com/devops-maturity/devops-maturity"
 tracker = "https://github.com/devops-maturity/devops-maturity/issues"
 discussions = "https://github.com/devops-maturity/devops-maturity/discussions"
