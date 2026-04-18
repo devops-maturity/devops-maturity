@@ -67,7 +67,7 @@ dm = "cli.main:app"
 
 [project.urls]
 homepage = "https://github.com/devops-maturity"
-documentation = "https://github.com/devops-maturity/devops-maturity#readme"
+documentation = "https://devops-maturity.github.io/devops-maturity/"
 source = "https://github.com/devops-maturity/devops-maturity"
 tracker = "https://github.com/devops-maturity/devops-maturity/issues"
 discussions = "https://github.com/devops-maturity/devops-maturity/discussions"

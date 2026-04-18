@@ -23,6 +23,7 @@ def test_read_form_highlights_value_and_cli_path():
     assert "Turn a long DevOps checklist into a clear next action" in response.text
     assert "pip install devops-maturity" in response.text
     assert "Get my maturity score" in response.text
+    assert "https://devops-maturity.github.io/devops-maturity/" in response.text
 
 
 # ── Auth pages ─────────────────────────────────────────────────────────────────
