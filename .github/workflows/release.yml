@@ -33,7 +33,7 @@ jobs:
     - name: Check distribution
       run: twine check dist/*
     - name: Attest build provenance
-      uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.3.0
+      uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v2.3.0
       with:
         subject-path: dist/*
     - name: Publish package (to TestPyPI)
