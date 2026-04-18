@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - docs/**
+      - mkdocs.yml
       - .github/workflows/docs-site.yml
   workflow_dispatch:
 
@@ -26,9 +27,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install MkDocs
+        run: pip install mkdocs mkdocs-material
+      - name: Build docs
+        run: mkdocs build --strict
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4
