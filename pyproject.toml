@@ -55,7 +55,7 @@ dependencies = [
   "passlib[bcrypt]==1.7.4",
   "bcrypt==5.0.0",
   "authlib",
-  "python-dotenv",
+  "python-dotenv>=1.2.2",
   "itsdangerous",
   "httpx",
   "uvicorn",
