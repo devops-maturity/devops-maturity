@@ -63,6 +63,7 @@ def licenses(session):
 def vulnerability_scan(session):
     """Scan dependencies for known vulnerabilities."""
     session.install("pip-audit", ".")
+    session.run("pip", "list", "--format=columns")
     session.run("pip-audit", "--local")
 
 
