@@ -55,11 +55,11 @@ dependencies = [
   "passlib[bcrypt]==1.7.4",
   "bcrypt==5.0.0",
   "authlib",
-  "python-dotenv",
+  "python-dotenv>=1.2.2",
   "itsdangerous",
   "httpx",
   "uvicorn",
-  "litellm>=1.83.7,!=1.83.8,!=1.83.9",
+  "litellm>=1.9.0,<1.10",
 ]
 
 [project.scripts]
