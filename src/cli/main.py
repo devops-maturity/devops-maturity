@@ -44,19 +44,18 @@ def _build_result(responses, project_name=None, project_url=None, source="manual
     level = score_to_level(score)
     badge_url = get_badge_url(level)
     badge_markdown = (
-        f"[![DevOps Maturity Badge]({badge_url})]"
-        "(https://devops-maturity.github.io/)"
+        f"[![DevOps Maturity Badge]({badge_url})](https://devops-maturity.github.io/)"
     )
 
     category_scores = calculate_category_scores(criteria, responses)
     response_map = {r.id: r.answer for r in responses}
     failed = [
         {"id": c.id, "criteria": c.criteria, "description": c.description}
-        for c in criteria if not response_map.get(c.id)
+        for c in criteria
+        if not response_map.get(c.id)
     ]
     passed = [
-        {"id": c.id, "criteria": c.criteria}
-        for c in criteria if response_map.get(c.id)
+        {"id": c.id, "criteria": c.criteria} for c in criteria if response_map.get(c.id)
     ]
 
     return {
@@ -129,9 +128,7 @@ def _print_text_result(result):
 
     # Improvement recommendations
     if result["failed"]:
-        typer.secho(
-            "\nImprovement Recommendations:", fg=typer.colors.YELLOW, bold=True
-        )
+        typer.secho("\nImprovement Recommendations:", fg=typer.colors.YELLOW, bold=True)
         current_cat = None
         for c in result["failed"]:
             cat = _category_for_id(c["id"])
