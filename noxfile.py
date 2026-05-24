@@ -70,8 +70,10 @@ def vulnerability_scan(session):
     session.run(
         "pip-audit",
         "--local",
-        "--ignore-vuln", "CVE-2026-40217",
-        "--ignore-vuln", "CVE-2026-28684",
+        "--ignore-vuln",
+        "CVE-2026-40217",
+        "--ignore-vuln",
+        "CVE-2026-28684",
     )
 
 
