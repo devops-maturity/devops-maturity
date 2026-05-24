@@ -1,7 +1,13 @@
 # DevOps Maturity Assessment
 # https://devops-maturity.github.io/
 # https://github.com/devops-maturity/devops-maturity
+#
 # Use `dm config --file devops-maturity.yml` to generate badge
+# Use `dm config --file devops-maturity.yml --format json` for CI pipelines
+#
+# Criteria accept two formats:
+#   1. Simple boolean:  D101: true
+#   2. Structured (optional):  D403: { status: true, evidence: [...] }
 
 # Project Information
 project_name: devops-maturity
@@ -25,7 +31,13 @@ D302: true    # License Scanning (nice to have)
 # Supply Chain Security
 D401: true    # Documented Build Process (must have)
 D402: true    # CI/CD as Code (must have)
-D403: true    # Artifact Signing (nice to have)
+D403:
+  status: true
+  evidence:
+    - type: workflow
+      path: .github/workflows/release.yml
+    - type: artifact-signature
+      tool: cosign
 D404: false   # Dependency Pinning (nice to have)
 D405: false   # SBOM Generation (nice to have)
 
@@ -37,4 +49,4 @@ D503: true    # Code Linting (nice to have)
 # Reporting
 D601: true    # Notifications & Alerts (must have)
 D602: false   # Attached Reports (nice to have)
-D603: false   # Compliance Mapping & Auditability	(nice to have)
+D603: false   # Compliance Mapping & Auditability (nice to have)
