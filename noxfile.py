@@ -67,8 +67,10 @@ def vulnerability_scan(session):
     # python<3.14. On Python 3.14 we are stuck at 1.83.7 until litellm
     # adds 3.14 support. Ignore this CVE on affected interpreters.
     session.run(
-        "pip-audit", "--local",
-        "--ignore-vuln", "CVE-2026-40217",
+        "pip-audit",
+        "--local",
+        "--ignore-vuln",
+        "CVE-2026-40217",
     )
 
 
