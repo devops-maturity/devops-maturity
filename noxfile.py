@@ -63,7 +63,18 @@ def licenses(session):
 def vulnerability_scan(session):
     """Scan dependencies for known vulnerabilities."""
     session.install("pip-audit", ".")
-    session.run("pip-audit", "--local")
+    # CVE-2026-40217 (litellm): fixed in 1.83.10, but 1.83.10+ requires
+    # python<3.14. Litellm 1.83.7 (last to support 3.14) pins python-dotenv
+    # to 1.0.1, which has CVE-2026-28684. Both blocked by upstream;
+    # ignore until upstream resolves the compatibility constraints.
+    session.run(
+        "pip-audit",
+        "--local",
+        "--ignore-vuln",
+        "CVE-2026-40217",
+        "--ignore-vuln",
+        "CVE-2026-28684",
+    )
 
 
 @nox.session
