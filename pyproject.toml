@@ -59,7 +59,8 @@ dependencies = [
   "itsdangerous",
   "httpx",
   "uvicorn",
-  "litellm>=1.83.7,!=1.83.8,!=1.83.9",
+  "litellm>=1.83.10; python_version < '3.14'",
+  "litellm>=1.83.7,!=1.83.8,!=1.83.9; python_version >= '3.14'",
 ]
 
 [project.scripts]
