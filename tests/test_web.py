@@ -197,6 +197,17 @@ def test_badge_svg_endpoint():
     assert "svg" in response.headers.get("content-type", "").lower()
 
 
+# ── Health check ───────────────────────────────────────────────────────────────
+
+
+def test_healthz_endpoint():
+    response = client.get("/healthz")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "ok"
+    assert "version" in payload
+
+
 # ── Edit assessment ────────────────────────────────────────────────────────────
 
 
