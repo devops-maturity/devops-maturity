@@ -23,6 +23,27 @@ User documentation for both interfaces is available at the [DevOps Maturity Docs
 - **Shareable signal**: publish a badge that makes DevOps maturity visible to users, contributors, and stakeholders.
 - **Portable scoring model**: use the same criteria from the CLI, web UI, or a YAML file in automation.
 
+## How it compares
+
+DevOps Maturity is a **breadth-first, automatable baseline** for the whole delivery lifecycle. Most adjacent tools go deeper but narrower, or measure *outcomes* rather than *practices in place* — they complement it rather than compete with it.
+
+| Tool | Primary focus | How you run it | Best for |
+|---|---|---|---|
+| **DevOps Maturity** | DevOps **practices & controls** (build, quality, security, supply chain, analysis, reporting) | CLI · Web UI · GitHub Action · YAML · AI auto-assess | A fast, broad baseline + badge for OSS **and** internal repos |
+| [DORA metrics](https://dora.dev/) | Delivery **outcomes** (deploy frequency, lead time, MTTR, change-fail rate) | Pipeline telemetry | Tracking delivery performance once practices exist |
+| [OpenSSF Scorecard](https://securityscorecards.dev/) | OSS security **health** (repo heuristics) | Automated checks | Hardening the security posture of a public repo |
+| [OpenSSF Best Practices](https://www.bestpractices.dev/) | OSS best-practice **badge** | Web SaaS, self-attested | Earning a recognized OSS badge |
+| [SLSA](https://slsa.dev/) | Supply-chain **integrity** (provenance & attestation) | Attestation + verification | Deep, verifiable supply-chain assurance |
+
+**What makes it different:**
+
+- **Breadth, not just security** — covers testing, quality, analysis, and reporting, not only supply-chain/security.
+- **Automatable end-to-end** — machine-readable YAML in, `--format json`/badge out; drop the [GitHub Action](https://github.com/devops-maturity/devops-maturity-action) into CI to keep the badge current on every change.
+- **AI-powered auto-assessment** — point it at a repo and an LLM infers answers from the README, CI config, and file tree, so you skip the questionnaire.
+- **Yours to run** — CLI or self-hostable web UI; works on private/internal repos, not only public OSS, with no SaaS lock-in.
+
+**When to use which:** start with DevOps Maturity for a quick, broad health check and a badge; add **DORA** to track delivery outcomes over time; layer **OpenSSF Scorecard / SLSA** for deeper security and supply-chain rigor once the D3xx/D4xx gaps are closed. See the full comparison on the [specification site][Specification].
+
 ## 🎥 Demo
 
 Explore how the DevOps Maturity Assessment works in both interfaces:
