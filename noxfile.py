@@ -75,23 +75,39 @@ def vulnerability_scan(session):
         "pip-audit",
         "--local",
         # litellm 1.83.7 and its hard-pinned dependencies
-        "--ignore-vuln", "CVE-2026-40217",  # litellm -> fixed in 1.83.10 (python<3.14)
-        "--ignore-vuln", "CVE-2026-47102",  # litellm -> fixed in 1.83.10 (python<3.14)
-        "--ignore-vuln", "CVE-2026-47101",  # litellm -> fixed in 1.83.14 (python<3.14)
-        "--ignore-vuln", "CVE-2026-49468",  # litellm -> fixed in 1.84.0 (python<3.14)
-        "--ignore-vuln", "CVE-2026-28684",  # python-dotenv 1.0.1 (pinned by litellm 1.83.7)
+        "--ignore-vuln",
+        "CVE-2026-40217",  # litellm -> fixed in 1.83.10 (python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-47102",  # litellm -> fixed in 1.83.10 (python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-47101",  # litellm -> fixed in 1.83.14 (python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-49468",  # litellm -> fixed in 1.84.0 (python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-28684",  # python-dotenv 1.0.1 (pinned by litellm 1.83.7)
         # aiohttp 3.13.5 (hard-pinned by litellm 1.83.7); all fixed in 3.14.x
-        "--ignore-vuln", "PYSEC-2026-237",
-        "--ignore-vuln", "CVE-2026-34993",
-        "--ignore-vuln", "CVE-2026-47265",
-        "--ignore-vuln", "CVE-2026-50269",
-        "--ignore-vuln", "CVE-2026-54273",
-        "--ignore-vuln", "CVE-2026-54274",
-        "--ignore-vuln", "CVE-2026-54276",
-        "--ignore-vuln", "CVE-2026-54277",
-        "--ignore-vuln", "CVE-2026-54278",
-        "--ignore-vuln", "CVE-2026-54279",
-        "--ignore-vuln", "CVE-2026-54280",
+        "--ignore-vuln",
+        "PYSEC-2026-237",
+        "--ignore-vuln",
+        "CVE-2026-34993",
+        "--ignore-vuln",
+        "CVE-2026-47265",
+        "--ignore-vuln",
+        "CVE-2026-50269",
+        "--ignore-vuln",
+        "CVE-2026-54273",
+        "--ignore-vuln",
+        "CVE-2026-54274",
+        "--ignore-vuln",
+        "CVE-2026-54276",
+        "--ignore-vuln",
+        "CVE-2026-54277",
+        "--ignore-vuln",
+        "CVE-2026-54278",
+        "--ignore-vuln",
+        "CVE-2026-54279",
+        "--ignore-vuln",
+        "CVE-2026-54280",
     )
 
 
