@@ -40,6 +40,8 @@ nav:
     - Maturity levels: reference/maturity-levels.md
     - Configuration: reference/configuration.md
     - CLI flags: reference/cli-flags.md
+  - Deploy:
+    - Hosting & keep-warm: deploy/hosting.md
 
 markdown_extensions:
   - admonition
