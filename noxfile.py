@@ -63,17 +63,26 @@ def licenses(session):
 def vulnerability_scan(session):
     """Scan dependencies for known vulnerabilities."""
     session.install("pip-audit", ".")
-    # CVE-2026-40217 (litellm): fixed in 1.83.10, but 1.83.10+ requires
-    # python<3.14. Litellm 1.83.7 (last to support 3.14) pins python-dotenv
-    # to 1.0.1, which has CVE-2026-28684. Both blocked by upstream;
-    # ignore until upstream resolves the compatibility constraints.
+    # The ignored CVEs are all blocked by litellm's Python 3.14 support:
+    # litellm's fixes (1.83.10 / 1.83.14 / 1.84.0) all require python<3.14,
+    # but we still support Python 3.14, where litellm is pinned at 1.83.7
+    # (the last release supporting 3.14). 1.83.7 also pins python-dotenv==1.0.1
+    # (CVE-2026-28684). The aiohttp CVE batch is resolved by pinning
+    # aiohttp>=3.14.1 in pyproject.toml. Revisit once litellm restores 3.14
+    # support so these can be fixed instead of ignored.
     session.run(
         "pip-audit",
         "--local",
         "--ignore-vuln",
-        "CVE-2026-40217",
+        "CVE-2026-40217",  # litellm: fixed in 1.83.10 (requires python<3.14)
         "--ignore-vuln",
-        "CVE-2026-28684",
+        "CVE-2026-28684",  # python-dotenv: pinned to 1.0.1 by litellm 1.83.7
+        "--ignore-vuln",
+        "CVE-2026-47102",  # litellm: fixed in 1.83.10 (requires python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-47101",  # litellm: fixed in 1.83.14 (requires python<3.14)
+        "--ignore-vuln",
+        "CVE-2026-49468",  # litellm: fixed in 1.84.0 (requires python<3.14)
     )
 
 

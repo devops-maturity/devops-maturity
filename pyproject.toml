@@ -59,6 +59,8 @@ dependencies = [
   "itsdangerous",
   "httpx",
   "uvicorn",
+  # Transitive via litellm; pinned to clear the aiohttp CVE batch fixed in 3.14.x.
+  "aiohttp>=3.14.1",
   "litellm>=1.83.7,!=1.83.8,!=1.83.9",
 ]
 
