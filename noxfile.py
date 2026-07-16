@@ -43,7 +43,7 @@ def preview(session):
 @nox.session
 def docs(session):
     """Build and serve the MkDocs documentation locally."""
-    session.install("mkdocs", "mkdocs-material")
+    session.install("mkdocs-ng", "mkdocs-ng-material")
     if GITHUB_ACTIONS:
         session.run("mkdocs", "build", "--strict")
     else:
