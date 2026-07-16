@@ -71,6 +71,7 @@ def performance(session):
         "--benchmark-columns=min,max,mean,stddev,rounds",
     )
 
+
 @nox.session
 def deploy(session):
     """Deploy the project"""
