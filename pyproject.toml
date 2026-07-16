@@ -83,6 +83,7 @@ test = [
   "httpx",
   "pytest",
   "pytest-cov",
+  "pytest-benchmark",
 ]
 
 [tool.setuptools]

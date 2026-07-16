@@ -60,6 +60,19 @@ def licenses(session):
 
 
 @nox.session
+def performance(session):
+    """Run performance benchmarks."""
+    session.install("-e", ".[test]")
+    session.run(
+        "pytest",
+        "tests/test_performance.py",
+        "--benchmark-only",
+        "--benchmark-sort=mean",
+        "--benchmark-columns=min,max,mean,stddev,rounds",
+    )
+
+
+@nox.session
 def deploy(session):
     """Deploy the project"""
     if not RENDER:
