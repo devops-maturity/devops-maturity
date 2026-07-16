@@ -63,4 +63,3 @@ jobs:
           pip install nox
       - name: Scan dependency licenses
         run: nox -s licenses
-

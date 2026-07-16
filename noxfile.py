@@ -59,7 +59,6 @@ def licenses(session):
     )
 
 
-
 @nox.session
 def deploy(session):
     """Deploy the project"""
