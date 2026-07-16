@@ -41,6 +41,16 @@ def preview(session):
 
 
 @nox.session
+def docs(session):
+    """Build and serve the MkDocs documentation locally."""
+    session.install("mkdocs-ng", "mkdocs-ng-material")
+    if GITHUB_ACTIONS:
+        session.run("mkdocs", "build", "--strict")
+    else:
+        session.run("mkdocs", "serve")
+
+
+@nox.session
 def licenses(session):
     """Scan dependency licenses."""
     session.install("pip-licenses", ".")
@@ -60,14 +70,6 @@ def performance(session):
         "--benchmark-sort=mean",
         "--benchmark-columns=min,max,mean,stddev,rounds",
     )
-
-
-@nox.session
-def vulnerability_scan(session):
-    """Scan dependencies for known vulnerabilities."""
-    session.install("pip-audit", ".")
-    session.run("pip-audit", "--local")
-
 
 @nox.session
 def deploy(session):

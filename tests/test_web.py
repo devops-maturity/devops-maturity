@@ -23,6 +23,7 @@ def test_read_form_highlights_value_and_cli_path():
     assert "Turn a long DevOps checklist into a clear next action" in response.text
     assert "pip install devops-maturity" in response.text
     assert "Get my maturity score" in response.text
+    assert "https://devops-maturity.github.io/devops-maturity/" in response.text
 
 
 # ── Auth pages ─────────────────────────────────────────────────────────────────
@@ -194,6 +195,17 @@ def test_badge_svg_endpoint():
     response = client.get("/badge.svg")
     assert response.status_code == 200
     assert "svg" in response.headers.get("content-type", "").lower()
+
+
+# ── Health check ───────────────────────────────────────────────────────────────
+
+
+def test_healthz_endpoint():
+    response = client.get("/healthz")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "ok"
+    assert "version" in payload
 
 
 # ── Edit assessment ────────────────────────────────────────────────────────────

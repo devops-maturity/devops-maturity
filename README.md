@@ -3,7 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/devops-maturity)](https://pypi.org/project/devops-maturity/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/devops-maturity)
 [![CI](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml/badge.svg)](https://github.com/devops-maturity/devops-maturity/actions/workflows/ci.yml)
-[![PASSING](https://img.shields.io/badge/DevOps%20Maturity-PASSING-green.svg)](https://devops-maturity.github.io/)
+[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg)](https://devops-maturity.github.io/)
 
 ## Overview
 
@@ -13,6 +13,8 @@ Use it when you want a quick baseline before a platform improvement program, an 
 
 It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Specification][Specification] — a standardized set of guidelines for DevOps best practices.
 
+User documentation for both interfaces is available at the [DevOps Maturity Docs site][DocsSite].
+
 ## Why teams use it
 
 - **Fast baseline**: answer a short weighted checklist and get a maturity level in minutes.
@@ -20,6 +22,27 @@ It provides both a **web UI** and a **CLI**, built on the [DevOps Maturity Speci
 - **Repository-aware AI mode**: optionally let an LLM inspect repository metadata, README content, and CI configuration.
 - **Shareable signal**: publish a badge that makes DevOps maturity visible to users, contributors, and stakeholders.
 - **Portable scoring model**: use the same criteria from the CLI, web UI, or a YAML file in automation.
+
+## How it compares
+
+DevOps Maturity is a **breadth-first, automatable baseline** for the whole delivery lifecycle. Most adjacent tools go deeper but narrower, or measure *outcomes* rather than *practices in place* — they complement it rather than compete with it.
+
+| Tool | Primary focus | How you run it | Best for |
+|---|---|---|---|
+| **DevOps Maturity** | DevOps **practices & controls** (build, quality, security, supply chain, analysis, reporting) | CLI · Web UI · GitHub Action · YAML · AI auto-assess | A fast, broad baseline + badge for OSS **and** internal repos |
+| [DORA metrics](https://dora.dev/) | Delivery **outcomes** (deploy frequency, lead time, MTTR, change-fail rate) | Pipeline telemetry | Tracking delivery performance once practices exist |
+| [OpenSSF Scorecard](https://securityscorecards.dev/) | OSS security **health** (repo heuristics) | Automated checks | Hardening the security posture of a public repo |
+| [OpenSSF Best Practices](https://www.bestpractices.dev/) | OSS best-practice **badge** | Web SaaS, self-attested | Earning a recognized OSS badge |
+| [SLSA](https://slsa.dev/) | Supply-chain **integrity** (provenance & attestation) | Attestation + verification | Deep, verifiable supply-chain assurance |
+
+**What makes it different:**
+
+- **Breadth, not just security** — covers testing, quality, analysis, and reporting, not only supply-chain/security.
+- **Automatable end-to-end** — machine-readable YAML in, `--format json`/badge out; drop the [GitHub Action](https://github.com/devops-maturity/devops-maturity-action) into CI to keep the badge current on every change.
+- **AI-powered auto-assessment** — point it at a repo and an LLM infers answers from the README, CI config, and file tree, so you skip the questionnaire.
+- **Yours to run** — CLI or self-hostable web UI; works on private/internal repos, not only public OSS, with no SaaS lock-in.
+
+**When to use which:** start with DevOps Maturity for a quick, broad health check and a badge; add **DORA** to track delivery outcomes over time; layer **OpenSSF Scorecard / SLSA** for deeper security and supply-chain rigor once the D3xx/D4xx gaps are closed. See the full comparison on the [specification site][Specification].
 
 ## 🎥 Demo
 
@@ -184,7 +207,7 @@ If you find this tool helpful, please consider giving it a ⭐️ — your suppo
 Want to show your project aligns with the [DevOps Maturity Specification][Specification]? Add this badge to your README:
 
 ```markdown
-[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity%20Specification-1.0.0-yellow)](https://devops-maturity.github.io/)
+[![DevOps Maturity](https://img.shields.io/badge/DevOps%20Maturity-SILVER-silver.svg)](https://devops-maturity.github.io/)
 ```
 
 
@@ -204,6 +227,7 @@ This project is licensed under the [Apache License 2.0][LICENSE].
 
 [LICENSE]: https://github.com/devops-maturity/devops-maturity/blob/main/LICENSE
 [Specification]: https://devops-maturity.github.io/
+[DocsSite]: https://devops-maturity.github.io/devops-maturity/
 [CLIDemo]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/demo.gif?raw=true
 [WebHome]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/home.png?raw=true
 [WebAssessment]: https://github.com/devops-maturity/devops-maturity/blob/main/docs/img/assessment.png?raw=true

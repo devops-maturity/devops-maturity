@@ -37,6 +37,18 @@ app = FastAPI(
 )
 
 
+@app.get("/healthz")
+def healthz():
+    """Lightweight liveness probe.
+
+    Returns immediately without touching the database or rendering
+    templates, so it is cheap to call frequently. Use it as a
+    keep-warm / uptime-monitor target to avoid cold starts on hosts
+    that spin idle instances down (e.g. Render's free tier).
+    """
+    return {"status": "ok", "version": __version__}
+
+
 @app.get("/edit-assessment/{assessment_id}", response_class=HTMLResponse)
 def edit_assessment_form(request: Request, assessment_id: int):
     user = get_current_user(request)
