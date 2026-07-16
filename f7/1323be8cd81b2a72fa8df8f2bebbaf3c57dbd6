@@ -1,0 +1,21 @@
+.github/workflows/docs-site.yml
+  s_dd2ce2f719b5cd::t_18a4f33e38700b 34
+noxfile.py
+  s_dd2ce2f719b5cd::t_17a230f3452f5a 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "f71323be8cd81b2a72fa8df8f2bebbaf3c57dbd6",
+  "prompts": {},
+  "sessions": {
+    "s_dd2ce2f719b5cd": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f6c1b-e7cb-7797-8d5c-4217dafe10fb",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": null
+    }
+  }
+}
