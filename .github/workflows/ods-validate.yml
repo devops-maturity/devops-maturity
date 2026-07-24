@@ -26,3 +26,4 @@ jobs:
           branch: ${{ github.head_ref }}
           summary: 'true'
           comment: 'true'
+          report: 'true'
