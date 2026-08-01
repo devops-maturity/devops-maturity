@@ -1,0 +1,21 @@
+.github/workflows/codeql.yml
+  s_680628c6310e80::t_0650c715f89d45 52,56,68
+.github/workflows/release.yml
+  s_680628c6310e80::t_bae16d601febb5 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "9d4cc7d10c568d3e6a1e66495c131f09fa88fb5e",
+  "prompts": {},
+  "sessions": {
+    "s_680628c6310e80": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fbdb6-e20e-734d-97b2-4afb1a49e11f",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "shenxianpeng <xianpeng.shen@gmail.com>"
+    }
+  }
+}
