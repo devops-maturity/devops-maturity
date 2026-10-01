@@ -1,0 +1,21 @@
+src/web/main.py
+  s_66212c309e21f0::t_79f42ab98e5d6f 211-219,398
+tests/test_web.py
+  s_66212c309e21f0::t_606c29623e5a97 847-876
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1a859beeb0ff03ed3a9f19bf7aae247b7b8de59f",
+  "prompts": {},
+  "sessions": {
+    "s_66212c309e21f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8763d161-5362-48a1-ae9b-11f7bcd83469",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Xianpeng Shen <xianpeng.shen@gmail.com>"
+    }
+  }
+}
