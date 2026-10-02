@@ -426,3 +426,252 @@ def test_assess_auto_success_mocked(monkeypatch):
     assert result.exit_code == 0, result.output
     assert "score" in result.output.lower()
     assert "Keep up the great work!" in result.output
+
+
+# ── CLI: --auto orchestration (all external calls mocked) ─────────────────────
+
+
+def _fake_repo_context(**overrides):
+    ctx = {
+        "provider": "github",
+        "owner": "acme",
+        "repo": "myapp",
+        "description": "Test",
+        "language": "Python",
+        "readme": "# Test",
+        "files": [".github/workflows/ci.yml", "README.md"],
+        "ci_files": [{"path": ".github/workflows/ci.yml", "content": "on: [push]"}],
+    }
+    ctx.update(overrides)
+    return ctx
+
+
+def _latest_assessment():
+    from core.model import Assessment, SessionLocal
+
+    db = SessionLocal()
+    try:
+        return db.query(Assessment).order_by(Assessment.id.desc()).first()
+    finally:
+        db.close()
+
+
+def test_assess_auto_unparseable_remote_with_explicit_provider():
+    """--provider alone is not enough when owner/repo cannot be parsed."""
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://git.example.com/acme/myapp.git",
+        ),
+        patch("src.cli.main.fetch_repo_context") as mock_fetch,
+    ):
+        result = runner.invoke(
+            app, ["assess", "--auto", "--ai", "ollama", "--provider", "github"]
+        )
+    assert result.exit_code == 1
+    assert "Could not determine owner/repository" in result.output
+    mock_fetch.assert_not_called()
+
+
+def test_assess_auto_fetch_error_exits_cleanly():
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://github.com/acme/myapp.git",
+        ),
+        patch("src.cli.main.fetch_repo_context", side_effect=RuntimeError("API down")),
+        patch("src.cli.main.call_ai") as mock_ai,
+    ):
+        result = runner.invoke(app, ["assess", "--auto", "--ai", "ollama"])
+    assert result.exit_code == 1
+    assert "Error fetching repository context: API down" in result.output
+    mock_ai.assert_not_called()
+
+
+def test_assess_auto_ai_error_exits_cleanly():
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://github.com/acme/myapp.git",
+        ),
+        patch("src.cli.main.fetch_repo_context", return_value=_fake_repo_context()),
+        patch("src.cli.main.call_ai", side_effect=RuntimeError("rate limited")),
+    ):
+        result = runner.invoke(app, ["assess", "--auto", "--ai", "ollama"])
+    assert result.exit_code == 1
+    assert "Error calling AI provider: rate limited" in result.output
+
+
+def test_assess_auto_unparseable_ai_response_exits_cleanly():
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://github.com/acme/myapp.git",
+        ),
+        patch("src.cli.main.fetch_repo_context", return_value=_fake_repo_context()),
+        patch("src.cli.main.call_ai", return_value="Sorry, I cannot help with that."),
+    ):
+        result = runner.invoke(app, ["assess", "--auto", "--ai", "ollama"])
+    assert result.exit_code == 1
+    assert "Error parsing AI response" in result.output
+    assert "Assessment saved" not in result.output
+
+
+def test_assess_auto_resolves_keys_tokens_and_defaults_from_env(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-from-env")
+    monkeypatch.setenv("GITHUB_TOKEN", "gh-from-env")
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://github.com/acme/myapp.git",
+        ),
+        patch(
+            "src.cli.main.fetch_repo_context", return_value=_fake_repo_context()
+        ) as mock_fetch,
+        patch(
+            "src.cli.main.call_ai", return_value=json.dumps({"D101": True})
+        ) as mock_ai,
+    ):
+        result = runner.invoke(app, ["assess", "--auto", "--ai", "OpenAI"])
+
+    assert result.exit_code == 0, result.output
+    mock_fetch.assert_called_once_with("github", "acme", "myapp", "gh-from-env")
+    kwargs = mock_ai.call_args.kwargs
+    assert kwargs["provider"] == "openai"
+    assert kwargs["model"] == DEFAULT_MODELS["openai"]
+    assert kwargs["api_key"] == "sk-from-env"
+    assert kwargs["ollama_url"] == "http://localhost:11434"
+    assert "D101" in kwargs["prompt"]
+    assert "2 files found, 1 CI/CD config file(s) fetched" in result.output
+    # No suggestions in the AI response, so no suggestions section.
+    assert "AI Improvement Suggestions" not in result.output
+
+    saved = _latest_assessment()
+    assert saved.project_name == "myapp"
+    assert saved.project_url == "https://github.com/acme/myapp.git"
+    assert saved.responses["D101"] is True
+    assert saved.responses["D102"] is False
+
+
+def test_assess_auto_explicit_options_take_precedence(monkeypatch):
+    monkeypatch.delenv("GITLAB_TOKEN", raising=False)
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="git@github.com:acme/myapp.git",
+        ),
+        patch(
+            "src.cli.main.fetch_repo_context", return_value=_fake_repo_context()
+        ) as mock_fetch,
+        patch("src.cli.main.call_ai", return_value="{}") as mock_ai,
+    ):
+        result = runner.invoke(
+            app,
+            [
+                "assess",
+                "--auto",
+                "--provider",
+                "GitLab",
+                "--ai",
+                "anthropic",
+                "--ai-key",
+                "sk-ant-test",
+                "--model",
+                "claude-test",
+                "--repo-token",
+                "explicit-token",
+                "--project-name",
+                "custom-name",
+                "--project-url",
+                "https://example.com/custom",
+            ],
+        )
+
+    assert result.exit_code == 0, result.output
+    # The explicit provider wins over the one detected from the remote URL.
+    mock_fetch.assert_called_once_with("gitlab", "acme", "myapp", "explicit-token")
+    assert mock_ai.call_args.kwargs["model"] == "claude-test"
+    assert mock_ai.call_args.kwargs["api_key"] == "sk-ant-test"
+    saved = _latest_assessment()
+    assert saved.project_name == "custom-name"
+    assert saved.project_url == "https://example.com/custom"
+
+
+def test_assess_auto_ollama_needs_no_key_and_uses_custom_url(monkeypatch):
+    for var in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY"):
+        monkeypatch.delenv(var, raising=False)
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://bitbucket.org/team/repo.git",
+        ),
+        patch(
+            "src.cli.main.fetch_repo_context",
+            return_value=_fake_repo_context(provider="bitbucket"),
+        ) as mock_fetch,
+        patch("src.cli.main.call_ai", return_value="{}") as mock_ai,
+    ):
+        result = runner.invoke(
+            app,
+            [
+                "assess",
+                "--auto",
+                "--ai",
+                "ollama",
+                "--ollama-url",
+                "http://ollama.internal:11434",
+            ],
+        )
+
+    assert result.exit_code == 0, result.output
+    assert mock_fetch.call_args.args[:3] == ("bitbucket", "team", "repo")
+    assert mock_ai.call_args.kwargs["api_key"] is None
+    assert mock_ai.call_args.kwargs["model"] == DEFAULT_MODELS["ollama"]
+    assert mock_ai.call_args.kwargs["ollama_url"] == "http://ollama.internal:11434"
+
+
+@pytest.mark.parametrize(
+    "ai,env_var",
+    [("anthropic", "ANTHROPIC_API_KEY"), ("gemini", "GEMINI_API_KEY")],
+)
+def test_assess_auto_missing_key_names_provider_env_var(monkeypatch, ai, env_var):
+    monkeypatch.delenv(env_var, raising=False)
+    result = runner.invoke(app, ["assess", "--auto", "--ai", ai])
+    assert result.exit_code == 1
+    assert env_var in result.output
+
+
+def test_assess_auto_json_output_contains_result_and_suggestions():
+    ai_json = {"D101": True, "suggestions": ["Generate an SBOM"]}
+    with (
+        patch(
+            "src.cli.main.detect_remote_url",
+            return_value="https://github.com/acme/myapp.git",
+        ),
+        patch("src.cli.main.fetch_repo_context", return_value=_fake_repo_context()),
+        patch("src.cli.main.call_ai", return_value=json.dumps(ai_json)),
+    ):
+        result = runner.invoke(
+            app,
+            [
+                "assess",
+                "--auto",
+                "--ai",
+                "openai",
+                "--ai-key",
+                "sk-test",
+                "--format",
+                "json",
+            ],
+        )
+
+    assert result.exit_code == 0, result.output
+    stdout = result.stdout
+    payload = json.JSONDecoder().raw_decode(stdout[stdout.index("{") :])[0]
+    assert payload["assessment_source"] == "ai"
+    assert payload["project_name"] == "myapp"
+    assert payload["project_url"] == "https://github.com/acme/myapp.git"
+    assert payload["ai_suggestions"] == ["Generate an SBOM"]
+    assert [p["id"] for p in payload["passed"]] == ["D101"]
+    # Suggestions are part of the JSON, not printed as a text section.
+    assert "AI Improvement Suggestions" not in result.output
