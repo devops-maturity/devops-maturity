@@ -102,3 +102,8 @@ fallback_version = "0.0.0"
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.coverage.report]
+exclude_also = [
+  'if __name__ == "__main__":',
+]

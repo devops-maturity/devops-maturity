@@ -17,7 +17,7 @@ from config.loader import load_criteria_config
 # Handle bcrypt version compatibility issue
 try:
     from passlib.hash import bcrypt
-except (ImportError, AttributeError):
+except (ImportError, AttributeError):  # pragma: no cover - import-time fallback
     # Fallback for bcrypt version compatibility issues
     import passlib.hash
 
@@ -347,7 +347,7 @@ async def oauth_callback(request: Request, provider: str):
             email = next((e["email"] for e in emails if e.get("primary")), None)
         username = profile.get("login")
         oauth_id = str(profile.get("id"))
-    else:
+    else:  # pragma: no cover - unreachable, provider is validated above
         return RedirectResponse("/login")
     db = SessionLocal()
     user = (
