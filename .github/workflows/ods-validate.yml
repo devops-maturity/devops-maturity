@@ -14,13 +14,13 @@ jobs:
       contents: read        # checkout
       pull-requests: write  # post the ODS report comment
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
       - name: ODS AI code quality gate
-        uses: open-delivery-spec/validate-action@v1
+        uses: open-delivery-spec/validate-action@73523732feace0206ae9a9de98ffd11b5352a3a1  # v1
         with:
           diff-base: ${{ github.event.pull_request.base.sha || 'origin/master' }}
           branch: ${{ github.head_ref }}
