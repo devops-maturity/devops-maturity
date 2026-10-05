@@ -18,12 +18,12 @@ from src.cli.ai_client import (
     call_ai,
     parse_ai_response,
 )
+from src.cli.main import app
 from src.cli.repo_fetcher import (
     detect_remote_url,
     fetch_repo_context,
     parse_provider_and_repo,
 )
-from src.cli.main import app
 from src.core.model import Criteria
 
 runner = CliRunner()

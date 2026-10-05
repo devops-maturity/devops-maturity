@@ -1,5 +1,5 @@
-from src.core.scorer import calculate_score, calculate_category_scores, score_to_level
 from src.core.model import Criteria, UserResponse
+from src.core.scorer import calculate_category_scores, calculate_score, score_to_level
 
 
 def _make_criteria(n=4, weight=1.0):

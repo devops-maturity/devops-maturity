@@ -10,7 +10,7 @@ from an empty schema.
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
 
-import core.model as model
+from core import model
 
 _test_engine = create_engine(
     "sqlite://",

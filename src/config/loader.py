@@ -1,10 +1,11 @@
-import yaml
 import os
-from typing import List
+
+import yaml
+
 from core.model import Criteria
 
 
-def load_criteria_config() -> tuple[List[str], List[Criteria]]:
+def load_criteria_config() -> tuple[list[str], list[Criteria]]:
     """Load categories and criteria from YAML config file."""
     config_path = os.path.join(os.path.dirname(__file__), "criteria.yaml")
 

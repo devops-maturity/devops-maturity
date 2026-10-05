@@ -1,5 +1,6 @@
-import nox
 import os
+
+import nox
 
 # check if running in CI environment
 GITHUB_ACTIONS = os.environ.get("GITHUB_ACTIONS") == "true"

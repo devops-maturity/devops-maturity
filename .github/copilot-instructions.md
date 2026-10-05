@@ -170,6 +170,7 @@ def new_command():
 # Standard pattern for database operations
 from src.core.model import SessionLocal
 
+
 def get_data():
     db = SessionLocal()
     try:
