@@ -1,14 +1,9 @@
 import json
 import os
-from typing import Optional
 
 import typer
 import yaml
-from core.model import UserResponse, Assessment, SessionLocal, init_db
-from core.scorer import calculate_score, score_to_level, calculate_category_scores
-from core.badge import get_badge_url
-from core import __version__
-from config.loader import load_criteria_config
+
 from cli.ai_client import (
     DEFAULT_MODELS,
     build_assessment_prompt,
@@ -20,6 +15,11 @@ from cli.repo_fetcher import (
     fetch_repo_context,
     parse_provider_and_repo,
 )
+from config.loader import load_criteria_config
+from core import __version__
+from core.badge import get_badge_url
+from core.model import Assessment, SessionLocal, UserResponse, init_db
+from core.scorer import calculate_category_scores, calculate_score, score_to_level
 
 # Load criteria and categories from config
 categories, criteria = load_criteria_config()
@@ -172,7 +172,7 @@ def assess(
         "--format",
         help="Output format: text (default) or json.",
     ),
-    provider: Optional[str] = typer.Option(
+    provider: str | None = typer.Option(
         None,
         "--provider",
         help=(
@@ -180,17 +180,17 @@ def assess(
             "Auto-detected from the current git remote when omitted."
         ),
     ),
-    ai: Optional[str] = typer.Option(
+    ai: str | None = typer.Option(
         None,
         "--ai",
         help="AI provider to use: openai, anthropic, gemini, or ollama.",
     ),
-    model: Optional[str] = typer.Option(
+    model: str | None = typer.Option(
         None,
         "--model",
         help="AI model name (e.g. gpt-4o). Uses a sensible default for each provider.",
     ),
-    repo_token: Optional[str] = typer.Option(
+    repo_token: str | None = typer.Option(
         None,
         "--repo-token",
         envvar="REPO_TOKEN",
@@ -199,7 +199,7 @@ def assess(
             "Can also be set via GITHUB_TOKEN, GITLAB_TOKEN, or BITBUCKET_TOKEN env vars."
         ),
     ),
-    ai_api_key: Optional[str] = typer.Option(
+    ai_api_key: str | None = typer.Option(
         None,
         "--ai-key",
         help=(
@@ -274,13 +274,13 @@ def assess(
 
 
 def _run_auto_assess(
-    project_name: Optional[str],
-    project_url: Optional[str],
-    provider: Optional[str],
-    ai: Optional[str],
-    model: Optional[str],
-    repo_token: Optional[str],
-    ai_api_key: Optional[str],
+    project_name: str | None,
+    project_url: str | None,
+    provider: str | None,
+    ai: str | None,
+    model: str | None,
+    repo_token: str | None,
+    ai_api_key: str | None,
     ollama_url: str,
     output_format: str = "text",
 ) -> None:
@@ -329,9 +329,9 @@ def _run_auto_assess(
     # ── Detect git provider / repository ─────────────────────────────────────
     remote_url = detect_remote_url()
 
-    resolved_provider: Optional[str] = provider
-    owner: Optional[str] = None
-    repo_name: Optional[str] = None
+    resolved_provider: str | None = provider
+    owner: str | None = None
+    repo_name: str | None = None
 
     if remote_url:
         try:
@@ -395,7 +395,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     typer.secho(
         f"  ✔ {len(repo_context.get('files', []))} files found, "
@@ -427,7 +427,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     try:
         responses, suggestions = parse_ai_response(raw_response, criteria)
@@ -437,7 +437,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     typer.secho("  ✔ AI assessment complete.", fg=typer.colors.GREEN)
 

@@ -1,8 +1,7 @@
-from typing import Dict, List
 from .model import Criteria, UserResponse
 
 
-def calculate_score(criteria: List[Criteria], responses: List[UserResponse]) -> float:
+def calculate_score(criteria: list[Criteria], responses: list[UserResponse]) -> float:
     total = 0.0
     max_score = 0.0
     response_map = {r.id: r.answer for r in responses}
@@ -16,12 +15,12 @@ def calculate_score(criteria: List[Criteria], responses: List[UserResponse]) -> 
 
 
 def calculate_category_scores(
-    criteria: List[Criteria], responses: List[UserResponse]
-) -> Dict[str, float]:
+    criteria: list[Criteria], responses: list[UserResponse]
+) -> dict[str, float]:
     """Return a score (0–100) for each category."""
     response_map = {r.id: r.answer for r in responses}
-    totals: Dict[str, float] = {}
-    maxes: Dict[str, float] = {}
+    totals: dict[str, float] = {}
+    maxes: dict[str, float] = {}
 
     for c in criteria:
         maxes[c.category] = maxes.get(c.category, 0.0) + c.weight

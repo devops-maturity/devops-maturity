@@ -18,12 +18,12 @@ from src.cli.ai_client import (
     call_ai,
     parse_ai_response,
 )
+from src.cli.main import app
 from src.cli.repo_fetcher import (
     detect_remote_url,
     fetch_repo_context,
     parse_provider_and_repo,
 )
-from src.cli.main import app
 from src.core.model import Criteria
 
 runner = CliRunner()
@@ -220,7 +220,7 @@ def test_parse_ai_response_basic(sample_criteria):
 
 def test_parse_ai_response_markdown_fences(sample_criteria):
     raw = '```json\n{"D101": true, "D201": true, "D301": false}\n```'
-    responses, suggestions = parse_ai_response(raw, sample_criteria)
+    responses, _ = parse_ai_response(raw, sample_criteria)
     resp_map = {r.id: r.answer for r in responses}
     assert resp_map["D101"] is True
     assert resp_map["D301"] is False

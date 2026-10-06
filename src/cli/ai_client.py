@@ -7,7 +7,6 @@ many other providers through a single unified interface.
 import json
 import os
 import re
-from typing import Optional
 
 import litellm
 
@@ -117,7 +116,7 @@ def call_ai(
     provider: str,
     model: str,
     prompt: str,
-    api_key: Optional[str] = None,
+    api_key: str | None = None,
     ollama_url: str = "http://localhost:11434",
 ) -> str:
     """

@@ -1,18 +1,16 @@
 import os
-from fastapi import FastAPI
-from fastapi import HTTPException
-from starlette.middleware.sessions import SessionMiddleware
-from fastapi.templating import Jinja2Templates
+
+from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
-from fastapi import Request
-from fastapi import Form
-from fastapi.responses import FileResponse, RedirectResponse
-from core.model import UserResponse, Assessment, SessionLocal, init_db, User
-from core.scorer import calculate_score, score_to_level, calculate_category_scores
-from core.badge import get_badge_url
-from core import __version__
+from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
+
 from config.loader import load_criteria_config
+from core import __version__
+from core.badge import get_badge_url
+from core.model import Assessment, SessionLocal, User, UserResponse, init_db
+from core.scorer import calculate_category_scores, calculate_score, score_to_level
 
 # Handle bcrypt version compatibility issue
 try:
@@ -24,11 +22,10 @@ except (ImportError, AttributeError):  # pragma: no cover - import-time fallback
     # Force bcrypt to use the correct backend
     bcrypt = passlib.hash.bcrypt.using(rounds=12)
 
-from sqlalchemy.exc import IntegrityError
 from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
 from dotenv import load_dotenv
-
+from sqlalchemy.exc import IntegrityError
+from starlette.config import Config
 
 app = FastAPI(
     title="DevOps Maturity Assessment",

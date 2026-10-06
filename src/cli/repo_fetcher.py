@@ -6,7 +6,6 @@ Supports GitHub, GitLab, and Bitbucket via their respective REST APIs.
 import base64
 import re
 import subprocess
-from typing import Optional
 
 import httpx
 
@@ -41,7 +40,7 @@ _MAX_CI_FILE_CHARS = 2000
 _MAX_FILE_LIST = 150
 
 
-def detect_remote_url() -> Optional[str]:
+def detect_remote_url() -> str | None:
     """Detect the git remote origin URL from the current directory."""
     try:
         result = subprocess.run(
@@ -88,14 +87,14 @@ def _decode_base64_content(b64: str) -> str:
     """Decode a base64-encoded string, stripping newlines GitHub inserts."""
     try:
         return base64.b64decode(b64.replace("\n", "")).decode("utf-8", errors="replace")
-    except Exception:
+    except ValueError:  # includes binascii.Error
         return ""
 
 
 # ── GitHub ─────────────────────────────────────────────────────────────────────
 
 
-def fetch_github_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
+def fetch_github_context(owner: str, repo: str, token: str | None = None) -> dict:
     """Fetch repository context from the GitHub REST API."""
     headers: dict = {"Accept": "application/vnd.github.v3+json"}
     if token:
@@ -152,7 +151,7 @@ def fetch_github_context(owner: str, repo: str, token: Optional[str] = None) -> 
 # ── GitLab ─────────────────────────────────────────────────────────────────────
 
 
-def fetch_gitlab_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
+def fetch_gitlab_context(owner: str, repo: str, token: str | None = None) -> dict:
     """Fetch repository context from the GitLab REST API."""
     import urllib.parse
 
@@ -211,7 +210,7 @@ def fetch_gitlab_context(owner: str, repo: str, token: Optional[str] = None) -> 
 # ── Bitbucket ──────────────────────────────────────────────────────────────────
 
 
-def fetch_bitbucket_context(owner: str, repo: str, token: Optional[str] = None) -> dict:
+def fetch_bitbucket_context(owner: str, repo: str, token: str | None = None) -> dict:
     """Fetch repository context from the Bitbucket REST API."""
     base = f"https://api.bitbucket.org/2.0/repositories/{owner}/{repo}"
     headers: dict = {}
@@ -269,7 +268,7 @@ def fetch_bitbucket_context(owner: str, repo: str, token: Optional[str] = None) 
 
 
 def fetch_repo_context(
-    provider: str, owner: str, repo: str, token: Optional[str] = None
+    provider: str, owner: str, repo: str, token: str | None = None
 ) -> dict:
     """
     Fetch repository context for *provider*.
