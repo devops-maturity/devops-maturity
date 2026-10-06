@@ -395,7 +395,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     typer.secho(
         f"  ✔ {len(repo_context.get('files', []))} files found, "
@@ -427,7 +427,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     try:
         responses, suggestions = parse_ai_response(raw_response, criteria)
@@ -437,7 +437,7 @@ def _run_auto_assess(
             fg=typer.colors.RED,
             bold=True,
         )
-        raise typer.Exit(1)
+        raise typer.Exit(1) from exc
 
     typer.secho("  ✔ AI assessment complete.", fg=typer.colors.GREEN)
 

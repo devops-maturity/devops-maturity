@@ -87,7 +87,7 @@ def _decode_base64_content(b64: str) -> str:
     """Decode a base64-encoded string, stripping newlines GitHub inserts."""
     try:
         return base64.b64decode(b64.replace("\n", "")).decode("utf-8", errors="replace")
-    except Exception:
+    except ValueError:  # includes binascii.Error
         return ""
 
 
