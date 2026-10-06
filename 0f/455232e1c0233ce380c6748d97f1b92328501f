@@ -1,0 +1,23 @@
+tests/test_auto_assess.py
+  s_8254c37744e5c9::t_ad7f3a4845088b 223
+src/cli/main.py
+  s_8254c37744e5c9::t_d01c842c020606 398,430,440
+src/cli/repo_fetcher.py
+  s_8254c37744e5c9::t_005d238f6c0e34 90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f455232e1c0233ce380c6748d97f1b92328501f",
+  "prompts": {},
+  "sessions": {
+    "s_8254c37744e5c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1cdd11ec-d09b-4789-a288-c8ddc9d25f78",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Xianpeng Shen <xianpeng.shen@gmail.com>"
+    }
+  }
+}
