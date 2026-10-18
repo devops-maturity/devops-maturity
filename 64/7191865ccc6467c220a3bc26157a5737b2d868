@@ -1,0 +1,19 @@
+mkdocs.yml
+  s_3b1f4d993766cf::t_7a04f78550f953 24-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "647191865ccc6467c220a3bc26157a5737b2d868",
+  "prompts": {},
+  "sessions": {
+    "s_3b1f4d993766cf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2969eecb-975d-43eb-a8ec-7534023fdcae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Xianpeng Shen <xianpeng.shen@gmail.com>"
+    }
+  }
+}
