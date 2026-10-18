@@ -21,6 +21,15 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+# Same GA4 property as the specification site (devops-maturity.github.io):
+# the docs live under /devops-maturity/ on that host, so its web data stream
+# already covers them. Without this the docs sent nothing, and nobody could
+# tell whether people read the install and usage pages.
+extra:
+  analytics:
+    provider: google
+    property: G-ZE9BS6NG0D
+
 nav:
   - Home: index.md
   - Get Started:
