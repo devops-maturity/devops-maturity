@@ -9,6 +9,8 @@ updates:
     directory: /
     schedule:
       interval: "monthly"
+    # Security-only maintenance: 0 disables version updates; security updates still open PRs.
+    open-pull-requests-limit: 0
     groups:
       github-action:
         patterns:
@@ -17,6 +19,8 @@ updates:
     directory: /
     schedule:
       interval: "monthly"
+    # Security-only maintenance: 0 disables version updates; security updates still open PRs.
+    open-pull-requests-limit: 0
     groups:
       pip:
         patterns:
